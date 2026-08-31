@@ -1,0 +1,83 @@
+.secao {
+    width: min(94%, 1400px);
+    margin: 2rem auto 3rem auto;
+}
+
+.topo {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.75rem;
+}
+
+.busca {
+    flex: 1;
+    min-width: 280px;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: var(--color-text-muted);
+    background: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    padding: 0.9rem 1.4rem;
+}
+
+.busca input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 0.95rem;
+    background: transparent;
+}
+
+.titulo {
+    font-family: var(--font-display);
+    color: var(--color-primary);
+    font-size: 1.6rem;
+    margin-bottom: 1.25rem;
+}
+
+.tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.tabs button {
+    border: none;
+    background: var(--color-bg-alt);
+    color: var(--color-text);
+    border-radius: 999px;
+    padding: 0.6rem 1.3rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: var(--font-sans);
+}
+
+.tabs button.ativa {
+    background: var(--color-primary);
+    color: #fff;
+}
+
+.lista {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.vazio {
+    color: var(--color-text-muted);
+    text-align: center;
+    padding: 3rem 1rem;
+}
+
+@media (max-width: 900px) {
+    .topo {
+        flex-direction: column;
+    }
+}

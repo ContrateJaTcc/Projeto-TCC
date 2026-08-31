@@ -1,0 +1,38 @@
+:root {
+  /* Tudo em Inter. O token de display continua existindo para separar títulos
+     de texto corrido: agora a diferença vem do peso e do tracking, não da família. */
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-display: var(--font-sans);
+
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-pill: 999px;
+
+  --shadow-sm: 0 1px 2px rgba(28, 13, 51, 0.06), 0 2px 6px rgba(28, 13, 51, 0.05);
+  --shadow-md: 0 4px 10px rgba(28, 13, 51, 0.06), 0 12px 26px rgba(28, 13, 51, 0.07);
+  --shadow-lg: 0 18px 46px rgba(28, 13, 51, 0.14);
+
+  --color-primary: #322258;
+  --color-primary-dark: #1c0d33;
+  --color-primary-light: #6f3fa8;
+
+  --color-accent: #FFC014;
+  --color-accent-hover: #D9A311;
+  --color-accent-tint: #FFF3D2;
+
+  --color-bg: #FFFBFC;
+  --color-bg-alt: #F4F1F8;
+  --color-surface-muted: #ece6f3;
+
+  --color-text: #1f1c34;
+  --color-text-soft: #30302E;
+  --color-text-muted: #6b6b6b;
+
+  --color-border: #d8cfe6;
+  --color-danger: #c4392f;
+
+  --gradient-dark: linear-gradient(160deg, #150324, #320757 60%, #6f3fa8);
+  --gradient-hero: linear-gradient(100deg, #150324 0%, #320757 50%, #985FC9 100%);
+  --gradient-footer: linear-gradient(180deg, #1c0d33, #3a2160 70%, #5b3690);
+}

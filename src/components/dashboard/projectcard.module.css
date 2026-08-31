@@ -1,0 +1,91 @@
+.card {
+    background: #fff;
+    border: 1px solid #ece6f3;
+    border-radius: 18px;
+    padding: 1.4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    box-shadow: 0 4px 14px rgba(50, 34, 88, 0.06);
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+}
+
+.topo {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.icone {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #F4F1F8;
+    border-radius: 50%;
+    color: var(--color-primary);
+    flex-shrink: 0;
+}
+
+.categoria {
+    color: var(--color-accent-hover);
+    font-weight: 700;
+    font-size: 0.8rem;
+}
+
+.card h3 {
+    font-family: var(--font-display);
+    color: #322258;
+    font-size: 1.1rem;
+}
+
+.card p {
+    color: #555;
+    font-size: 0.9rem;
+    line-height: 1.35;
+    flex: 1;
+}
+
+.infos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    color: #6b6b6b;
+}
+
+.infos span {
+    background: #F4F1F8;
+    border-radius: 999px;
+    padding: 0.25rem 0.7rem;
+}
+
+.nota {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    color: var(--color-accent-hover);
+}
+
+.botao {
+    margin-top: 0.4rem;
+    background: #322258;
+    color: #fff;
+    border: none;
+    border-radius: 999px;
+    padding: 0.6rem 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-family: var(--font-sans);
+}
+
+.botao:hover {
+    background: var(--color-accent);
+    color: #1f1c34;
+}

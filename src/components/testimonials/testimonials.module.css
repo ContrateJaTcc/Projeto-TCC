@@ -1,0 +1,59 @@
+.depoimentos {
+    width: min(90%, 1200px);
+    margin: 1rem auto 5rem auto;
+    text-align: center;
+}
+
+.depoimentos > h2 {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 5vw, 3.8rem);
+    color: #322258;
+    margin-bottom: 2.5rem;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.25rem;
+}
+
+.card {
+    background: #fff;
+    border: 1px solid #ece6f3;
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    box-shadow: var(--shadow-sm);
+}
+
+.card strong {
+    color: #322258;
+}
+
+.area {
+    color: var(--color-accent-hover);
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.card p {
+    color: #555;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    margin-top: 0.4rem;
+}
+
+@media (max-width: 1100px) {
+    .grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 560px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+}

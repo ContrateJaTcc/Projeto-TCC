@@ -1,0 +1,68 @@
+*, *::before, *::after {
+    margin: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    /* Na raiz, e não só no body, para nada cair no serifado padrão do browser. */
+    font-family: var(--font-sans);
+}
+
+body {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-sans);
+    font-weight: 400;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Sem a serifada para contrastar, o peso é o que separa título de texto.
+   Inter em corpo grande também pede tracking mais fechado. */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.022em;
+}
+
+h1, h2 {
+    font-weight: 800;
+}
+
+/* Sem isso os controles de formulário caem na fonte padrão do sistema
+   e destoam do resto da interface. */
+button, input, textarea, select {
+    font-family: inherit;
+    font-size: inherit;
+}
+
+button {
+    font-weight: 600;
+}
+
+img {
+    max-width: 100%;
+}
+
+a {
+    text-decoration: none;
+}
+
+:focus-visible {
+    outline: 3px solid var(--color-primary-light);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}

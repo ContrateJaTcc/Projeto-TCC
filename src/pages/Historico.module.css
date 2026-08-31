@@ -1,0 +1,119 @@
+.pagina {
+    width: min(90%, 1100px);
+    margin: 2.5rem auto 3.5rem auto;
+}
+
+.pagina h1 {
+    font-family: var(--font-display);
+    color: var(--color-primary);
+    font-size: 1.7rem;
+    margin-bottom: 1.5rem;
+}
+
+.lista {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+}
+
+.card {
+    background: #fff;
+    border: 1px solid var(--color-surface-muted);
+    border-radius: 18px;
+    padding: 1.4rem 1.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.info strong {
+    color: var(--color-primary);
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+}
+
+.categoria {
+    color: var(--color-accent-hover);
+    font-size: 0.8rem;
+    font-weight: 700;
+    display: block;
+    margin-bottom: 0.3rem;
+}
+
+.info p {
+    color: #666;
+    font-size: 0.88rem;
+    margin-top: 0.35rem;
+    max-width: 520px;
+}
+
+.direita {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.4rem;
+}
+
+.valor {
+    color: var(--color-primary);
+    font-weight: 700;
+}
+
+.data {
+    color: var(--color-text-muted);
+    font-size: 0.8rem;
+}
+
+.status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 0.3rem 0.8rem;
+    border-radius: 999px;
+    background: var(--color-bg-alt);
+    color: var(--color-text);
+}
+
+.nota {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
+}
+
+.concluido {
+    background: var(--color-accent-tint);
+    color: #7a5c00;
+}
+
+.subtitulo {
+    color: var(--color-text-muted);
+    font-size: 0.95rem;
+    margin: -1rem 0 1.5rem 0;
+}
+
+.vazio {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    text-align: center;
+    padding: 3.5rem 1.5rem;
+    background: #fff;
+    border: 1px dashed var(--color-border);
+    border-radius: var(--radius-lg);
+    color: var(--color-text-muted);
+}
+
+.vazio strong {
+    color: var(--color-primary);
+    font-size: 1.05rem;
+}
+
+.vazio p {
+    max-width: 380px;
+    font-size: 0.9rem;
+}

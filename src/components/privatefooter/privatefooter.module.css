@@ -1,0 +1,37 @@
+.footer {
+    background: var(--gradient-footer);
+    color: #fff;
+    padding: 1.5rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: auto;
+}
+
+.logo {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    color: var(--color-accent);
+}
+
+.links {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.links a {
+    color: #e6e0f0;
+    text-decoration: none;
+    font-size: 0.85rem;
+}
+
+.links a:hover {
+    color: var(--color-accent);
+}
+
+.copyright {
+    color: #b3a6c9;
+    font-size: 0.78rem;
+}

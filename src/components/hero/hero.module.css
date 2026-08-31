@@ -1,0 +1,133 @@
+.hero {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: auto;
+    margin: clamp(1rem, 2vw, 1.5rem) clamp(1rem, 3.5vw, 2.5rem);
+    padding: clamp(2rem, 5vw, 4rem) clamp(1.5rem, 5vw, 5rem);
+    position: relative;
+    background: var(--gradient-hero);
+    border-radius: 28px;
+}
+
+.heroTexto {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    z-index: 1;
+    width: min(100%, 700px);
+    max-width: 700px;
+}
+
+/*titlo conectse*/
+.heroTexto h1 {
+    font-size: clamp(3rem, 6vw, 4rem);
+    font-weight: 800;
+    font-family: var(--font-display);
+    color: rgb(255, 255, 255);
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+}
+
+.heroSubt {
+    color: var(--color-accent);
+}
+
+.heroAcoes {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+}
+
+.heroBusca {
+    flex: 1;
+    min-width: 220px;
+    max-width: 420px;
+    display: flex;
+    align-items: center;
+    background: #30302E;
+    border-radius: 999px;
+    padding: 8px 6px 8px 18px;
+}
+
+.heroBusca input {
+    border: none;
+    outline: none;
+    font-size: 14px;
+    flex: 1;
+    background: transparent;
+    color: #fff;
+    font-family: var(--font-sans);
+}
+
+.heroBusca input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.heroBusca button {
+    background: var(--color-accent);
+    border: none;
+    border-radius: 999px;
+    padding: 10px 20px;
+    cursor: pointer;
+    color: #1f1c34;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.heroBusca button:hover {
+    background: var(--color-accent-hover);
+}
+
+/* Era um lilás dessaturado (#A997B7) que sumia contra o roxo do hero.
+   Botão fantasma dá hierarquia: o dourado da busca continua sendo a ação principal. */
+.heroBtn {
+    background: transparent;
+    border: 1.5px solid rgba(255, 255, 255, 0.45);
+    color: #fff;
+    border-radius: 999px;
+    padding: 11px 22px;
+    font-size: 14px;
+    cursor: pointer;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    white-space: nowrap;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.heroBtn:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: #fff;
+}
+
+.heroBruxa {
+    align-self: center;
+    width: min(30vw, 350px);
+    min-width: 150px;
+    height: auto;
+}
+
+@media (max-width: 900px) {
+    .hero {
+        flex-direction: column;
+        text-align: left;
+        padding: 2rem 1rem;
+        margin: 0.75rem;
+        border-radius: 20px;
+    }
+
+    .heroCont {
+        flex-direction: column;
+    }
+
+    .heroBusca {
+        max-width: 100%;
+    }
+    .heroBruxa {
+        display: none;
+    }
+}

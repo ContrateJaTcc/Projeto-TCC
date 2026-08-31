@@ -1,0 +1,286 @@
+
+.cabe {
+    background: rgba(255, 251, 252, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid transparent;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: 12px clamp(1rem, 3.5vw, 2.5rem);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    transition: box-shadow 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+}
+
+.cabeRolou {
+    background: rgba(255, 251, 252, 0.94);
+    border-bottom-color: var(--color-border);
+    box-shadow: var(--shadow-sm);
+}
+
+.logo img {
+    height:36px;
+    width:auto;
+}
+
+.logo {
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap: 9px;
+    text-decoration: none;
+}
+
+.logoTexto {
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    white-space: nowrap;
+}
+
+.perfil {
+    display: flex;
+    background: var(--color-surface-muted);
+    border-radius:999px;
+    padding:2px;
+    position: relative;
+}
+
+.slider {
+    position: absolute;
+    top:4px;
+    left: 4px;
+    width: calc(50% - 4px);
+    height: calc(100% - 8px);
+    background: #FFC014;
+    border-radius:999px;
+    transition: transform 0.3s ease-in-out;
+    z-index:0;
+}
+
+.sliderDireita {
+    transform: translateX(100%);
+}
+
+.frebu, .conbu {
+    border:none;
+    background: transparent;
+    border-radius: 999px;
+    padding: 6px 18px;
+    font-size:15px;
+    cursor: pointer;
+    color: var(--color-primary);
+    transition: all 0.3s ease-in-out;
+    position:relative;
+    z-index:1;
+    font: weight 5000px;
+}
+
+.frebu.ativo, .conbu.ativo {
+    color:black;
+}
+
+/* Antes o menu e o bloco de login eram dois pills escuros lado a lado, o que
+   competia pela atenção. Agora só o "Cadastrar" carrega peso visual. */
+.menu {
+    display: flex;
+    gap: 26px;
+    position:relative;
+}
+
+.menu a {
+    position: relative;
+    text-decoration: none;
+    color: var(--color-primary);
+    font-size: 14px;
+    font-weight: 500;
+    white-space: nowrap;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+}
+
+/* Sublinhado cresce a partir do centro; sem isso o único feedback de hover
+   era a troca de cor, quase imperceptível nesse contraste. */
+.menu a::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 0;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--color-accent);
+    transform: translateX(-50%);
+    transition: width 0.22s ease;
+}
+
+.menu a:hover {
+    color: var(--color-primary-light);
+}
+
+.menu a:hover::after {
+    width: 100%;
+}
+
+.login {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    position: relative;
+}
+
+.dropdown {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 10px 30px rgba(50, 34, 88, 0.18);
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    min-width: 200px;
+    z-index: 20;
+}
+
+.dropdown a {
+    color: #322258;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding: 0.65rem 0.8rem;
+    border-radius: 10px;
+}
+
+.dropdown a:hover {
+    background: #F4F1F8;
+}
+
+.btnEnt {
+    border:none;
+    background: transparent;
+    color: var(--color-primary);
+    border-radius: 999px;
+    padding: 8px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.2s ease;
+}
+
+.btnEnt:hover {
+    background: var(--color-surface-muted);
+}
+
+.btnCad {
+    border: none;
+    background: var(--color-accent);
+    color:#1f1c34;
+    border-radius: 999px;
+    padding: 8px 20px;
+    font-size: 14px;
+    cursor: pointer;
+    font-weight: 700;
+    transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.btnCad:hover {
+    background: var(--color-accent-hover);
+    transform: translateY(-1px);
+}
+
+.hamburguer {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: none;
+    color: #322258;
+    cursor: pointer;
+}
+
+.menucel {
+    display: none;
+}
+
+@media (max-width:900px) {
+    .cabe {
+        padding: 6px 12px;
+        gap: 8px;
+    }
+    .logo img {
+        height:30px;
+        width:auto;
+    }
+    .logo {
+        gap: 6px;
+    }
+    .logoTexto {
+        font-size: 0.9rem;
+    }
+    .menu {
+        display:none;
+    }
+    .perfil {
+        flex-direction: column;
+        background: transparent;
+        padding: 0;
+        gap: 6px;
+    }
+    .slider {
+        display: none;
+    }
+    .frebu, .conbu {
+        border-radius: 999px;
+        padding: 3px 10px;
+        color: var(--color-primary);
+        background: transparent;
+        border: 1.5px solid var(--color-border);
+        transition: none;
+        font-size: 10px;
+    }
+    .frebu.ativo, .conbu.ativo {
+        background: var(--color-primary);
+        color: white;
+        border-color: var(--color-primary);
+    }
+    .hamburguer {
+        display:flex;
+    }
+    .menucel {
+        display:flex;
+        flex-direction: column;
+        gap:15px;
+        position:absolute;
+        top:60px;
+        right:20px;
+        background:white;
+        padding:15px 18px;
+        border-radius: var(--radius-md);
+        border: 1px solid var(--color-border);
+        box-shadow: var(--shadow-md);
+    }
+    .menucel a {
+        color: var(--color-primary);
+        font-weight: 500;
+        font-size: 14px;
+    }
+    .login button {
+        padding: 5px 8px;
+        font-size: 12px;
+    }
+}
+/* Abaixo de ~560px o header não comporta logo + toggle + login + menu:
+   o hamburguer era empurrado para fora da viewport e gerava rolagem
+   horizontal na página inteira. O ícone sozinho já identifica a marca. */
+@media (max-width: 560px) {
+    .logoTexto {
+        display: none;
+    }
+    .logo img {
+        height: 32px;
+    }
+}

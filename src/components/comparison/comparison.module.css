@@ -1,0 +1,123 @@
+.diferenciais {
+    width: min(90%, 1100px);
+    margin: 1rem auto 5rem auto;
+    text-align: center;
+}
+
+.diferenciais > h2 {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 3.8rem);
+    color: #322258;
+}
+
+.chamada {
+    color: #6b6b6b;
+    font-style: italic;
+    max-width: 640px;
+    margin: 0.75rem auto 2.5rem auto;
+}
+
+.destaques {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.destaque {
+    background: #F4F1F8;
+    border-radius: var(--radius-md);
+    padding: 1.75rem;
+    text-align: left;
+}
+
+.tagDestaque {
+    display: inline-block;
+    background: #322258;
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    border-radius: 999px;
+    padding: 0.3rem 0.8rem;
+    margin-bottom: 0.75rem;
+}
+
+.destaque h3 {
+    font-family: var(--font-display);
+    color: #322258;
+    margin-bottom: 0.5rem;
+}
+
+.destaque p {
+    color: #555;
+    line-height: 1.45;
+    font-size: 0.95rem;
+}
+
+.tabelaWrap {
+    background: #fff;
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-md);
+    overflow-x: auto;
+}
+
+.tituloTabela {
+    font-family: var(--font-display);
+    color: #322258;
+    margin-bottom: 1rem;
+}
+
+.tabela {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 480px;
+}
+
+.tabela th, .tabela td {
+    padding: 0.75rem 1rem;
+    text-align: center;
+    border-bottom: 1px solid #eee;
+}
+
+.tabela th:first-child, .tabela td:first-child {
+    text-align: left;
+    color: #322258;
+    font-weight: 600;
+}
+
+.tabela thead th {
+    background: #322258;
+    color: #fff;
+    font-family: var(--font-display);
+}
+
+.tabela thead th:first-child {
+    border-radius: 10px 0 0 0;
+    color: #fff;
+}
+
+.tabela thead th:last-child {
+    border-radius: 0 10px 0 0;
+}
+
+/* O verde/vermelho eram as únicas cores fora da paleta da marca. O próprio
+   ícone (check / x) já distingue, então a cor pode ser decorativa. */
+.check {
+    color: var(--color-primary-light);
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.x {
+    color: #8f7fa8;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+@media (max-width: 900px) {
+    .destaques {
+        grid-template-columns: 1fr;
+    }
+}

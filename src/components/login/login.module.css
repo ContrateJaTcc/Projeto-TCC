@@ -1,0 +1,130 @@
+.pagina {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--gradient-dark);
+    padding: 2rem 1.5rem;
+}
+
+.cartao {
+    width: 100%;
+    max-width: 420px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 22px;
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.3rem;
+    color: #fff;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    width: fit-content;
+    margin: 0 auto;
+}
+
+.logo img {
+    height: 86px;
+    width: auto;
+    display: block;
+}
+
+.cartao h1 {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    text-align: center;
+}
+
+.cartao h1 span {
+    color: var(--color-accent);
+}
+
+.subtitulo {
+    color: #d8cfe6;
+    font-size: 0.9rem;
+    text-align: center;
+    margin-top: -0.8rem;
+}
+
+.toggle {
+    display: flex;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 999px;
+    padding: 4px;
+}
+
+.toggle button {
+    flex: 1;
+    border: none;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.7);
+    border-radius: 999px;
+    padding: 0.55rem 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: var(--font-sans);
+    transition: all 0.2s;
+}
+
+.toggle button.ativo {
+    background: var(--color-accent);
+    color: #1f1c34;
+}
+
+.formulario {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.formulario label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    font-size: 0.85rem;
+    color: #d8cfe6;
+}
+
+.formulario input {
+    background: #30302E;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 0.65rem 0.9rem;
+    font-size: 0.95rem;
+    font-family: var(--font-sans);
+}
+
+.btnPrimario {
+    background: var(--color-accent);
+    color: #1f1c34;
+    border: none;
+    border-radius: 999px;
+    padding: 0.85rem 1.5rem;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-family: var(--font-sans);
+}
+
+.btnPrimario:hover {
+    background: #fff;
+}
+
+.linkCadastro {
+    text-align: center;
+    color: #d8cfe6;
+    font-size: 0.9rem;
+}
+
+.linkCadastro a {
+    color: var(--color-accent);
+    font-weight: 700;
+    text-decoration: none;
+}

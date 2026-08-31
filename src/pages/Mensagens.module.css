@@ -1,0 +1,210 @@
+.pagina {
+    width: min(90%, 900px);
+    margin: 2.5rem auto 3.5rem auto;
+}
+
+.pagina h1 {
+    font-family: var(--font-display);
+    color: var(--color-primary);
+    font-size: 1.7rem;
+    margin-bottom: 1.25rem;
+}
+
+.busca {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    padding: 0.8rem 1.3rem;
+    margin-bottom: 1.5rem;
+    color: var(--color-text-muted);
+}
+
+.busca input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 0.95rem;
+}
+
+.lista {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: #fff;
+    border: none;
+    border-radius: 16px;
+    padding: 0.9rem 1.1rem;
+    text-align: left;
+    cursor: pointer;
+    width: 100%;
+}
+
+.item:hover {
+    background: var(--color-bg-alt);
+}
+
+.textos {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    min-width: 0;
+}
+
+.textos strong {
+    color: var(--color-primary);
+    font-size: 0.98rem;
+}
+
+.textos span {
+    color: var(--color-text-muted);
+    font-size: 0.85rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Chat modal */
+.backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(28, 13, 51, 0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+    padding: 1.5rem;
+}
+
+.chat {
+    width: min(100%, 620px);
+    max-height: 82vh;
+    background: #fff;
+    border-radius: 22px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.chatHeader {
+    background: var(--color-primary);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 1rem 1.25rem;
+}
+
+.chatVoltar {
+    background: rgba(255, 255, 255, 0.12);
+    border: none;
+    color: #fff;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.chatNome {
+    flex: 1;
+    font-weight: 700;
+}
+
+.chatFechar {
+    background: none;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mensagens {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    background: var(--color-bg-alt);
+}
+
+.bolha {
+    max-width: 75%;
+    padding: 0.7rem 1rem;
+    border-radius: 16px;
+    font-size: 0.92rem;
+    line-height: 1.35;
+}
+
+.recebida {
+    align-self: flex-start;
+    background: #fff;
+    color: var(--color-text);
+    border-bottom-left-radius: 4px;
+}
+
+.enviada {
+    align-self: flex-end;
+    background: var(--color-primary);
+    color: #fff;
+    border-bottom-right-radius: 4px;
+}
+
+.hora {
+    display: block;
+    font-size: 0.7rem;
+    opacity: 0.65;
+    margin-top: 0.25rem;
+}
+
+.inputBar {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.9rem 1rem;
+    border-top: 1px solid var(--color-surface-muted);
+}
+
+.inputBar input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: var(--color-bg-alt);
+    border-radius: 999px;
+    padding: 0.7rem 1.1rem;
+    font-size: 0.92rem;
+}
+
+.enviar {
+    background: var(--color-accent);
+    border: none;
+    color: #1f1c34;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.enviar:hover {
+    background: var(--color-accent-hover);
+}
