@@ -8,9 +8,11 @@ import Login from './pages/Login'
 import FreelancerDashboard from './pages/freelancer/Dashboard'
 import ContratanteDashboard from './pages/contratante/Dashboard'
 import Candidatos from './pages/contratante/Candidatos'
+import CriarProjeto from './pages/contratante/CriarProjeto'
 import ProjetoDetalhe from './pages/ProjetoDetalhe'
 import Historico from './pages/Historico'
 import Mensagens from './pages/Mensagens'
+
 
 function App() {
   return (
@@ -33,6 +35,7 @@ function App() {
             <Route path="/contratante/projetos/:id" element={<ProjetoDetalhe />} />
             <Route path="/contratante/historico" element={<Historico />} />
             <Route path="/contratante/mensagens" element={<Mensagens />} />
+            <Route path="/contratante/criar-projeto" element={<CriarProjeto />} />
           </Route>
 
           <Route path="/restrita" element={<Navigate to="/login" replace />} />

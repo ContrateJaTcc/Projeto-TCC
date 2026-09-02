@@ -1,0 +1,74 @@
+.pagina {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 48px 24px;
+}
+
+.cabecalho {
+  margin-bottom: 32px;
+}
+
+.etapa {
+  font-size: 14px;
+}
+
+.cabecalho h1 {
+  margin: 8px 0;
+  font-size: 32px;
+}
+
+.cabecalho p {
+  margin: 0;
+}
+
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.secao {
+  padding: 24px;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+}
+
+.secao h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+.secao label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.secao input,
+.secao textarea,
+.secao select {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font: inherit;
+}
+
+.linha {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.acoes {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.acoes button {
+  padding: 12px 20px;
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
+}
