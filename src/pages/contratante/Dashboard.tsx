@@ -53,6 +53,7 @@ export default function ContratanteDashboard() {
         const projetosFormatados: Projeto[] = dados.projetos.map(
           (servico: Servico) => ({
             id: String(servico.serv_id),
+            status: servico.serv_status,
             titulo: servico.serv_titulo,
             categoria: servico.categoria,
             descricao: servico.serv_desc,
@@ -93,6 +94,7 @@ export default function ContratanteDashboard() {
         )
 
         setProjetos(projetosFormatados)
+        console.log(projetosFormatados)
       } catch (erro) {
         console.error(erro)
         setErro('Não foi possível conectar ao servidor :().')
@@ -116,7 +118,7 @@ export default function ContratanteDashboard() {
     <ProjectListSection
       titulo="Seus projetos"
       buscaPlaceholder="Procure nos seus projetos.."
-      tabs={['Seus projetos', 'Recentes', 'Salvos', 'Convites']}
+      tabs={['Publicados', 'Rascunhos', 'Salvos', 'Convites']}
       projetos={projetos}
       linkBase="/contratante/projetos"
       perfilNome="Usuário"

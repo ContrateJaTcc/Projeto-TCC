@@ -41,7 +41,7 @@ function CriarProjeto() {
     setEtapa(1)
   }
 
-  async function publicarProjeto() {
+  async function publicarProjeto(statusProjeto: 'aberto' | 'rascunho') {
     setErro('')
     setPublicando(true)
 
@@ -81,7 +81,7 @@ function CriarProjeto() {
             habilidades: habilidades || null,
             forma_pagamento: formaPagamento || null,
             vagas: Number(vagas),
-            status: 'aberto',
+            status: statusProjeto,
           }),
         }
       )
@@ -220,7 +220,7 @@ function CriarProjeto() {
 
             <button
               type="button"
-              onClick={publicarProjeto}
+              onClick={() => publicarProjeto('aberto')}
               disabled={publicando}
             >
               {publicando ? 'Publicando...' : 'Publicar projeto'}
@@ -448,7 +448,7 @@ function CriarProjeto() {
 
           <button
             type="button"
-            onClick={() => console.log('Salvar rascunho')}
+            onClick={() => publicarProjeto('rascunho')}
           >
             Salvar rascunho
           </button>

@@ -27,8 +27,17 @@ export default function ProjectListSection({
   perfilProgresso,
 }: ProjectListSectionProps) {
   const [abaAtiva, setAbaAtiva] = useState(tabs[0])
-  const mostrarLista = abaAtiva === tabs[0]
 
+const projetosFiltrados =
+  abaAtiva === 'Publicados'
+    ? projetos.filter((projeto) => projeto.status === 'aberto')
+    : abaAtiva === 'Rascunhos'
+      ? projetos.filter((projeto) => projeto.status === 'rascunho')
+      : []
+
+const mostrarLista = abaAtiva === 'Publicados' || abaAtiva === 'Rascunhos'
+console.log('ABA:', abaAtiva)
+console.log('FILTRADOS:', projetosFiltrados)
   return (
     <section className={styles.secao}>
       <div className={styles.topo}>
@@ -56,7 +65,7 @@ export default function ProjectListSection({
 
       {mostrarLista ? (
         <div className={styles.lista}>
-          {projetos.map((p) => (
+          {projetosFiltrados.map((p) => (
             <ProjectListItem key={p.id} projeto={p} linkBase={linkBase} />
           ))}
         </div>

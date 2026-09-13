@@ -46,8 +46,22 @@ export default function ProjectListItem({ projeto, linkBase }: ProjectListItemPr
       </div>
 
       <div className={styles.acoes}>
-        <Link to={`${linkBase}/${projeto.id}`} className={styles.botao}>Ver projeto</Link>
-      </div>
+  {projeto.status === 'rascunho' ? (
+    <Link
+      to={`/contratante/criar-projeto?id=${projeto.id}`}
+      className={styles.botao}
+    >
+      Editar projeto
+    </Link>
+  ) : (
+    <Link
+      to={`${linkBase}/${projeto.id}`}
+      className={styles.botao}
+    >
+      Ver projeto
+    </Link>
+  )}
+</div>
     </article>
   )
 }
