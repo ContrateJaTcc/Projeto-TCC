@@ -94,7 +94,7 @@ export default function ContratanteDashboard() {
         )
 
         setProjetos(projetosFormatados)
-        console.log(projetosFormatados)
+        
       } catch (erro) {
         console.error(erro)
         setErro('Não foi possível conectar ao servidor :().')
@@ -115,6 +115,14 @@ export default function ContratanteDashboard() {
   }
 
   return (
+  <>
+    <button
+      type="button"
+      onClick={() => window.location.href = '/contratante/criar-projeto'}
+    >
+      Criar projeto
+    </button>
+
     <ProjectListSection
       titulo="Seus projetos"
       buscaPlaceholder="Procure nos seus projetos.."
@@ -125,5 +133,6 @@ export default function ContratanteDashboard() {
       perfilBio={`Contratante · ${projetos.length} projetos ativos`}
       perfilProgresso={40}
     />
-  )
+  </>
+)
 }
