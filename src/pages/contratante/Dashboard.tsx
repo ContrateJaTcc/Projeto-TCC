@@ -30,7 +30,7 @@ export default function ContratanteDashboard() {
         const token = localStorage.getItem('token')
 
         if (!token) {
-          setErro('Você precisa estar logado.')
+          setErro('Você precisa estar logado para ver seus projetos.')
           return
         }
 
@@ -105,7 +105,7 @@ export default function ContratanteDashboard() {
   }, [])
 
   if (carregando) {
-    return <p>Carregando projetos...</p>
+    return <p>Carregando seus projetos, espere um tempinho 0.0...</p>
   }
 
   if (erro) {
