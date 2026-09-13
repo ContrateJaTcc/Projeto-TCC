@@ -22,6 +22,7 @@ export interface Projeto {
   local: string
   postadoEm: string
   autor: Autor
+  status?: string
 }
 
 export interface ItemHistorico {
