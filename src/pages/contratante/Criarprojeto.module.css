@@ -72,3 +72,34 @@
   border-radius: 8px;
   cursor: pointer;
 }
+.revisao {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.informacao {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 18px;
+}
+
+.informacao:last-child {
+  margin-bottom: 0;
+}
+
+.informacao span {
+  font-size: 14px;
+  color: #666;
+}
+
+.informacao strong {
+  font-size: 16px;
+}
+
+.informacao p {
+  margin: 0;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
