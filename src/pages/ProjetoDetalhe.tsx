@@ -93,9 +93,9 @@ export default function ProjetoDetalhe() {
             : 'Não informado',
           postadoEm: servico.serv_data_criacao,
           autor: {
-    nome: servico.contratante_nome,
+    nome: servico.contratante_nome || 'Contratante',
     bio: servico.contratante_desc || 'Contratante',
-    membroDesde: servico.contratante_data_criacao,
+    membroDesde: servico.contratante_data_criacao || '',
     numeroVerificado: false,
     pagamentoVerificado: false,
     totalPago: 'R$ 0,00',
