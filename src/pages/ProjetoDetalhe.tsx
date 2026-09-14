@@ -42,6 +42,17 @@ interface Servico {
   contratante_servicos_postados: number
 }
 
+interface OutroProjeto {
+  serv_id: number
+  serv_titulo: string
+  serv_desc: string
+  categoria: string
+  serv_valor: number
+  serv_tipo_valor: 'hora' | 'fixo'
+  serv_qtd_dias: number | null
+  serv_data_criacao: string
+}
+
 function formatarData(data: string) {
   if (!data) return ''
 
@@ -60,8 +71,10 @@ export default function ProjetoDetalhe() {
   const { role } = useRole()
 
   const [projeto, setProjeto] = useState<Projeto | null>(null)
+  const [outrosProjetos, setOutrosProjetos] = useState<OutroProjeto[]>([])
   const [carregando, setCarregando] = useState(true)
   const [erro, setErro] = useState('')
+  
 
   const base = role === 'contratante' ? '/contratante' : '/freelancer'
 
@@ -120,10 +133,24 @@ export default function ProjetoDetalhe() {
         }
 
         setProjeto(projetoFormatado)
+        const respostaOutros = await fetch(
+  `https://backendtcc-zeta.vercel.app/servicos/${id}/outros`,
+  {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
+)
+
+const dadosOutros = await respostaOutros.json()
+
+if (respostaOutros.ok) {
+  setOutrosProjetos(dadosOutros.projetos)
+}
       } catch (erro) {
-        console.error(erro)
-        setErro('Não foi possível carregar o projeto.')
-      } finally {
+  console.error('erro ao carregar o projwto:', erro)
+  setErro('Não foi possível carregar o projeto.')
+} finally {
         setCarregando(false)
       }
     }
@@ -206,7 +233,7 @@ export default function ProjetoDetalhe() {
         </div>
       </div>
 
-      <aside>
+                  <aside>
         <div className={styles.autorCard}>
           <div className={styles.autorTopo}>
             <Avatar
@@ -241,20 +268,14 @@ export default function ProjetoDetalhe() {
 
             {projeto.autor.numeroVerificado && (
               <span className={styles.verificado}>
-                <BadgeCheck
-                  size={15}
-                  strokeWidth={2.2}
-                />
+                <BadgeCheck size={15} strokeWidth={2.2} />
                 Número verificado
               </span>
             )}
 
             {projeto.autor.pagamentoVerificado && (
               <span className={styles.verificado}>
-                <BadgeCheck
-                  size={15}
-                  strokeWidth={2.2}
-                />
+                <BadgeCheck size={15} strokeWidth={2.2} />
                 Método de pagamento verificado
               </span>
             )}
@@ -266,6 +287,42 @@ export default function ProjetoDetalhe() {
             </span>
           </div>
         </div>
+
+        {outrosProjetos.length > 0 && (
+          <section className={styles.outrosProjetos}>
+            <h2>Outros trabalhos deste contratante</h2>
+
+            <div className={styles.outrosLista}>
+              {outrosProjetos.map((outro) => (
+                <Link
+                  key={outro.serv_id}
+                  to={`${base}/projetos/${outro.serv_id}`}
+                  className={styles.outroCard}
+                >
+                  <span className={styles.outroCategoria}>
+                    {outro.categoria}
+                  </span>
+
+                  <h3>{outro.serv_titulo}</h3>
+
+                  <p>{outro.serv_desc}</p>
+
+                  <strong>
+                    {outro.serv_tipo_valor === 'hora'
+                      ? `${formatarMoeda(outro.serv_valor)}/hora`
+                      : formatarMoeda(outro.serv_valor)}
+                  </strong>
+
+                  <span>
+                    {outro.serv_qtd_dias
+                      ? `${outro.serv_qtd_dias} dias`
+                      : 'Prazo não informado'}
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
       </aside>
     </div>
   )

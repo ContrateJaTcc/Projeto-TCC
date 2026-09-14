@@ -36,8 +36,7 @@ const projetosFiltrados =
       : []
 
 const mostrarLista = abaAtiva === 'Publicados' || abaAtiva === 'Rascunhos'
-console.log('ABA:', abaAtiva)
-console.log('FILTRADOS:', projetosFiltrados)
+
   return (
     <section className={styles.secao}>
       <div className={styles.topo}>
