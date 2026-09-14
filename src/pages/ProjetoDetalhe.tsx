@@ -39,6 +39,20 @@ interface Servico {
   contratante_desc: string | null
   contratante_foto: string | null
   contratante_data_criacao: string
+  contratante_servicos_postados: number
+}
+
+function formatarData(data: string) {
+  if (!data) return ''
+
+  return new Date(data).toLocaleDateString('pt-BR')
+}
+
+function formatarMoeda(valor: number) {
+  return Number(valor).toLocaleString('pt-BR', {
+    style: 'currency',
+    currency: 'BRL',
+  })
 }
 
 export default function ProjetoDetalhe() {
@@ -85,21 +99,21 @@ export default function ProjetoDetalhe() {
           descricao: servico.serv_desc,
           categoria: servico.categoria,
           orcamento:
-            servico.serv_tipo_valor === 'hora'
-              ? `R$ ${Number(servico.serv_valor).toFixed(2)}/hora`
-              : `R$ ${Number(servico.serv_valor).toFixed(2)}`,
+  servico.serv_tipo_valor === 'hora'
+    ? `${formatarMoeda(servico.serv_valor)}/hora`
+    : formatarMoeda(servico.serv_valor),
           prazo: servico.serv_qtd_dias
             ? `${servico.serv_qtd_dias} dias`
             : 'Não informado',
-          postadoEm: servico.serv_data_criacao,
+          postadoEm: formatarData(servico.serv_data_criacao),
           autor: {
     nome: servico.contratante_nome || 'Contratante',
     bio: servico.contratante_desc || 'Contratante',
-    membroDesde: servico.contratante_data_criacao || '',
+    membroDesde: formatarData(servico.contratante_data_criacao),
     numeroVerificado: false,
     pagamentoVerificado: false,
     totalPago: 'R$ 0,00',
-    servicosPostados: 0,
+    servicosPostados: servico.contratante_servicos_postados || 0,
     nota: 0,
     totalAvaliacoes: 0,
   },
