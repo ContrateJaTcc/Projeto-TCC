@@ -1,9 +1,12 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import styles from './CriarProjeto.module.css'
 
 function CriarProjeto() {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const projetoId = searchParams.get('id')
+  const editando = Boolean(projetoId)
 
   const [etapa, setEtapa] = useState(1)
 
@@ -30,6 +33,63 @@ function CriarProjeto() {
     'Redação e Tradução': 4,
     'Programação': 5,
   }
+
+  useEffect(() => {
+  if (!projetoId) {
+    return
+  }
+
+  async function carregarProjeto() {
+    try {
+      const token = localStorage.getItem('token')
+
+      if (!token) {
+        setErro('Você precisa estar logado.')
+        return
+      }
+
+      const resposta = await fetch(
+  `https://backendtcc-zeta.vercel.app/servicos/${projetoId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+
+      const dados = await resposta.json()
+
+      if (!resposta.ok) {
+        setErro(dados.erro || 'Erro ao carregar projeto.')
+        return
+      }
+
+      const projeto = dados.projeto
+
+      setTitulo(projeto.serv_titulo || '')
+      setDescricao(projeto.serv_desc || '')
+      setCategoria(projeto.categoria || '')
+      setTipoValor(projeto.serv_tipo_valor || 'fixo')
+      setValor(String(projeto.serv_valor || ''))
+      setQtdDias(
+        projeto.serv_qtd_dias !== null
+          ? String(projeto.serv_qtd_dias)
+          : ''
+      )
+      setLocal(projeto.serv_local || 'remoto')
+      setCidade(projeto.serv_cidade || '')
+      setEstado(projeto.serv_estado || '')
+      setHabilidades(projeto.serv_habilidades || '')
+      setVagas(String(projeto.serv_vagas || 1))
+      setFormaPagamento(projeto.serv_forma_pagamento || '')
+    } catch (erro) {
+      console.error(erro)
+      setErro('Não foi possível carregar o projeto.')
+    }
+  }
+
+  carregarProjeto()
+}, [projetoId])
 
   function continuar() {
     setErro('')
@@ -61,7 +121,7 @@ function CriarProjeto() {
       }
 
       const resposta = await fetch(
-        'https://backendtcc-zeta.vercel.app/servicos',
+  `https://backendtcc-zeta.vercel.app/servicos/${projetoId}`,
         {
           method: 'POST',
           headers: {
