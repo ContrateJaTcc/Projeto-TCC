@@ -6,7 +6,6 @@ function CriarProjeto() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const projetoId = searchParams.get('id')
-  const editando = Boolean(projetoId)
 
   const [etapa, setEtapa] = useState(1)
 
