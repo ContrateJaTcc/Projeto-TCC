@@ -120,9 +120,11 @@ function CriarProjeto() {
       }
 
       const resposta = await fetch(
-  `https://backendtcc-zeta.vercel.app/servicos/${projetoId}`,
-        {
-          method: 'POST',
+  projetoId
+    ? `https://backendtcc-zeta.vercel.app/servicos/${projetoId}`
+    : 'https://backendtcc-zeta.vercel.app/servicos',
+  {
+    method: projetoId ? 'PUT' : 'POST',
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
