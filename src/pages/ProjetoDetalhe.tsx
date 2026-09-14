@@ -35,6 +35,10 @@ interface Servico {
   serv_tipo_valor: 'hora' | 'fixo'
   serv_qtd_dias: number | null
   serv_data_criacao: string
+  contratante_nome: string
+  contratante_desc: string | null
+  contratante_foto: string | null
+  contratante_data_criacao: string
 }
 
 export default function ProjetoDetalhe() {
@@ -89,16 +93,16 @@ export default function ProjetoDetalhe() {
             : 'Não informado',
           postadoEm: servico.serv_data_criacao,
           autor: {
-            nome: role === 'contratante' ? 'Você' : 'Contratante',
-            bio: 'Contratante',
-            membroDesde: '',
-            numeroVerificado: false,
-            pagamentoVerificado: false,
-            totalPago: 'R$ 0,00',
-            servicosPostados: 0,
-            nota: 0,
-            totalAvaliacoes: 0,
-          },
+    nome: servico.contratante_nome,
+    bio: servico.contratante_desc || 'Contratante',
+    membroDesde: servico.contratante_data_criacao,
+    numeroVerificado: false,
+    pagamentoVerificado: false,
+    totalPago: 'R$ 0,00',
+    servicosPostados: 0,
+    nota: 0,
+    totalAvaliacoes: 0,
+  },
         }
 
         setProjeto(projetoFormatado)
