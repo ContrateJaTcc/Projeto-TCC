@@ -21,7 +21,6 @@ export default function Login() {
   const navigate = useNavigate()
   const { setRole } = useRole()
 
-  const [papel, setPapel] = useState<Role>('freelancer')
   /* Vindo do cadastro ou da redefinição de senha: mostra a confirmação e já preenche o e-mail. */
   const location = useLocation()
   const vindoDe = location.state as { cadastrado?: boolean; senhaRedefinida?: boolean; email?: string } | null
@@ -95,8 +94,8 @@ export default function Login() {
          (CPF, telefone...) na tela de cadastro, já preenchida. */
       if (dados.cadastroNecessario && dados.google) {
         navigate('/cadastro', {
-          state: { google: { token: accessToken, ...dados.google }, perfil: papel },
-        })
+  state: { google: { token: accessToken, ...dados.google } },
+})
       }
     } catch (e) {
       setErro(
@@ -117,26 +116,6 @@ export default function Login() {
         <h1>
           Bem-vindo de volta ao <span>ContrateJá</span>
         </h1>
-
-        <p className={styles.subtitulo}>Entre como:</p>
-
-        <div className={styles.toggle}>
-          <button
-            type="button"
-            className={papel === 'freelancer' ? styles.ativo : ''}
-            onClick={() => setPapel('freelancer')}
-          >
-            Freelancer
-          </button>
-
-          <button
-            type="button"
-            className={papel === 'contratante' ? styles.ativo : ''}
-            onClick={() => setPapel('contratante')}
-          >
-            Contratante
-          </button>
-        </div>
 
         <button
           type="button"
