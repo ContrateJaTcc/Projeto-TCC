@@ -11,7 +11,6 @@ import { formatarValorServico, formatarData } from '../utils/formatar'
 import type { AvaliacaoPendente } from '../components/gamificacao/tipos'
 import styles from './Historico.module.css'
 
-/* Resposta de GET /historico. */
 interface ItemHistorico {
   serv_id: number
   serv_titulo: string
@@ -27,9 +26,6 @@ interface ItemHistorico {
 }
 
 interface HistoricoProps {
-  /* "Entregue Trabalho" e "Histórico" mostram o mesmo tipo de registro, só que
-     em recortes diferentes — daí a mesma página atender aos dois em vez de
-     duplicar a marcação dos cards. */
   apenasEntregues?: boolean
 }
 

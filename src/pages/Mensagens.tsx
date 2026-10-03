@@ -5,7 +5,6 @@ import { useRole } from '../context/useRole'
 import Avatar from '../components/avatar/avatar'
 import Carregando from '../components/carregando/carregando'
 import { api, ErroApi, getToken } from '../services/api'
-import { useToast } from '../context/useToast'
 import { haQuanto } from '../utils/formatar'
 import styles from './Mensagens.module.css'
 
@@ -69,7 +68,6 @@ function lerMeuId(): number | null {
 }
 
 export default function Mensagens() {
-  const toast = useToast()
   const [params, setParams] = useSearchParams()
   const { role } = useRole()
   const [conversas, setConversas] = useState<Conversa[]>([])
@@ -120,11 +118,11 @@ export default function Mensagens() {
       /* Abrir marca como lidas no servidor; atualiza o contador da lista. */
       carregarConversas()
     } catch (e) {
-      toast.mostrar(e instanceof ErroApi ? e.message : 'Não foi possível carregar a conversa.', 'erro')
+      setErro(e instanceof ErroApi ? e.message : 'Não foi possível carregar a conversa.')
     } finally {
       setCarregandoChat(false)
     }
-  }, [buscarMensagens, carregarConversas, toast])
+  }, [buscarMensagens, carregarConversas])
 
   /*
    * Primeira carga. Se a URL trouxer ?serv=&com= (botão "Mensagem" em
@@ -226,7 +224,7 @@ export default function Mensagens() {
       /* Desfaz a bolha e devolve o texto, para a pessoa não perder o que escreveu. */
       setMensagens((atuais) => atuais.filter((m) => m.msg_id !== provisoria.msg_id))
       setTexto(conteudo)
-      toast.mostrar(err instanceof ErroApi ? err.message : 'Não foi possível enviar a mensagem.', 'erro')
+      setErro(err instanceof ErroApi ? err.message : 'Não foi possível enviar a mensagem.')
     }
   }
 

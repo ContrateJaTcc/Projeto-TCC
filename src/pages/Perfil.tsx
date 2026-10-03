@@ -10,7 +10,7 @@ import PainelContratante, { type PerfilContratante } from '../components/gamific
 import type { PerfilFreelancer } from '../components/gamificacao/tipos'
 import secoes from '../components/gamificacao/gamificacao.module.css'
 import { api, ErroApi } from '../services/api'
-import { useToast } from '../context/useToast'
+import { useToast } from '../context/ToastContext'
 import Carregando from '../components/carregando/carregando'
 import EstadoErro from '../components/carregando/estadoerro'
 import { mascararTelefone, somenteDigitos } from '../utils/mascaras'
