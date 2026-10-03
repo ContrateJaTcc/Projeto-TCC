@@ -110,3 +110,148 @@
     background: var(--color-bg-alt);
     color: var(--color-text-muted);
 }
+
+.verPortfolio {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--color-primary-light);
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.verPortfolio:hover {
+    text-decoration: underline;
+}
+
+/* ---------- grupos, etiquetas e movimento ---------- */
+
+.grupo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1rem;
+    color: var(--color-primary);
+    margin: 1.8rem 0 0.9rem;
+}
+
+.grupo:first-of-type {
+    margin-top: 0;
+}
+
+.grupo span {
+    background: var(--color-bg-alt);
+    border-radius: var(--radius-pill);
+    padding: 0.05rem 0.55rem;
+    font-size: 0.78rem;
+}
+
+.nenhum {
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+}
+
+.card {
+    transition: box-shadow var(--dur-media), border-color var(--dur-media), opacity var(--dur-media);
+}
+
+.card:hover {
+    box-shadow: var(--shadow-md);
+    border-color: var(--color-border);
+}
+
+/* Respondidos ficam um pouco apagados: o olho vai primeiro aos pendentes. */
+.respondido {
+    opacity: 0.8;
+}
+
+.respondido:hover {
+    opacity: 1;
+}
+
+.aceitar,
+.recusar {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.aceitar:hover:not(:disabled) {
+    background: var(--color-accent-hover);
+    box-shadow: 0 4px 14px rgba(255, 192, 20, 0.4);
+}
+
+.recusar:hover:not(:disabled) {
+    background: #fdecea;
+    color: var(--color-danger);
+}
+
+.etiqueta {
+    border-radius: var(--radius-pill);
+    padding: 0.3rem 0.8rem;
+    font-size: 0.78rem;
+    font-weight: 700;
+    background: var(--color-bg-alt);
+    color: var(--color-text-muted);
+    animation: aparecer var(--dur-lenta) both;
+}
+
+.aceita {
+    background: #e3f5ec;
+    color: #1d7a4c;
+}
+
+.recusada {
+    background: #fdecea;
+    color: #9b2c22;
+}
+
+.vazio {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    text-align: center;
+    padding: 3.5rem 1.5rem;
+    background: #fff;
+    border: 1px dashed var(--color-border);
+    border-radius: var(--radius-lg);
+    color: var(--color-text-muted);
+}
+
+.vazio strong {
+    color: var(--color-primary);
+    font-size: 1.05rem;
+}
+
+.vazio p {
+    max-width: 420px;
+    font-size: 0.9rem;
+}
+
+.vazioBtn {
+    margin-top: 0.6rem;
+    background: var(--color-accent);
+    color: var(--color-primary-dark);
+    border-radius: var(--radius-pill);
+    padding: 0.6rem 1.3rem;
+    font-weight: 700;
+}
+
+@media (max-width: 640px) {
+    .card {
+        flex-wrap: wrap;
+    }
+
+    .direita {
+        flex-basis: 100%;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+}
+
+.verPortfolio + .verPortfolio {
+    margin-left: 1.1rem;
+}

@@ -335,3 +335,27 @@
         flex-direction: column;
     }
 }
+
+.avisoGoogle {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    padding: 0.8rem 1rem;
+    font-size: 0.85rem;
+    color: #d8cfe6;
+    line-height: 1.5;
+}
+
+.avisoGoogle strong {
+    color: #fff;
+}
+
+.avisoGoogle button {
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--color-accent);
+    font-weight: 700;
+    cursor: pointer;
+    font-family: var(--font-sans);
+    font-size: inherit;
+}

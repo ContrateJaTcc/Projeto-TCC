@@ -1,0 +1,103 @@
+.pagina {
+    width: min(90%, 1000px);
+    margin: 2.5rem auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    animation: aparecer var(--dur-media) ease both;
+    /* Um atraso curto: em resposta rápida o esqueleto nem chega a piscar. */
+    animation-delay: 120ms;
+}
+
+.titulo {
+    height: 30px;
+    width: 220px;
+    margin-bottom: 0.5rem;
+}
+
+.cartao,
+.item {
+    display: flex;
+    gap: 1.2rem;
+    align-items: center;
+    padding: 1.4rem;
+    border-radius: 18px;
+    border: 1px solid var(--color-surface-muted);
+    background: #fff;
+}
+
+.avatar {
+    width: 88px;
+    height: 88px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.linhas {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.linha {
+    height: 13px;
+}
+
+.faixa {
+    height: 96px;
+    border-radius: 18px;
+}
+
+.grade {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 0.9rem;
+}
+
+.bloco {
+    height: 130px;
+    border-radius: 14px;
+}
+
+.erro {
+    width: min(90%, 520px);
+    margin: 4rem auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    text-align: center;
+    padding: 2.5rem 1.5rem;
+    background: #fff;
+    border: 1px solid var(--color-surface-muted);
+    border-radius: var(--radius-lg);
+    color: var(--color-text-muted);
+}
+
+.erro strong {
+    color: var(--color-primary);
+    font-size: 1.05rem;
+}
+
+.erro p {
+    font-size: 0.9rem;
+}
+
+.erro button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 0.6rem;
+    background: var(--color-primary);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-pill);
+    padding: 0.6rem 1.2rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.erro button:hover {
+    background: var(--color-primary-light);
+}

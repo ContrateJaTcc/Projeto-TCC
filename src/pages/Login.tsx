@@ -1,19 +1,56 @@
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import logo from '../components/imgs/logo.png'
 import { useRole } from '../context/useRole'
 import type { Role } from '../context/role-context-def'
+import { api, ErroApi, salvarSessao } from '../services/api'
+import { pedirTokenGoogle } from '../services/google'
 import styles from '../components/login/login.module.css'
+
+interface RespostaLogin {
+  token: string
+  tipo?: Role
+}
+
+interface RespostaGoogle extends Partial<RespostaLogin> {
+  cadastroNecessario?: boolean
+  google?: { email: string; nome: string; sobrenome: string }
+}
 
 export default function Login() {
   const navigate = useNavigate()
   const { setRole } = useRole()
 
   const [papel, setPapel] = useState<Role>('freelancer')
-  const [email, setEmail] = useState('')
+  /* Vindo do cadastro ou da redefinição de senha: mostra a confirmação e já preenche o e-mail. */
+  const location = useLocation()
+  const vindoDe = location.state as { cadastrado?: boolean; senhaRedefinida?: boolean; email?: string } | null
+  const aviso = vindoDe?.cadastrado
+    ? 'Conta criada com sucesso! Entre com seu e-mail e senha.'
+    : vindoDe?.senhaRedefinida
+      ? 'Senha redefinida! Entre com a nova senha.'
+      : ''
+
+  const [email, setEmail] = useState(vindoDe?.email ?? '')
   const [senha, setSenha] = useState('')
   const [erro, setErro] = useState('')
   const [carregando, setCarregando] = useState(false)
+
+  /*
+   * O destino vem do tipo que o servidor le do banco, nao do botao acima:
+   * antes um contratante que clicasse em "Freelancer" entrava na area errada.
+   */
+  const entrar = (dados: RespostaLogin) => {
+    const tipoReal = salvarSessao(dados.token, dados.tipo)
+
+    if (!tipoReal) {
+      setErro('Não foi possível identificar o tipo da sua conta. Tente novamente.')
+      return
+    }
+
+    setRole(tipoReal)
+    navigate(`/${tipoReal}`)
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -22,35 +59,49 @@ export default function Login() {
     setCarregando(true)
 
     try {
-      const resposta = await fetch(
-        'https://backendtcc-zeta.vercel.app/auth/login',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            email,
-            senha
-          })
-        }
-      )
+      const dados = await api<RespostaLogin>('/auth/login', {
+        metodo: 'POST',
+        corpo: { email, senha },
+        publico: true,
+      })
 
-      const dados = await resposta.json()
+      entrar(dados)
+    } catch (e) {
+      setErro(e instanceof ErroApi ? e.message : 'Não foi possível conectar ao servidor.')
+    } finally {
+      setCarregando(false)
+    }
+  }
 
-      if (!resposta.ok) {
-        setErro(dados.erro || 'Erro ao fazer login')
+  const handleGoogle = async () => {
+    setErro('')
+    setCarregando(true)
+
+    try {
+      const accessToken = await pedirTokenGoogle()
+
+      const dados = await api<RespostaGoogle>('/auth/google', {
+        metodo: 'POST',
+        corpo: { accessToken },
+        publico: true,
+      })
+
+      if (dados.token) {
+        entrar({ token: dados.token, tipo: dados.tipo })
         return
       }
 
-      localStorage.setItem('token', dados.token)
-
-      setRole(papel)
-      navigate(`/${papel}`)
-
-    } catch (erro) {
-      console.error(erro)
-      setErro('Não foi possível conectar ao servidor.')
+      /* Conta Google sem cadastro: completa os dados que o Google não dá
+         (CPF, telefone...) na tela de cadastro, já preenchida. */
+      if (dados.cadastroNecessario && dados.google) {
+        navigate('/cadastro', {
+          state: { google: { token: accessToken, ...dados.google }, perfil: papel },
+        })
+      }
+    } catch (e) {
+      setErro(
+        e instanceof Error ? e.message : 'Não foi possível conectar ao servidor.'
+      )
     } finally {
       setCarregando(false)
     }
@@ -87,6 +138,19 @@ export default function Login() {
           </button>
         </div>
 
+        <button
+          type="button"
+          className={styles.btnSocial}
+          onClick={handleGoogle}
+          disabled={carregando}
+        >
+          Continuar com Google
+        </button>
+
+        <div className={styles.divisor}>
+          <span>ou entre com e-mail</span>
+        </div>
+
         <div className={styles.formulario}>
           <label>
             E-mail
@@ -110,10 +174,20 @@ export default function Login() {
             onChange={(e) => setSenha(e.target.value)}
            />
           </label>
+
+          <Link to="/esqueci-senha" state={{ email }} className={styles.linkEsqueci}>
+            Esqueci minha senha
+          </Link>
         </div>
 
+        {aviso && !erro && (
+          <p className="msg-ok">
+            {aviso}
+          </p>
+        )}
+
         {erro && (
-          <p style={{ color: 'red' }}>
+          <p className="msg-erro">
             {erro}
           </p>
         )}

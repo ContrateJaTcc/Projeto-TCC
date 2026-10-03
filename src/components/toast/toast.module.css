@@ -1,0 +1,100 @@
+.pilha {
+    position: fixed;
+    right: 1.25rem;
+    bottom: 1.25rem;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    width: min(380px, calc(100vw - 2.5rem));
+    pointer-events: none;
+}
+
+.toast {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+    padding: 0.85rem 0.9rem 0.95rem 1rem;
+    border-radius: 14px;
+    background: #fff;
+    color: var(--color-text);
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--color-surface-muted);
+    font-size: 0.88rem;
+    font-weight: 500;
+    line-height: 1.4;
+    pointer-events: auto;
+    animation: entrarToast var(--dur-lenta) var(--ease-out) both;
+}
+
+.toast > span:first-of-type {
+    flex: 1;
+}
+
+.toast button {
+    background: none;
+    border: none;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    padding: 0.1rem;
+    border-radius: 6px;
+    line-height: 0;
+}
+
+.toast button:hover {
+    background: var(--color-bg-alt);
+    color: var(--color-text);
+}
+
+.icone {
+    flex-shrink: 0;
+    margin-top: 0.05rem;
+}
+
+.sucesso .icone { color: #1d7a4c; }
+.erro .icone { color: var(--color-danger); }
+.info .icone { color: var(--color-primary-light); }
+
+/* Barrinha embaixo mostrando quanto tempo falta para o aviso sumir. */
+.tempo {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 3px;
+    width: 100%;
+    transform-origin: left;
+    animation: esvaziar linear forwards;
+}
+
+.sucesso .tempo { background: #1d7a4c; }
+.erro .tempo { background: var(--color-danger); }
+.info .tempo { background: var(--color-primary-light); }
+
+.saindo {
+    animation: sairToast var(--dur-media) ease-in forwards;
+}
+
+@keyframes entrarToast {
+    from {
+        opacity: 0;
+        transform: translateY(16px) scale(0.96);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@keyframes sairToast {
+    to {
+        opacity: 0;
+        transform: translateX(24px);
+    }
+}
+
+@keyframes esvaziar {
+    from { transform: scaleX(1); }
+    to { transform: scaleX(0); }
+}

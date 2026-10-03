@@ -66,3 +66,156 @@ a {
         transition-duration: 0.01ms !important;
     }
 }
+
+/* ================= movimento e resposta ao toque =================
+ *
+ * Antes quase metade dos CSS nao tinha nenhuma transition: hover e troca de
+ * estado aconteciam "no seco", o que dava a sensacao de site duro. Estas
+ * regras dao uma resposta suave a todo elemento clicavel de uma vez.
+ */
+
+a,
+button,
+input,
+select,
+textarea,
+[role='button'] {
+    transition:
+        background-color var(--dur-media) var(--ease-out),
+        color var(--dur-media) var(--ease-out),
+        border-color var(--dur-media) var(--ease-out),
+        box-shadow var(--dur-media) var(--ease-out),
+        transform var(--dur-rapida) var(--ease-out),
+        opacity var(--dur-media) var(--ease-out);
+}
+
+/* "Afunda" levemente ao clicar: o retorno fisico que faltava nos botoes. */
+button:not(:disabled):active,
+a[class]:active {
+    transform: scale(0.97);
+}
+
+button:disabled {
+    cursor: not-allowed;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    box-shadow: 0 0 0 4px rgba(111, 63, 168, 0.14);
+}
+
+/* Entrada de pagina e de conteudo carregado. */
+@keyframes entrar {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@keyframes aparecer {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes brilho {
+    from { background-position: 150% 0; }
+    to { background-position: -50% 0; }
+}
+
+@keyframes girar {
+    to { transform: rotate(360deg); }
+}
+
+/*
+ * fill-mode "backwards", e não "both": com "both" a animação fica ativa para
+ * sempre, o que transforma o elemento em contêiner de tudo que é position:fixed
+ * dentro dele (o fundo do chat parava no cabeçalho) e bloqueia o transform do
+ * hover (.elevavel não levantava).
+ */
+.entrada {
+    animation: entrar var(--dur-lenta) var(--ease-out) backwards;
+}
+
+/*
+ * Listas entram em cascata: cada item espera um pouco mais que o anterior.
+ * Limitado a 8 itens para listas longas nao demorarem a aparecer.
+ */
+.cascata > * {
+    animation: entrar var(--dur-lenta) var(--ease-out) backwards;
+}
+.cascata > *:nth-child(2) { animation-delay: 40ms; }
+.cascata > *:nth-child(3) { animation-delay: 80ms; }
+.cascata > *:nth-child(4) { animation-delay: 120ms; }
+.cascata > *:nth-child(5) { animation-delay: 160ms; }
+.cascata > *:nth-child(6) { animation-delay: 200ms; }
+.cascata > *:nth-child(7) { animation-delay: 240ms; }
+.cascata > *:nth-child(n + 8) { animation-delay: 280ms; }
+
+/* Cartao que "levanta" no hover. */
+.elevavel {
+    transition:
+        transform var(--dur-media) var(--ease-out),
+        box-shadow var(--dur-media) var(--ease-out),
+        border-color var(--dur-media) var(--ease-out);
+}
+
+.elevavel:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--color-border);
+}
+
+/* Bloco de carregamento (skeleton) com brilho passando. */
+.skeleton {
+    background: linear-gradient(
+        90deg,
+        var(--color-surface-muted) 25%,
+        #f7f3fb 50%,
+        var(--color-surface-muted) 75%
+    );
+    background-size: 200% 100%;
+    animation: brilho 1.3s linear infinite;
+    border-radius: 10px;
+}
+
+/* Spinner pequeno para botoes em andamento: <span class="spinner" />. */
+.spinner {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: girar 0.7s linear infinite;
+    vertical-align: -0.15em;
+}
+
+/* Mensagens junto ao formulário. Antes eram <p style={{ color: 'red' }}>:
+   texto vermelho puro, sem fundo, que surgia de repente e empurrava o layout. */
+.msg-erro,
+.msg-ok {
+    display: block;
+    border-radius: 12px;
+    padding: 0.7rem 0.95rem;
+    font-size: 0.86rem;
+    font-weight: 500;
+    line-height: 1.45;
+    animation: entrar var(--dur-media) var(--ease-out) both;
+}
+
+.msg-erro {
+    background: #fdecea;
+    color: #9b2c22;
+    border: 1px solid #f5c2bc;
+}
+
+.msg-ok {
+    background: #e3f5ec;
+    color: #1d6b42;
+    border: 1px solid #a8dcb8;
+}

@@ -35,4 +35,10 @@
   --gradient-dark: linear-gradient(160deg, #150324, #320757 60%, #6f3fa8);
   --gradient-hero: linear-gradient(100deg, #150324 0%, #320757 50%, #985FC9 100%);
   --gradient-footer: linear-gradient(180deg, #1c0d33, #3a2160 70%, #5b3690);
+
+  /* Movimento: uma curva e tres duracoes para o site inteiro se mover igual. */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-rapida: 0.15s;
+  --dur-media: 0.25s;
+  --dur-lenta: 0.45s;
 }

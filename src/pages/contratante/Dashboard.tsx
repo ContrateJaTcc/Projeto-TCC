@@ -115,24 +115,32 @@ export default function ContratanteDashboard() {
   }
 
   return (
-  <>
-    <button
-      type="button"
-      onClick={() => window.location.href = '/contratante/criar-projeto'}
-    >
-      Criar projeto
-    </button>
-
     <ProjectListSection
+      papel="contratante"
       titulo="Seus projetos"
       buscaPlaceholder="Procure nos seus projetos.."
-      tabs={['Publicados', 'Rascunhos', 'Salvos', 'Convites']}
+      abas={[
+        { rotulo: 'Publicados', filtro: (projeto) => projeto.status !== 'rascunho' },
+        { rotulo: 'Rascunhos', filtro: (projeto) => projeto.status === 'rascunho' },
+        { rotulo: 'Salvos', filtro: () => false },
+        { rotulo: 'Convites', filtro: () => false },
+      ]}
       projetos={projetos}
       linkBase="/contratante/projetos"
-      perfilNome="Usuário"
-      perfilBio={`Contratante · ${projetos.length} projetos ativos`}
-      perfilProgresso={40}
+      acao={
+        <button type="button" onClick={() => (window.location.href = '/contratante/criar-projeto')}>
+          Criar projeto
+        </button>
+      }
+      vazio={{
+        titulo: 'Você ainda não tem projetos publicados',
+        texto: 'Crie o primeiro projeto e comece a receber propostas.',
+        acao: (
+          <button type="button" onClick={() => (window.location.href = '/contratante/criar-projeto')}>
+            Criar projeto
+          </button>
+        ),
+      }}
     />
-  </>
-)
+  )
 }

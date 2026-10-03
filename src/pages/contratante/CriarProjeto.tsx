@@ -1,6 +1,30 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import styles from './CriarProjeto.module.css'
+import { api, ErroApi } from '../../services/api'
+
+interface TipoServico {
+  tipo_id: number
+  tipo_nome: string
+  tipo_desc: string | null
+}
+
+/* Resposta de GET /servicos/:id, com os campos que esta tela preenche. */
+interface ServicoCarregado {
+  serv_titulo: string | null
+  serv_desc: string | null
+  categoria: string | null
+  serv_tipo_valor: 'hora' | 'fixo' | null
+  serv_valor: number | string | null
+  serv_qtd_dias: number | null
+  serv_local: 'remoto' | 'hibrido' | 'presencial' | null
+  serv_cidade: string | null
+  serv_estado: string | null
+  serv_habilidades: string | null
+  serv_forma_pagamento: string | null
+  serv_vagas: number | null
+}
+
 
 function CriarProjeto() {
   const navigate = useNavigate()
@@ -25,13 +49,20 @@ function CriarProjeto() {
   const [publicando, setPublicando] = useState(false)
   const [erro, setErro] = useState('')
 
-  const categorias: Record<string, number> = {
-    'Desenvolvimento Web': 1,
-    'Design': 2,
-    'Marketing': 3,
-    'Redação e Tradução': 4,
-    'Programação': 5,
-  }
+  /*
+   * As categorias vem do banco, nao de um mapa fixo. O mapa antigo quebrava
+   * de duas formas: se os ids do banco fossem outros, o insert falhava na
+   * chave estrangeira; e ao editar um projeto cujo nome de categoria diferisse
+   * do escrito aqui (acento, maiuscula), dava "Categoria invalida" e o
+   * usuario nao conseguia salvar.
+   */
+  const [tiposServico, setTiposServico] = useState<TipoServico[]>([])
+
+  useEffect(() => {
+    api<{ tipos: TipoServico[] }>('/tipos-servico')
+      .then((d) => setTiposServico(d.tipos))
+      .catch(() => setErro('Não foi possível carregar as categorias.'))
+  }, [])
 
   useEffect(() => {
   if (!projetoId) {
@@ -40,28 +71,7 @@ function CriarProjeto() {
 
   async function carregarProjeto() {
     try {
-      const token = localStorage.getItem('token')
-
-      if (!token) {
-        setErro('Você precisa estar logado.')
-        return
-      }
-
-      const resposta = await fetch(
-  `https://backendtcc-zeta.vercel.app/servicos/${projetoId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
-
-      const dados = await resposta.json()
-
-      if (!resposta.ok) {
-        setErro(dados.erro || 'Erro ao carregar projeto.')
-        return
-      }
+      const dados = await api<{ projeto: ServicoCarregado }>(`/servicos/${projetoId}`)
 
       const projeto = dados.projeto
 
@@ -81,9 +91,8 @@ function CriarProjeto() {
       setHabilidades(projeto.serv_habilidades || '')
       setVagas(String(projeto.serv_vagas || 1))
       setFormaPagamento(projeto.serv_forma_pagamento || '')
-    } catch (erro) {
-      console.error(erro)
-      setErro('Não foi possível carregar o projeto.')
+    } catch (e) {
+      setErro(e instanceof ErroApi ? e.message : 'Não foi possível carregar o projeto.')
     }
   }
 
@@ -112,54 +121,35 @@ function CriarProjeto() {
         return
       }
 
-      const tipo_id = categorias[categoria]
+      const tipo_id = tiposServico.find((t) => t.tipo_nome === categoria)?.tipo_id
 
       if (!tipo_id) {
-        setErro('Categoria inválida.')
+        setErro('Escolha uma categoria da lista.')
         return
       }
 
-      const resposta = await fetch(
-  projetoId
-    ? `https://backendtcc-zeta.vercel.app/servicos/${projetoId}`
-    : 'https://backendtcc-zeta.vercel.app/servicos',
-  {
-    method: projetoId ? 'PUT' : 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            titulo,
-            descricao,
-            tipo_id,
-            valor: Number(valor),
-            tipo_valor: tipoValor,
-            qtd_dias: Number(qtdDias),
-            local,
-            cidade: cidade || null,
-            estado: estado || null,
-            habilidades: habilidades || null,
-            forma_pagamento: formaPagamento || null,
-            vagas: Number(vagas),
-            status: statusProjeto,
-          }),
-        }
-      )
-
-      const dados = await resposta.json()
-
-      if (!resposta.ok) {
-        setErro(dados.erro || 'Erro ao publicar projeto.')
-        return
-      }
-
-      console.log('Projeto publicado:', dados.projeto)
+      await api(projetoId ? `/servicos/${projetoId}` : '/servicos', {
+        metodo: projetoId ? 'PUT' : 'POST',
+        corpo: {
+          titulo,
+          descricao,
+          tipo_id,
+          valor: Number(valor),
+          tipo_valor: tipoValor,
+          qtd_dias: Number(qtdDias),
+          local,
+          cidade: cidade || null,
+          estado: estado || null,
+          habilidades: habilidades || null,
+          forma_pagamento: formaPagamento || null,
+          vagas: Number(vagas),
+          status: statusProjeto,
+        },
+      })
 
       navigate('/contratante')
-    } catch (erro) {
-      console.error(erro)
-      setErro('Não foi possível conectar ao servidor.')
+    } catch (e) {
+      setErro(e instanceof ErroApi ? e.message : 'Não foi possível conectar ao servidor.')
     } finally {
       setPublicando(false)
     }
@@ -265,7 +255,7 @@ function CriarProjeto() {
           </section>
 
           {erro && (
-            <p style={{ color: 'red' }}>
+            <p className="msg-erro">
               {erro}
             </p>
           )}
@@ -344,25 +334,11 @@ function CriarProjeto() {
                 Selecione uma categoria
               </option>
 
-              <option value="Desenvolvimento Web">
-                Desenvolvimento Web
-              </option>
-
-              <option value="Design">
-                Design
-              </option>
-
-              <option value="Marketing">
-                Marketing
-              </option>
-
-              <option value="Redação e Tradução">
-                Redação e Tradução
-              </option>
-
-              <option value="Programação">
-                Programação
-              </option>
+              {tiposServico.map((tipo) => (
+                <option key={tipo.tipo_id} value={tipo.tipo_nome}>
+                  {tipo.tipo_nome}
+                </option>
+              ))}
             </select>
           </label>
         </section>

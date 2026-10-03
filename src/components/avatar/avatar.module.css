@@ -10,3 +10,12 @@
     flex-shrink: 0;
     letter-spacing: 0.02em;
 }
+
+.foto {
+    border-radius: 50%;
+    object-fit: cover;
+    /* Sem isto a foto encolhe dentro de containers flex, como nos cards. */
+    flex-shrink: 0;
+    background: var(--color-bg-alt);
+    display: block;
+}

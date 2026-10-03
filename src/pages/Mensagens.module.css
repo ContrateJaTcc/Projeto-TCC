@@ -208,3 +208,274 @@
 .enviar:hover {
     background: var(--color-accent-hover);
 }
+
+/* ---------- lista ---------- */
+
+.item {
+    border: 1px solid transparent;
+}
+
+.item:hover {
+    border-color: var(--color-surface-muted);
+}
+
+.textos {
+    flex: 1;
+}
+
+.textos .projeto {
+    font-size: 0.75rem;
+    color: var(--color-primary-light);
+    font-weight: 600;
+}
+
+.naoLida {
+    background: var(--color-accent-tint);
+}
+
+.naoLida .textos span:last-child {
+    color: var(--color-text);
+    font-weight: 600;
+}
+
+.lado {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.35rem;
+    flex-shrink: 0;
+}
+
+.quando {
+    font-size: 0.74rem;
+    color: var(--color-text-muted);
+}
+
+.contador {
+    min-width: 22px;
+    height: 22px;
+    padding: 0 6px;
+    border-radius: var(--radius-pill);
+    background: var(--color-accent);
+    color: var(--color-primary-dark);
+    font-size: 0.74rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.vazio {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    text-align: center;
+    padding: 3.5rem 1.5rem;
+    background: #fff;
+    border: 1px dashed var(--color-border);
+    border-radius: var(--radius-lg);
+    color: var(--color-text-muted);
+}
+
+.vazio strong {
+    color: var(--color-primary);
+    font-size: 1.05rem;
+}
+
+.vazio p {
+    max-width: 420px;
+    font-size: 0.9rem;
+}
+
+.nenhuma {
+    color: var(--color-text-muted);
+    text-align: center;
+    padding: 2rem;
+}
+
+/* ---------- chat ---------- */
+
+.backdrop {
+    animation: aparecer var(--dur-media) ease both;
+    backdrop-filter: blur(3px);
+}
+
+.chat {
+    height: min(82vh, 680px);
+    animation: subirChat var(--dur-lenta) var(--ease-out) both;
+}
+
+.chatNome {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.chatNome span {
+    font-size: 0.76rem;
+    font-weight: 500;
+    opacity: 0.75;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.chatVoltar:hover,
+.chatFechar:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.chatFechar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+}
+
+.bolha {
+    animation: bolha var(--dur-media) var(--ease-out) both;
+    overflow-wrap: anywhere;
+}
+
+.enviada {
+    transform-origin: bottom right;
+}
+
+.recebida {
+    transform-origin: bottom left;
+}
+
+.pendente {
+    opacity: 0.65;
+}
+
+.bolhaEsqueleto {
+    width: 55%;
+    height: 42px;
+    border-radius: 16px;
+}
+
+.direitaEsq {
+    align-self: flex-end;
+    width: 40%;
+}
+
+.inicio {
+    margin: auto;
+    max-width: 320px;
+    text-align: center;
+    color: var(--color-text-muted);
+    font-size: 0.88rem;
+}
+
+.enviar:disabled {
+    opacity: 0.45;
+}
+
+.enviar:not(:disabled):hover svg {
+    transform: translate(2px, -2px);
+}
+
+.enviar svg {
+    transition: transform var(--dur-media) var(--ease-out);
+}
+
+@keyframes subirChat {
+    from {
+        opacity: 0;
+        transform: translateY(24px) scale(0.97);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@keyframes bolha {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@media (max-width: 560px) {
+    .backdrop {
+        padding: 0;
+        align-items: flex-end;
+    }
+
+    .chat {
+        height: 92vh;
+        max-height: none;
+        border-radius: 22px 22px 0 0;
+    }
+}
+
+/* ---------- começar conversa ---------- */
+
+.novos {
+    margin-bottom: 1.8rem;
+}
+
+.novos h2,
+.tituloLista {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 1rem;
+    color: var(--color-primary);
+    margin-bottom: 0.8rem;
+}
+
+.gradeContatos {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 0.7rem;
+}
+
+.contato {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: #fff;
+    border: 1px solid var(--color-surface-muted);
+    border-radius: 16px;
+    padding: 0.8rem 0.9rem;
+    text-align: left;
+    cursor: pointer;
+    width: 100%;
+}
+
+.contato:hover {
+    border-color: var(--color-primary-light);
+    box-shadow: var(--shadow-sm);
+}
+
+.contatoAcao {
+    flex-shrink: 0;
+    background: var(--color-primary);
+    color: #fff;
+    border-radius: var(--radius-pill);
+    padding: 0.35rem 0.8rem;
+    font-size: 0.76rem;
+    font-weight: 700;
+    transition: background-color var(--dur-media), color var(--dur-media);
+}
+
+.contato:hover .contatoAcao {
+    background: var(--color-accent);
+    color: var(--color-primary-dark);
+}
+
+.vazioBtn {
+    margin-top: 0.6rem;
+    background: var(--color-accent);
+    color: var(--color-primary-dark);
+    border-radius: var(--radius-pill);
+    padding: 0.6rem 1.3rem;
+    font-weight: 700;
+}

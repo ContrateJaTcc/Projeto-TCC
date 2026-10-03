@@ -1,0 +1,205 @@
+.secao {
+    margin-top: 2.5rem;
+    
+}
+
+.topo {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.6rem;
+}
+
+.topo h2 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: var(--color-primary);
+    font-size: 1.2rem;
+}
+
+.subtitulo {
+    color: var(--color-text-muted);
+    font-size: 0.88rem;
+    margin-top: 0.3rem;
+    max-width: 52ch;
+}
+
+.novo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: var(--color-accent);
+    color: var(--color-primary-dark);
+    border: none;
+    border-radius: var(--radius-pill);
+    padding: 0.65rem 1.3rem;
+    font-family: var(--font-sans);
+    font-size: 0.88rem;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.novo:hover {
+    background: var(--color-accent-hover);
+}
+
+.erro {
+    color: var(--color-danger);
+    font-size: 0.88rem;
+    margin-bottom: 1rem;
+}
+
+.form {
+    background: #fff;
+    border: 1px solid var(--color-surface-muted);
+    border-radius: 18px;
+    padding: 1.4rem 1.6rem;
+    margin-bottom: 1.8rem;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+}
+
+.formTopo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.formTopo strong {
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: var(--color-primary);
+}
+
+.formTopo button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-text-muted);
+    display: flex;
+}
+
+.form label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-text);
+    /* Sem isso os dois campos lado a lado estouram a largura do form. */
+    min-width: 0;
+}
+
+.form label span {
+    font-weight: 400;
+    color: var(--color-text-muted);
+}
+
+.form input,
+.form textarea {
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    padding: 0.6rem 0.8rem;
+    background: var(--color-bg);
+    resize: vertical;
+    width: 100%;
+}
+
+.form input:focus,
+.form textarea:focus {
+    outline: 2px solid var(--color-primary-light);
+    outline-offset: 1px;
+}
+
+.linha {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.9rem;
+}
+
+.dica {
+    color: var(--color-text-muted);
+    font-size: 0.78rem;
+    line-height: 1.5;
+    margin: -0.2rem 0 0 0;
+}
+
+.formAcoes {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.6rem;
+    margin-top: 0.3rem;
+}
+
+.formAcoes button {
+    border-radius: var(--radius-pill);
+    padding: 0.6rem 1.3rem;
+    font-family: var(--font-sans);
+    font-size: 0.86rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.cancelar {
+    background: #fff;
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+}
+
+.salvar {
+    background: var(--color-primary);
+    border: none;
+    color: #fff;
+}
+
+.salvar:hover {
+    background: var(--color-primary-light);
+}
+
+.salvar:disabled {
+    opacity: 0.6;
+    cursor: default;
+}
+
+.vazio {
+    background: var(--color-bg-alt);
+    border: 1px dashed var(--color-border);
+    border-radius: 18px;
+    padding: 2.5rem 1.5rem;
+    text-align: center;
+}
+
+.vazio strong {
+    display: block;
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-bottom: 0.4rem;
+}
+
+.vazio p {
+    color: var(--color-text-muted);
+    font-size: 0.88rem;
+    max-width: 46ch;
+    margin: 0 auto;
+    line-height: 1.55;
+}
+
+@media (max-width: 560px) {
+    .linha {
+        grid-template-columns: 1fr;
+    }
+}
+
+.form {
+    animation: entrar var(--dur-lenta) var(--ease-out) both;
+}

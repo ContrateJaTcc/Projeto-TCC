@@ -172,3 +172,79 @@
     color: #1f1c34;
     font-weight: 700;
 }
+
+/* ---------- movimento e celular ---------- */
+
+.menu a:not(.ativo):hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.logo img {
+    transition: transform var(--dur-lenta) var(--ease-out);
+}
+
+.logo:hover img {
+    transform: rotate(-8deg) scale(1.08);
+}
+
+.busca {
+    transition: background-color var(--dur-media), box-shadow var(--dur-media);
+}
+
+.busca:focus-within {
+    background: rgba(255, 255, 255, 0.18);
+    box-shadow: 0 0 0 3px rgba(255, 192, 20, 0.35);
+}
+
+/* O "x" nativo do input de busca destoa do tema escuro. */
+.busca input::-webkit-search-cancel-button {
+    display: none;
+}
+
+.busca input:focus {
+    box-shadow: none;
+}
+
+.veu {
+    position: fixed;
+    inset: 0;
+    top: 66px;
+    background: rgba(21, 3, 36, 0.4);
+    z-index: 15;
+    animation: aparecer var(--dur-media) ease both;
+}
+
+.menucel {
+    animation: entrar var(--dur-media) var(--ease-out) both;
+    box-shadow: var(--shadow-lg);
+}
+
+.menucel a:not(.ativo):hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/*
+ * Antes, no celular, o cabeçalho não cabia: o botão do menu e o "Sair"
+ * ficavam fora da tela, e não havia como navegar.
+ */
+@media (max-width: 640px) {
+    .cabe {
+        padding: 12px 16px;
+        gap: 0.6rem;
+    }
+
+    .papel {
+        display: none;
+    }
+
+    .direita {
+        gap: 0.5rem;
+    }
+}
+
+@media (max-width: 400px) {
+    .logoTexto {
+        display: none;
+    }
+}

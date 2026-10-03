@@ -1,0 +1,324 @@
+.pagina {
+    width: min(90%, 1000px);
+    margin: 2.5rem auto 3.5rem auto;
+}
+
+.pagina h1 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: var(--color-primary);
+    font-size: 1.7rem;
+    margin-bottom: 1.4rem;
+}
+
+.erro {
+    color: var(--color-danger);
+    font-size: 0.88rem;
+    margin-bottom: 1rem;
+}
+
+.aviso {
+    color: #1d7a4c;
+    font-size: 0.88rem;
+    margin-bottom: 1rem;
+}
+
+/* ---------- cartao de visualizacao ---------- */
+
+.cartao {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.3rem;
+    background: #fff;
+    border: 1px solid var(--color-surface-muted);
+    border-radius: 18px;
+    padding: 1.6rem;
+    box-shadow: var(--shadow-sm);
+}
+
+.dados {
+    flex: 1;
+    /* Impede que uma bio longa empurre os botoes para fora do cartao. */
+    min-width: 0;
+}
+
+.nome {
+    display: block;
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: var(--color-primary);
+    font-size: 1.3rem;
+    overflow-wrap: anywhere;
+}
+
+.contatos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem 1rem;
+    margin-top: 0.4rem;
+}
+
+.contatos span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    color: var(--color-text-muted);
+    font-size: 0.82rem;
+    overflow-wrap: anywhere;
+}
+
+.bio {
+    color: var(--color-text-soft);
+    font-size: 0.88rem;
+    line-height: 1.55;
+    margin: 0.8rem 0;
+    overflow-wrap: anywhere;
+}
+
+.botoes {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.editar,
+.senhaBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    border-radius: var(--radius-pill);
+    padding: 0.55rem 1.1rem;
+    font-family: var(--font-sans);
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    border: 1px solid var(--color-border);
+    background: #fff;
+    color: var(--color-primary);
+}
+
+.editar {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: var(--color-primary-dark);
+    font-weight: 700;
+}
+
+.editar:hover {
+    background: var(--color-accent-hover);
+    border-color: var(--color-accent-hover);
+}
+
+.senhaBtn:hover {
+    background: var(--color-bg-alt);
+}
+
+/* ---------- areas de atuacao ---------- */
+
+.areas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+}
+
+.area {
+    background: var(--color-accent-tint);
+    color: var(--color-primary-dark);
+    border-radius: var(--radius-pill);
+    padding: 0.28rem 0.8rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+}
+
+.semAreas {
+    color: var(--color-text-muted);
+    font-size: 0.82rem;
+}
+
+.chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-pill);
+    padding: 0.4rem 0.9rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--color-text);
+    cursor: pointer;
+    background: #fff;
+    /* O chip inteiro e clicavel por ser um label do checkbox. */
+    user-select: none;
+}
+
+.chipAtivo {
+    background: var(--color-accent-tint);
+    border-color: var(--color-accent);
+    color: var(--color-primary-dark);
+}
+
+/* ---------- formularios ---------- */
+
+.form {
+    background: #fff;
+    border: 1px solid var(--color-surface-muted);
+    border-radius: 18px;
+    padding: 1.5rem 1.6rem;
+    margin-top: 1.2rem;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.tituloForm {
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: var(--color-primary);
+}
+
+/*
+ * So os labels de campo do proprio formulario, nao qualquer um aninhado.
+ *
+ * Com ".form label" a regra alcancava tambem o botao "Escolher foto" dentro
+ * do seletor de avatar e os chips de area de atuacao, empilhando icone e
+ * texto em coluna — os dois sao labels, mas nenhum e campo de texto.
+ */
+.form > label,
+.linha > label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-text);
+    /* Sem isto os campos lado a lado estouram a largura do formulario. */
+    min-width: 0;
+}
+
+.form input[type='text'],
+.form input[type='tel'],
+.form input[type='password'],
+.form select,
+.form textarea {
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    padding: 0.6rem 0.8rem;
+    background: var(--color-bg);
+    resize: vertical;
+    width: 100%;
+}
+
+.form input:focus,
+.form select:focus,
+.form textarea:focus {
+    outline: 2px solid var(--color-primary-light);
+    outline-offset: 1px;
+}
+
+.linha {
+    display: grid;
+    grid-template-columns: 1fr 1fr 90px;
+    gap: 0.9rem;
+}
+
+/* O formulario de senha tem dois campos, nao tres. */
+.linhaDupla {
+    grid-template-columns: 1fr 1fr;
+}
+
+.uf select {
+    /* Sem isto o select de UF fica mais alto que os inputs vizinhos. */
+    height: 100%;
+}
+
+.fieldset {
+    border: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.fieldset legend {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin-bottom: 0.4rem;
+}
+
+/* O checkbox some: quem mostra o estado e o proprio chip. */
+.chip input {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+}
+
+.fixos {
+    color: var(--color-text-muted);
+    font-size: 0.78rem;
+    margin: 0;
+}
+
+.formAcoes {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.6rem;
+}
+
+.formAcoes button {
+    border-radius: var(--radius-pill);
+    padding: 0.6rem 1.3rem;
+    font-family: var(--font-sans);
+    font-size: 0.86rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.cancelar {
+    background: #fff;
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+}
+
+.salvar {
+    background: var(--color-primary);
+    border: none;
+    color: #fff;
+}
+
+.salvar:hover {
+    background: var(--color-primary-light);
+}
+
+.salvar:disabled {
+    opacity: 0.6;
+    cursor: default;
+}
+
+@media (max-width: 680px) {
+    .cartao {
+        flex-wrap: wrap;
+    }
+
+    .botoes {
+        flex-direction: row;
+        flex-basis: 100%;
+    }
+
+    .linha {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Abrir "Editar perfil" ou "Alterar senha" desliza o formulário em vez de trocá-lo no seco. */
+.form,
+.cartao {
+    animation: entrar var(--dur-lenta) var(--ease-out) both;
+}

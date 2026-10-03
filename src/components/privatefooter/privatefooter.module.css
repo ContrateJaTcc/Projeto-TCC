@@ -35,3 +35,17 @@
     color: #b3a6c9;
     font-size: 0.78rem;
 }
+
+/* No celular os links do rodapé passavam da largura da tela. */
+@media (max-width: 560px) {
+    .footer {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .links {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.8rem 1.2rem;
+    }
+}

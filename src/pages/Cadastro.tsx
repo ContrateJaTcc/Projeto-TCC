@@ -1,11 +1,11 @@
 import { useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate, useLocation, Link } from 'react-router-dom'
 import { Check } from 'lucide-react'
 import logo from '../components/imgs/logo.png'
 import EtapaPerfil, { type Perfil } from '../components/cadastro/etapaperfil'
 import EtapaFormulario from '../components/cadastro/etapaformulario'
-import { useRole } from '../context/useRole'
 import styles from '../components/cadastro/cadastro.module.css'
+import type { DadosGoogle } from '../services/google'
 
 const etapas = [
   { numero: 1, titulo: 'Escolha seu perfil' },
@@ -15,9 +15,12 @@ const etapas = [
 
 export default function Cadastro() {
   const navigate = useNavigate()
-  const { setRole } = useRole()
+  /* Vindo do "Continuar com Google" do login, com uma conta Google ainda sem cadastro. */
+  const vindoDoLogin = useLocation().state as { google?: DadosGoogle; perfil?: Perfil } | null
+
   const [etapa, setEtapa] = useState<'perfil' | 'formulario'>('perfil')
-  const [perfil, setPerfil] = useState<Perfil>('freelancer')
+  const [perfil, setPerfil] = useState<Perfil>(vindoDoLogin?.perfil ?? 'freelancer')
+  const [google, setGoogle] = useState<DadosGoogle | null>(vindoDoLogin?.google ?? null)
 
   const etapaAtual = etapa === 'perfil' ? 1 : 2
 
@@ -60,10 +63,14 @@ export default function Cadastro() {
         ) : (
           <EtapaFormulario
             perfil={perfil}
+            google={google}
+            onGoogle={setGoogle}
             onVoltar={() => setEtapa('perfil')}
-            onCriarConta={() => {
-              setRole(perfil)
-              navigate(`/${perfil}`)
+            onCriarConta={(email) => {
+              /* O cadastro não devolve token. Abrir o dashboard aqui fazia a
+                 primeira requisição voltar 401 e mostrar "sessão expirou".
+                 O login salva o token e define o papel a partir do servidor. */
+              navigate('/login', { state: { cadastrado: true, email } })
             }}
           />
         )}
