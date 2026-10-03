@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import ProjectListSection from '../../components/dashboard/projectlistsection'
 import type { Projeto } from '../../data/mock'
+import { Plus } from 'lucide-react'
 
 interface Servico {
   serv_id: number
@@ -127,11 +128,15 @@ export default function ContratanteDashboard() {
       ]}
       projetos={projetos}
       linkBase="/contratante/projetos"
-      acao={
-        <button type="button" onClick={() => (window.location.href = '/contratante/criar-projeto')}>
-          Criar projeto
-        </button>
-      }
+     acao={
+  <button
+    type="button"
+    onClick={() => (window.location.href = '/contratante/criar-projeto')}
+  >
+    <Plus size={18} strokeWidth={2.5} />
+    Criar projeto
+  </button>
+}
       vazio={{
         titulo: 'Você ainda não tem projetos publicados',
         texto: 'Crie o primeiro projeto e comece a receber propostas.',

@@ -83,10 +83,15 @@ export default function ProjectListSection({
         <ProfileCard papel={papel} />
       </div>
 
-      <div className={styles.cabecalho}>
-        <h2 className={styles.titulo}>{titulo}</h2>
-        {acao}
-      </div>
+     <div className={styles.cabecalho}>
+  <h2 className={styles.titulo}>{titulo}</h2>
+
+  {acao && (
+    <div className={styles.acao}>
+      {acao}
+    </div>
+  )}
+</div>
 
       {abas.length > 1 && (
         <div className={styles.tabs} role="tablist">
