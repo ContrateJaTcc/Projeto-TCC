@@ -86,7 +86,6 @@ export default function ProjetoDetalhe() {
   const [outrosProjetos, setOutrosProjetos] = useState<OutroProjeto[]>([])
   const [carregando, setCarregando] = useState(true)
   const [erro, setErro] = useState('')
-  
 
   const base = role === 'contratante' ? '/contratante' : '/freelancer'
 
@@ -119,66 +118,69 @@ export default function ProjetoDetalhe() {
         const servico: Servico = dados.projeto
 
         const projetoFormatado: Projeto = {
-  id: String(servico.serv_id),
-  titulo: servico.serv_titulo,
-  descricao: servico.serv_desc,
-  categoria: servico.categoria,
-  orcamento:
-    servico.serv_tipo_valor === 'hora'
-      ? `${formatarMoeda(servico.serv_valor)}/hora`
-      : formatarMoeda(servico.serv_valor),
+          id: String(servico.serv_id),
+          titulo: servico.serv_titulo,
+          descricao: servico.serv_desc,
+          categoria: servico.categoria,
 
-  prazo: servico.serv_qtd_dias
-    ? `${servico.serv_qtd_dias} dias`
-    : 'Não informado',
+          orcamento:
+            servico.serv_tipo_valor === 'hora'
+              ? `${formatarMoeda(servico.serv_valor)}/hora`
+              : formatarMoeda(servico.serv_valor),
 
-  modalidade:
-    servico.serv_local === 'remoto'
-      ? 'Remoto'
-      : servico.serv_local === 'hibrido'
-        ? 'Híbrido'
-        : 'Presencial',
+          prazo: servico.serv_qtd_dias
+            ? `${servico.serv_qtd_dias} dias`
+            : 'Não informado',
 
-  cidade: servico.serv_cidade || '',
-  estado: servico.serv_estado || '',
-  habilidades: servico.serv_habilidades || '',
-  vagas: servico.serv_vagas || 1,
-  formaPagamento: servico.serv_forma_pagamento || '',
+          modalidade:
+            servico.serv_local === 'remoto'
+              ? 'Remoto'
+              : servico.serv_local === 'hibrido'
+                ? 'Híbrido'
+                : 'Presencial',
 
-  postadoEm: formatarData(servico.serv_data_criacao),
+          cidade: servico.serv_cidade || '',
+          estado: servico.serv_estado || '',
+          habilidades: servico.serv_habilidades || '',
+          vagas: servico.serv_vagas || 1,
+          formaPagamento: servico.serv_forma_pagamento || '',
 
-  autor: {
-    nome: servico.contratante_nome || 'Contratante',
-    bio: servico.contratante_desc || 'Contratante',
-    membroDesde: formatarData(servico.contratante_data_criacao),
-    numeroVerificado: false,
-    pagamentoVerificado: false,
-    totalPago: 'R$ 0,00',
-    servicosPostados: servico.contratante_servicos_postados || 0,
-    nota: 0,
-    totalAvaliacoes: 0,
-  },
-}
+          postadoEm: formatarData(servico.serv_data_criacao),
+
+          autor: {
+            nome: servico.contratante_nome || 'Contratante',
+            bio: servico.contratante_desc || 'Contratante',
+            membroDesde: formatarData(servico.contratante_data_criacao),
+            numeroVerificado: false,
+            pagamentoVerificado: false,
+            totalPago: 'R$ 0,00',
+            servicosPostados:
+              servico.contratante_servicos_postados || 0,
+            nota: 0,
+            totalAvaliacoes: 0,
+          },
+        }
 
         setProjeto(projetoFormatado)
+
         const respostaOutros = await fetch(
-  `https://backendtcc-zeta.vercel.app/servicos/${id}/outros`,
-  {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  }
-)
+          `https://backendtcc-zeta.vercel.app/servicos/${id}/outros`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
 
-const dadosOutros = await respostaOutros.json()
+        const dadosOutros = await respostaOutros.json()
 
-if (respostaOutros.ok) {
-  setOutrosProjetos(dadosOutros.projetos)
-}
+        if (respostaOutros.ok) {
+          setOutrosProjetos(dadosOutros.projetos)
+        }
       } catch (erro) {
-  console.error('erro ao carregar o projwto:', erro)
-  setErro('Não foi possível carregar o projeto.')
-} finally {
+        console.error('erro ao carregar o projeto:', erro)
+        setErro('Não foi possível carregar o projeto.')
+      } finally {
         setCarregando(false)
       }
     }
@@ -200,6 +202,7 @@ if (respostaOutros.ok) {
     return (
       <div className={styles.pagina}>
         <p>{erro || 'Projeto não encontrado.'}</p>
+
         <Link
           to={base}
           className={styles.voltar}
@@ -234,7 +237,8 @@ if (respostaOutros.ok) {
                 strokeWidth={2.2}
                 fill="currentColor"
               />
-              {projeto.autor.nota} de {projeto.autor.totalAvaliacoes} avaliações
+              {projeto.autor.nota} de {projeto.autor.totalAvaliacoes}{' '}
+              avaliações
             </div>
           </div>
         </div>
@@ -267,6 +271,7 @@ if (respostaOutros.ok) {
           {(projeto.cidade || projeto.estado) && (
             <div className={styles.localizacao}>
               <strong>Localização</strong>
+
               <span>
                 {projeto.cidade && projeto.estado
                   ? `${projeto.cidade} - ${projeto.estado}`
@@ -276,114 +281,125 @@ if (respostaOutros.ok) {
           )}
         </div>
 
-        <aside>
-          <div className={styles.autorCard}>
-            <div className={styles.autorTopo}>
-              <Avatar
-                nome={projeto.autor.nome}
-                size={58}
-              />
+        <div className={styles.habilidades}>
+          <strong>Habilidades necessárias</strong>
 
-              <div>
-                <div className={styles.autorNome}>
-                  {projeto.autor.nome}
-                </div>
-
-                <div className={styles.autorNota}>
-                  <Star
-                    size={13}
-                    strokeWidth={2.2}
-                    fill="currentColor"
-                  />
-                  {projeto.autor.nota} de {projeto.autor.totalAvaliacoes} avaliações
-                </div>
-              </div>
-            </div>
-
-            <p className={styles.autorBio}>
-              {projeto.autor.bio}
-            </p>
-
-            <div className={styles.autorStats}>
-              <span>
-                Membro desde {projeto.autor.membroDesde}
-              </span>
-
-              {projeto.autor.numeroVerificado && (
-                <span className={styles.verificado}>
-                  <BadgeCheck size={15} strokeWidth={2.2} />
-                  Número verificado
-                </span>
-              )}
-
-              {projeto.autor.pagamentoVerificado && (
-                <span className={styles.verificado}>
-                  <BadgeCheck size={15} strokeWidth={2.2} />
-                  Método de pagamento verificado
-                </span>
-              )}
-
-              <span>{projeto.autor.totalPago}</span>
-
-              <span>
-                {projeto.autor.servicosPostados} serviços postados
-              </span>
-            </div>
-          </div>
-
-          <div className={styles.contratacaoCard}>
-            <h2>Contratação</h2>
-
-            <div className={styles.contratacaoItem}>
-              <strong>Preço do serviço</strong>
-              <span>{projeto.orcamento}</span>
-            </div>
-
-            <div className={styles.contratacaoItem}>
-              <strong>Forma de pagamento</strong>
-              <span>
-                {projeto.formaPagamento || 'Não informado'}
-              </span>
-            </div>
-          </div>
-
-          {outrosProjetos.length > 0 && (
-            <section className={styles.outrosProjetos}>
-              <h2>Outros trabalhos deste contratante</h2>
-
-              <div className={styles.outrosLista}>
-                {outrosProjetos.map((outro) => (
-                  <Link
-                    key={outro.serv_id}
-                    to={`${base}/projetos/${outro.serv_id}`}
-                    className={styles.outroCard}
-                  >
-                    <span className={styles.outroCategoria}>
-                      {outro.categoria}
-                    </span>
-
-                    <h3>{outro.serv_titulo}</h3>
-
-                    <p>{outro.serv_desc}</p>
-
-                    <strong>
-                      {outro.serv_tipo_valor === 'hora'
-                        ? `${formatarMoeda(outro.serv_valor)}/hora`
-                        : formatarMoeda(outro.serv_valor)}
-                    </strong>
-
-                    <span>
-                      {outro.serv_qtd_dias
-                        ? `${outro.serv_qtd_dias} dias`
-                        : 'Prazo não informado'}
-                    </span>
-                  </Link>
-                ))}
-              </div>
-            </section>
-          )}
-        </aside>
+          <span>
+            {projeto.habilidades || 'Nenhuma informada'}
+          </span>
+        </div>
       </div>
+
+      <aside>
+        <div className={styles.autorCard}>
+          <div className={styles.autorTopo}>
+            <Avatar
+              nome={projeto.autor.nome}
+              size={58}
+            />
+
+            <div>
+              <div className={styles.autorNome}>
+                {projeto.autor.nome}
+              </div>
+
+              <div className={styles.autorNota}>
+                <Star
+                  size={13}
+                  strokeWidth={2.2}
+                  fill="currentColor"
+                />
+
+                {projeto.autor.nota} de{' '}
+                {projeto.autor.totalAvaliacoes} avaliações
+              </div>
+            </div>
+          </div>
+
+          <p className={styles.autorBio}>
+            {projeto.autor.bio}
+          </p>
+
+          <div className={styles.autorStats}>
+            <span>
+              Membro desde {projeto.autor.membroDesde}
+            </span>
+
+            {projeto.autor.numeroVerificado && (
+              <span className={styles.verificado}>
+                <BadgeCheck size={15} strokeWidth={2.2} />
+                Número verificado
+              </span>
+            )}
+
+            {projeto.autor.pagamentoVerificado && (
+              <span className={styles.verificado}>
+                <BadgeCheck size={15} strokeWidth={2.2} />
+                Método de pagamento verificado
+              </span>
+            )}
+
+            <span>{projeto.autor.totalPago}</span>
+
+            <span>
+              {projeto.autor.servicosPostados} serviços postados
+            </span>
+          </div>
+        </div>
+
+        <div className={styles.contratacaoCard}>
+          <h2>Contratação</h2>
+
+          <div className={styles.contratacaoItem}>
+            <strong>Preço do serviço</strong>
+            <span>{projeto.orcamento}</span>
+          </div>
+
+          <div className={styles.contratacaoItem}>
+            <strong>Forma de pagamento</strong>
+
+            <span>
+              {projeto.formaPagamento || 'Não informado'}
+            </span>
+          </div>
+        </div>
+
+        {outrosProjetos.length > 0 && (
+          <section className={styles.outrosProjetos}>
+            <h2>Outros trabalhos deste contratante</h2>
+
+            <div className={styles.outrosLista}>
+              {outrosProjetos.map((outro) => (
+                <Link
+                  key={outro.serv_id}
+                  to={`${base}/projetos/${outro.serv_id}`}
+                  className={styles.outroCard}
+                >
+                  <span className={styles.outroCategoria}>
+                    {outro.categoria}
+                  </span>
+
+                  <h3>{outro.serv_titulo}</h3>
+
+                  <p>{outro.serv_desc}</p>
+
+                  <strong>
+                    {outro.serv_tipo_valor === 'hora'
+                      ? `${formatarMoeda(outro.serv_valor)}/hora`
+                      : formatarMoeda(outro.serv_valor)}
+                  </strong>
+
+                  <span>
+                    {outro.serv_qtd_dias
+                      ? `${outro.serv_qtd_dias} dias`
+                      : 'Prazo não informado'}
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
+      </aside>
     </div>
   )
 }
