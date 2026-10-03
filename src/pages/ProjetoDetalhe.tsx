@@ -212,25 +212,83 @@ if (respostaOutros.ok) {
   }
 
   return (
-    <div className={styles.pagina}>
-      <div className={styles.principal}>
-        <Link
-          to={base}
-          className={styles.voltar}
-          aria-label="Voltar"
-        >
-          <ArrowLeft size={18} strokeWidth={2.2} />
-        </Link>
+  <div className={styles.pagina}>
+    <div className={styles.principal}>
+      <Link
+        to={base}
+        className={styles.voltar}
+        aria-label="Voltar"
+      >
+        <ArrowLeft size={18} strokeWidth={2.2} />
+      </Link>
 
-        <div className={styles.cabecalho}>
-          <h1 className={styles.titulo}>{projeto.titulo}</h1>
+      <div className={styles.cabecalho}>
+        <h1 className={styles.titulo}>{projeto.titulo}</h1>
 
-          <div className={styles.meta}>
-            <div>Postado em {projeto.postadoEm}</div>
+        <div className={styles.meta}>
+          <div>Postado em {projeto.postadoEm}</div>
 
-            <div className={styles.estrelas}>
+          <div className={styles.estrelas}>
+            <Star
+              size={14}
+              strokeWidth={2.2}
+              fill="currentColor"
+            />
+            {projeto.autor.nota} de {projeto.autor.totalAvaliacoes} avaliações
+          </div>
+        </div>
+      </div>
+
+      <p className={styles.descricao}>
+        {projeto.descricao}
+      </p>
+
+      <div className={styles.info}>
+        <div>
+          <strong>Categoria</strong>
+          <span>{projeto.categoria}</span>
+        </div>
+
+        <div>
+          <strong>Prazo</strong>
+          <span>{projeto.prazo}</span>
+        </div>
+
+        <div>
+          <strong>Profissionais</strong>
+          <span>{projeto.vagas}</span>
+        </div>
+
+        <div>
+          <strong>Modalidade</strong>
+          <span>{projeto.modalidade}</span>
+        </div>
+      </div>
+
+      <div className={styles.habilidades}>
+        <strong>Habilidades necessárias</strong>
+        <span>
+          {projeto.habilidades || 'Nenhuma informada'}
+        </span>
+      </div>
+    </div>
+
+    <aside>
+      <div className={styles.autorCard}>
+        <div className={styles.autorTopo}>
+          <Avatar
+            nome={projeto.autor.nome}
+            size={58}
+          />
+
+          <div>
+            <div className={styles.autorNome}>
+              {projeto.autor.nome}
+            </div>
+
+            <div className={styles.autorNota}>
               <Star
-                size={14}
+                size={13}
                 strokeWidth={2.2}
                 fill="currentColor"
               />
@@ -239,150 +297,89 @@ if (respostaOutros.ok) {
           </div>
         </div>
 
-        <p className={styles.descricao}>
-          {projeto.descricao}
+        <p className={styles.autorBio}>
+          {projeto.autor.bio}
         </p>
 
-        <div className={styles.info}>
-  <div>
-    <strong>Categoria</strong>
-    <span>{projeto.categoria}</span>
-  </div>
+        <div className={styles.autorStats}>
+          <span>
+            Membro desde {projeto.autor.membroDesde}
+          </span>
 
-  <div>
-    <strong>Preço do serviço</strong>
-    <span>{projeto.orcamento}</span>
-  </div>
+          {projeto.autor.numeroVerificado && (
+            <span className={styles.verificado}>
+              <BadgeCheck size={15} strokeWidth={2.2} />
+              Número verificado
+            </span>
+          )}
 
-  <div>
-    <strong>Prazo</strong>
-    <span>{projeto.prazo}</span>
-  </div>
+          {projeto.autor.pagamentoVerificado && (
+            <span className={styles.verificado}>
+              <BadgeCheck size={15} strokeWidth={2.2} />
+              Método de pagamento verificado
+            </span>
+          )}
 
-  <div>
-    <strong>Modalidade</strong>
-    <span>{projeto.modalidade}</span>
-  </div>
+          <span>{projeto.autor.totalPago}</span>
 
-  {(projeto.cidade || projeto.estado) && (
-    <div>
-      <strong>Localização</strong>
-      <span>
-        {projeto.cidade && projeto.estado
-          ? `${projeto.cidade} - ${projeto.estado}`
-          : projeto.cidade || projeto.estado}
-      </span>
-    </div>
-  )}
-
-  <div>
-    <strong>Profissionais</strong>
-    <span>{projeto.vagas}</span>
-  </div>
-
-  <div>
-    <strong>Forma de pagamento</strong>
-    <span>{projeto.formaPagamento || 'Não informado'}</span>
-  </div>
-
-  <div>
-    <strong>Habilidades necessárias</strong>
-    <span>{projeto.habilidades || 'Nenhuma informada'}</span>
-  </div>
-</div>
+          <span>
+            {projeto.autor.servicosPostados} serviços postados
+          </span>
+        </div>
       </div>
 
-                  <aside>
-        <div className={styles.autorCard}>
-          <div className={styles.autorTopo}>
-            <Avatar
-              nome={projeto.autor.nome}
-              size={58}
-            />
+      <div className={styles.contratacaoCard}>
+        <h2>Contratação</h2>
 
-            <div>
-              <div className={styles.autorNome}>
-                {projeto.autor.nome}
-              </div>
-
-              <div className={styles.autorNota}>
-                <Star
-                  size={13}
-                  strokeWidth={2.2}
-                  fill="currentColor"
-                />
-                {projeto.autor.nota} de {projeto.autor.totalAvaliacoes} avaliações
-              </div>
-            </div>
-          </div>
-
-          <p className={styles.autorBio}>
-            {projeto.autor.bio}
-          </p>
-
-          <div className={styles.autorStats}>
-            <span>
-              Membro desde {projeto.autor.membroDesde}
-            </span>
-
-            {projeto.autor.numeroVerificado && (
-              <span className={styles.verificado}>
-                <BadgeCheck size={15} strokeWidth={2.2} />
-                Número verificado
-              </span>
-            )}
-
-            {projeto.autor.pagamentoVerificado && (
-              <span className={styles.verificado}>
-                <BadgeCheck size={15} strokeWidth={2.2} />
-                Método de pagamento verificado
-              </span>
-            )}
-
-            <span>{projeto.autor.totalPago}</span>
-
-            <span>
-              {projeto.autor.servicosPostados} serviços postados
-            </span>
-          </div>
+        <div className={styles.contratacaoItem}>
+          <strong>Preço do serviço</strong>
+          <span>{projeto.orcamento}</span>
         </div>
 
-        {outrosProjetos.length > 0 && (
-          <section className={styles.outrosProjetos}>
-            <h2>Outros trabalhos deste contratante</h2>
+        <div className={styles.contratacaoItem}>
+          <strong>Forma de pagamento</strong>
+          <span>
+            {projeto.formaPagamento || 'Não informado'}
+          </span>
+        </div>
+      </div>
 
-            <div className={styles.outrosLista}>
-              {outrosProjetos.map((outro) => (
-                <Link
-                  key={outro.serv_id}
-                  to={`${base}/projetos/${outro.serv_id}`}
-                  className={styles.outroCard}
-                >
-                  <span className={styles.outroCategoria}>
-                    {outro.categoria}
-                  </span>
+      {outrosProjetos.length > 0 && (
+        <section className={styles.outrosProjetos}>
+          <h2>Outros trabalhos deste contratante</h2>
 
-                  <h3>{outro.serv_titulo}</h3>
+          <div className={styles.outrosLista}>
+            {outrosProjetos.map((outro) => (
+              <Link
+                key={outro.serv_id}
+                to={`${base}/projetos/${outro.serv_id}`}
+                className={styles.outroCard}
+              >
+                <span className={styles.outroCategoria}>
+                  {outro.categoria}
+                </span>
 
-                  <p>{outro.serv_desc}</p>
+                <h3>{outro.serv_titulo}</h3>
 
-                  <strong>
-                    {outro.serv_tipo_valor === 'hora'
-                      ? `${formatarMoeda(outro.serv_valor)}/hora`
-                      : formatarMoeda(outro.serv_valor)}
-                  </strong>
+                <p>{outro.serv_desc}</p>
 
-                  <span>
-                    {outro.serv_qtd_dias
-                      ? `${outro.serv_qtd_dias} dias`
-                      : 'Prazo não informado'}
-                  </span>
-                </Link>
-              ))}
-            </div>
-          </section>
-        )}
-      </aside>
-    </div>
-  )
+                <strong>
+                  {outro.serv_tipo_valor === 'hora'
+                    ? `${formatarMoeda(outro.serv_valor)}/hora`
+                    : formatarMoeda(outro.serv_valor)}
+                </strong>
+
+                <span>
+                  {outro.serv_qtd_dias
+                    ? `${outro.serv_qtd_dias} dias`
+                    : 'Prazo não informado'}
+                </span>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
+    </aside>
+  </div>
+)
 }
