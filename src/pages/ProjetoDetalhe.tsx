@@ -12,6 +12,12 @@ interface Projeto {
   categoria: string
   orcamento: string
   prazo: string
+  modalidade: string
+  cidade: string
+  estado: string
+  habilidades: string
+  vagas: number
+  formaPagamento: string
   postadoEm: string
   autor: {
     nome: string
@@ -34,6 +40,12 @@ interface Servico {
   serv_valor: number
   serv_tipo_valor: 'hora' | 'fixo'
   serv_qtd_dias: number | null
+  serv_local: 'remoto' | 'hibrido' | 'presencial'
+  serv_cidade: string | null
+  serv_estado: string | null
+  serv_habilidades: string | null
+  serv_forma_pagamento: string | null
+  serv_vagas: number | null
   serv_data_criacao: string
   contratante_nome: string
   contratante_desc: string | null
@@ -107,19 +119,35 @@ export default function ProjetoDetalhe() {
         const servico: Servico = dados.projeto
 
         const projetoFormatado: Projeto = {
-          id: String(servico.serv_id),
-          titulo: servico.serv_titulo,
-          descricao: servico.serv_desc,
-          categoria: servico.categoria,
-          orcamento:
-  servico.serv_tipo_valor === 'hora'
-    ? `${formatarMoeda(servico.serv_valor)}/hora`
-    : formatarMoeda(servico.serv_valor),
-          prazo: servico.serv_qtd_dias
-            ? `${servico.serv_qtd_dias} dias`
-            : 'Não informado',
-          postadoEm: formatarData(servico.serv_data_criacao),
-          autor: {
+  id: String(servico.serv_id),
+  titulo: servico.serv_titulo,
+  descricao: servico.serv_desc,
+  categoria: servico.categoria,
+  orcamento:
+    servico.serv_tipo_valor === 'hora'
+      ? `${formatarMoeda(servico.serv_valor)}/hora`
+      : formatarMoeda(servico.serv_valor),
+
+  prazo: servico.serv_qtd_dias
+    ? `${servico.serv_qtd_dias} dias`
+    : 'Não informado',
+
+  modalidade:
+    servico.serv_local === 'remoto'
+      ? 'Remoto'
+      : servico.serv_local === 'hibrido'
+        ? 'Híbrido'
+        : 'Presencial',
+
+  cidade: servico.serv_cidade || '',
+  estado: servico.serv_estado || '',
+  habilidades: servico.serv_habilidades || '',
+  vagas: servico.serv_vagas || 1,
+  formaPagamento: servico.serv_forma_pagamento || '',
+
+  postadoEm: formatarData(servico.serv_data_criacao),
+
+  autor: {
     nome: servico.contratante_nome || 'Contratante',
     bio: servico.contratante_desc || 'Contratante',
     membroDesde: formatarData(servico.contratante_data_criacao),
@@ -130,7 +158,7 @@ export default function ProjetoDetalhe() {
     nota: 0,
     totalAvaliacoes: 0,
   },
-        }
+}
 
         setProjeto(projetoFormatado)
         const respostaOutros = await fetch(
@@ -216,21 +244,52 @@ if (respostaOutros.ok) {
         </p>
 
         <div className={styles.info}>
-          <div>
-            <strong>Categoria</strong>
-            <span>{projeto.categoria}</span>
-          </div>
+  <div>
+    <strong>Categoria</strong>
+    <span>{projeto.categoria}</span>
+  </div>
 
-          <div>
-            <strong>Preço do serviço</strong>
-            <span>{projeto.orcamento}</span>
-          </div>
+  <div>
+    <strong>Preço do serviço</strong>
+    <span>{projeto.orcamento}</span>
+  </div>
 
-          <div>
-            <strong>Prazo</strong>
-            <span>{projeto.prazo}</span>
-          </div>
-        </div>
+  <div>
+    <strong>Prazo</strong>
+    <span>{projeto.prazo}</span>
+  </div>
+
+  <div>
+    <strong>Modalidade</strong>
+    <span>{projeto.modalidade}</span>
+  </div>
+
+  {(projeto.cidade || projeto.estado) && (
+    <div>
+      <strong>Localização</strong>
+      <span>
+        {projeto.cidade && projeto.estado
+          ? `${projeto.cidade} - ${projeto.estado}`
+          : projeto.cidade || projeto.estado}
+      </span>
+    </div>
+  )}
+
+  <div>
+    <strong>Profissionais</strong>
+    <span>{projeto.vagas}</span>
+  </div>
+
+  <div>
+    <strong>Forma de pagamento</strong>
+    <span>{projeto.formaPagamento || 'Não informado'}</span>
+  </div>
+
+  <div>
+    <strong>Habilidades necessárias</strong>
+    <span>{projeto.habilidades || 'Nenhuma informada'}</span>
+  </div>
+</div>
       </div>
 
                   <aside>
