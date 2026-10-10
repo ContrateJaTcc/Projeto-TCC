@@ -19,7 +19,6 @@ interface Projeto {
   vagas: number
   formaPagamento: string
   postadoEm: string
-  jaCandidatado: boolean
   autor: {
     nome: string
     bio: string
@@ -53,7 +52,6 @@ interface Servico {
   contratante_foto: string | null
   contratante_data_criacao: string
   contratante_servicos_postados: number
-  ja_candidatado: number | boolean
 }
 
 interface OutroProjeto {
@@ -88,7 +86,8 @@ export default function ProjetoDetalhe() {
   const [outrosProjetos, setOutrosProjetos] = useState<OutroProjeto[]>([])
   const [carregando, setCarregando] = useState(true)
   const [erro, setErro] = useState('')
-  const [enviandoCandidatura, setEnviandoCandidatura] = useState(false)
+  const [statusCandidatura, setStatusCandidatura] = useState<string | null>(null)
+  const [processandoCandidatura, setProcessandoCandidatura] = useState(false)
   const [mensagemCandidatura, setMensagemCandidatura] = useState('')
 
   const base = role === 'contratante' ? '/contratante' : '/freelancer'
@@ -123,7 +122,6 @@ export default function ProjetoDetalhe() {
 
         const projetoFormatado: Projeto = {
           id: String(servico.serv_id),
-          jaCandidatado: Boolean(servico.ja_candidatado),
           titulo: servico.serv_titulo,
           descricao: servico.serv_desc,
           categoria: servico.categoria,
@@ -168,6 +166,34 @@ export default function ProjetoDetalhe() {
 
         setProjeto(projetoFormatado)
 
+        // O status só é consultado para freelancers. Contratantes não podem
+        // acessar a lista de candidaturas enviadas por um freelancer.
+        if (role === 'freelancer') {
+          const respostaCandidaturas = await fetch(
+            'https://backendtcc-zeta.vercel.app/candidaturas/minhas',
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          )
+
+          if (respostaCandidaturas.ok) {
+            const dadosCandidaturas = await respostaCandidaturas.json()
+            const candidaturaAtual = (dadosCandidaturas.candidaturas ?? []).find(
+              (candidatura: { serv_id: number; cand_status: string }) =>
+                String(candidatura.serv_id) === String(id)
+            )
+
+            // Uma candidatura cancelada não impede uma nova candidatura.
+            setStatusCandidatura(
+              candidaturaAtual?.cand_status === 'cancelada'
+                ? null
+                : candidaturaAtual?.cand_status ?? null
+            )
+          }
+        }
+
         const respostaOutros = await fetch(
           `https://backendtcc-zeta.vercel.app/servicos/${id}/outros`,
           {
@@ -195,55 +221,92 @@ export default function ProjetoDetalhe() {
     }
   }, [id, role])
 
-  
-async function candidatarSe() {
-  if (!id || enviandoCandidatura || projeto?.jaCandidatado) return
+  async function candidatarSe() {
+    if (!id || processandoCandidatura) return
 
-  const token = localStorage.getItem('token')
-
-  if (!token) {
-    setMensagemCandidatura('Entre na sua conta para se candidatar.')
-    return
-  }
-
-  setEnviandoCandidatura(true)
-  setMensagemCandidatura('')
-
-  try {
-    const resposta = await fetch(
-      `https://backendtcc-zeta.vercel.app/servicos/${id}/candidaturas`,
-      {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      }
-    )
-
-    const dados = await resposta.json()
-
-    if (!resposta.ok) {
-      throw new Error(dados.erro || 'Não foi possível enviar a candidatura.')
+    const token = localStorage.getItem('token')
+    if (!token) {
+      setMensagemCandidatura('Entre na sua conta para se candidatar.')
+      return
     }
 
-    setProjeto((atual) =>
-      atual ? { ...atual, jaCandidatado: true } : atual
-    )
+    setProcessandoCandidatura(true)
+    setMensagemCandidatura('')
 
-    setMensagemCandidatura(
-      dados.mensagem || 'Candidatura enviada com sucesso!'
-    )
-  } catch (e) {
-    setMensagemCandidatura(
-      e instanceof Error
-        ? e.message
-        : 'Erro ao enviar candidatura.'
-    )
-  } finally {
-    setEnviandoCandidatura(false)
+    try {
+      const resposta = await fetch(
+        `https://backendtcc-zeta.vercel.app/servicos/${id}/candidaturas`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      )
+
+      const dados = await resposta.json()
+
+      if (!resposta.ok) {
+        throw new Error(dados.erro || 'Não foi possível enviar a candidatura.')
+      }
+
+      setStatusCandidatura('pendente')
+      setMensagemCandidatura(dados.mensagem || 'Candidatura enviada com sucesso!')
+    } catch (erro) {
+      setMensagemCandidatura(
+        erro instanceof Error ? erro.message : 'Erro ao enviar candidatura.'
+      )
+    } finally {
+      setProcessandoCandidatura(false)
+    }
   }
-}
+
+  async function cancelarCandidatura() {
+    if (!id || processandoCandidatura) return
+
+    const confirmou = window.confirm(
+      'Tem certeza de que deseja cancelar sua candidatura?'
+    )
+    if (!confirmou) return
+
+    const token = localStorage.getItem('token')
+    if (!token) {
+      setMensagemCandidatura('Entre na sua conta para continuar.')
+      return
+    }
+
+    setProcessandoCandidatura(true)
+    setMensagemCandidatura('')
+
+    try {
+      const resposta = await fetch(
+        `https://backendtcc-zeta.vercel.app/servicos/${id}/candidaturas`,
+        {
+          method: 'DELETE',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      )
+
+      const dados = await resposta.json()
+
+      if (!resposta.ok) {
+        throw new Error(dados.erro || 'Não foi possível cancelar a candidatura.')
+      }
+
+      setStatusCandidatura('cancelada')
+      setMensagemCandidatura(dados.mensagem || 'Candidatura cancelada.')
+    } catch (erro) {
+      setMensagemCandidatura(
+        erro instanceof Error ? erro.message : 'Erro ao cancelar candidatura.'
+      )
+    } finally {
+      setProcessandoCandidatura(false)
+    }
+  }
 
   if (carregando) {
     return (
@@ -419,38 +482,47 @@ async function candidatarSe() {
           </div>
         </div>
 
-        
-{role === 'freelancer' && (
-  <div className={styles.candidatura}>
-    {projeto.jaCandidatado ? (
-      <button
-  type="button"
-  className={`${styles.botaoCandidatura} ${styles.candidaturaEnviada}`}
-  disabled
->
-  Candidatura enviada
-</button>
-    ) : (
-      <button
-        type="button"
-        className={styles.botaoCandidatura}
-        onClick={candidatarSe}
-        disabled={enviandoCandidatura}
-      >
-        {enviandoCandidatura
-          ? 'Enviando candidatura...'
-          : 'Candidatar-se ao projeto'}
-      </button>
-    )}
+        {role === 'freelancer' && (
+          <div className={styles.candidatura}>
+            {statusCandidatura === 'pendente' ? (
+              <button
+                type="button"
+                className={`${styles.botaoCandidatura} ${styles.candidaturaEnviada}`}
+                onClick={cancelarCandidatura}
+                disabled={processandoCandidatura}
+              >
+                {processandoCandidatura ? 'Processando...' : 'Cancelar candidatura'}
+              </button>
+            ) : statusCandidatura === 'aceita' || statusCandidatura === 'recusada' ? (
+              <button
+                type="button"
+                className={`${styles.botaoCandidatura} ${styles.candidaturaEnviada}`}
+                disabled
+              >
+                {statusCandidatura === 'aceita'
+                  ? 'Candidatura aceita'
+                  : 'Candidatura recusada'}
+              </button>
+            ) : (
+              <button
+                type="button"
+                className={styles.botaoCandidatura}
+                onClick={candidatarSe}
+                disabled={processandoCandidatura}
+              >
+                {processandoCandidatura
+                  ? 'Enviando candidatura...'
+                  : 'Candidatar-se ao projeto'}
+              </button>
+            )}
 
-    {mensagemCandidatura && (
-      <p className={styles.mensagemCandidatura}>
-        {mensagemCandidatura}
-      </p>
-    )}
-  </div>
-)}
-
+            {mensagemCandidatura && (
+              <p className={styles.mensagemCandidatura}>
+                {mensagemCandidatura}
+              </p>
+            )}
+          </div>
+        )}
 
         {outrosProjetos.length > 0 && (
           <section className={styles.outrosProjetos}>
