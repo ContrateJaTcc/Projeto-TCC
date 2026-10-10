@@ -424,12 +424,12 @@ async function candidatarSe() {
   <div className={styles.candidatura}>
     {projeto.jaCandidatado ? (
       <button
-        type="button"
-        className={styles.botaoCandidatura}
-        disabled
-      >
-        Candidatura enviada
-      </button>
+  type="button"
+  className={`${styles.botaoCandidatura} ${styles.candidaturaEnviada}`}
+  disabled
+>
+  Candidatura enviada
+</button>
     ) : (
       <button
         type="button"

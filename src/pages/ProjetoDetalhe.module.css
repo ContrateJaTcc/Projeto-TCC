@@ -344,3 +344,9 @@
   font-size: 0.9rem;
   line-height: 1.5;
 }
+.candidaturaEnviada {
+  background: #ffe710;
+  color: #000;
+  opacity: 1;
+  cursor: default;
+}
