@@ -76,7 +76,6 @@
 .localizacao {
     grid-column: 1 / -1;
 }
-
 .info > div {
     display: flex;
     flex-direction: column;
