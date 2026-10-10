@@ -1,7 +1,6 @@
 
 import { useEffect, useState } from 'react'
 import { Search, MapPin, UserRound } from 'lucide-react'
-import PrivateLayout from '../../components/layout/privatelayout'
 import Avatar from '../../components/avatar/avatar'
 import Carregando from '../../components/carregando/carregando'
 import EstadoErro from '../../components/carregando/estadoerro'
@@ -18,12 +17,6 @@ interface Freelancer {
 }
 
 export default function Freelancers() {
-  const PrivateLayoutWrapper = PrivateLayout as unknown as ({
-    children,
-  }: {
-    children: React.ReactNode
-  }) => React.ReactElement
-
   const [freelancers, setFreelancers] = useState<Freelancer[]>([])
   const [busca, setBusca] = useState('')
   const [carregando, setCarregando] = useState(true)
@@ -50,8 +43,7 @@ export default function Freelancers() {
       .includes(busca.toLowerCase())
   )
 
-  return (
-    <PrivateLayoutWrapper>
+ return (
       <main className={styles.pagina}>
         <header className={styles.cabecalho}>
           <h1>Freelancers</h1>
@@ -116,6 +108,5 @@ export default function Freelancers() {
           </div>
         )}
       </main>
-    </PrivateLayoutWrapper>
   )
 }
