@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import ProjectListSection from '../../components/dashboard/projectlistsection'
 import type { Projeto } from '../../data/mock'
 import { Plus } from 'lucide-react'
+import Candidatos from './Candidatos'
 
 interface Servico {
   serv_id: number
@@ -120,12 +121,23 @@ export default function ContratanteDashboard() {
       papel="contratante"
       titulo="Seus projetos"
       buscaPlaceholder="Procure nos seus projetos.."
-      abas={[
-        { rotulo: 'Publicados', filtro: (projeto) => projeto.status !== 'rascunho' },
-        { rotulo: 'Rascunhos', filtro: (projeto) => projeto.status === 'rascunho' },
-        { rotulo: 'Salvos', filtro: () => false },
-        { rotulo: 'Convites', filtro: () => false },
-      ]}
+      
+abas={[
+  {
+    rotulo: 'Publicados',
+    filtro: (projeto) => projeto.status !== 'rascunho',
+  },
+  {
+    rotulo: 'Rascunhos',
+    filtro: (projeto) => projeto.status === 'rascunho',
+  },
+  {
+    rotulo: 'Candidaturas',
+    filtro: () => false,
+    conteudo: <Candidatos />,
+  },
+]}
+
       projetos={projetos}
       linkBase="/contratante/projetos"
      acao={

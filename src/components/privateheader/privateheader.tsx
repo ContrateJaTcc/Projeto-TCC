@@ -16,7 +16,7 @@ const navPorPapel = {
   ],
   contratante: [
     { to: '/contratante', label: 'Projetos', end: true },
-    { to: '/contratante/candidatos', label: 'Candidatos' },
+    { to: '/contratante/freelancers', label: 'Freelancers' },
     { to: '/contratante/historico', label: 'Histórico' },
     { to: '/contratante/mensagens', label: 'Mensagens' },
     { to: '/contratante/perfil', label: 'Meu perfil' },

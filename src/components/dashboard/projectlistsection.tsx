@@ -8,6 +8,7 @@ import styles from './projectlistsection.module.css'
 export interface Aba {
   rotulo: string
   filtro: (p: ItemProjeto) => boolean
+  conteudo?: ReactNode
 }
 
 interface ProjectListSectionProps {
@@ -17,23 +18,13 @@ interface ProjectListSectionProps {
   abas: Aba[]
   projetos: ItemProjeto[]
   linkBase: string
-  /* Botão no canto do título (ex.: "Criar projeto"). */
   acao?: ReactNode
-  /* Mensagem quando a aba está vazia sem busca nenhuma. */
   vazio: { titulo: string; texto: string; acao?: ReactNode }
 }
 
 const normalizar = (texto: string) =>
   texto.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()
 
-/*
- * Antes as abas só reconheciam "Publicados" e "Rascunhos": a aba
- * "Disponíveis" do freelancer caía num filtro vazio e ele nunca via projeto
- * nenhum. E o campo de busca não estava ligado a nada.
- *
- * Agora cada aba traz o próprio filtro, e a busca filtra na hora. O termo
- * fica na URL (?busca=), então a busca do cabeçalho também cai aqui.
- */
 export default function ProjectListSection({
   papel,
   titulo,
@@ -108,40 +99,54 @@ export default function ProjectListSection({
                 onClick={() => setAbaAtiva(a.rotulo)}
               >
                 {a.rotulo}
-                <span className={styles.contagem}>{total}</span>
+                {!a.conteudo && <span className={styles.contagem}>{total}</span>}
               </button>
             )
           })}
         </div>
       )}
 
-      {filtrados.length > 0 ? (
-        /* key muda com aba/busca para a lista tocar a entrada em cascata de novo. */
-        <div key={`${abaAtiva}|${termo}`} className={`${styles.lista} cascata`}>
-          {filtrados.map((p) => (
-            <ProjectListItem key={p.id} projeto={p} linkBase={linkBase} mostrarStatus={papel === 'contratante'} />
-          ))}
-        </div>
-      ) : (
-        <div className={`${styles.vazio} entrada`}>
-          {termo ? (
-            <>
-              <SearchX size={34} strokeWidth={1.7} />
-              <strong>Nada encontrado para "{busca}"</strong>
-              <p>Tente outras palavras ou limpe a busca.</p>
-              <button type="button" className={styles.vazioBtn} onClick={() => mudarBusca('')}>
-                Limpar busca
-              </button>
-            </>
-          ) : (
-            <>
-              <strong>{vazio.titulo}</strong>
-              <p>{vazio.texto}</p>
-              {vazio.acao}
-            </>
-          )}
-        </div>
-      )}
+      
+{aba.conteudo ? (
+  <div key={abaAtiva} className={styles.lista}>
+    {aba.conteudo}
+  </div>
+) : filtrados.length > 0 ? (
+  <div key={`${abaAtiva}|${termo}`} className={`${styles.lista} cascata`}>
+    {filtrados.map((p) => (
+      <ProjectListItem
+        key={p.id}
+        projeto={p}
+        linkBase={linkBase}
+        mostrarStatus={papel === 'contratante'}
+      />
+    ))}
+  </div>
+) : (
+  <div className={`${styles.vazio} entrada`}>
+    {termo ? (
+      <>
+        <SearchX size={34} strokeWidth={1.7} />
+        <strong>Nada encontrado para "{busca}"</strong>
+        <p>Tente outras palavras ou limpe a busca.</p>
+        <button
+          type="button"
+          className={styles.vazioBtn}
+          onClick={() => mudarBusca('')}
+        >
+          Limpar busca
+        </button>
+      </>
+    ) : (
+      <>
+        <strong>{vazio.titulo}</strong>
+        <p>{vazio.texto}</p>
+        {vazio.acao}
+      </>
+    )}
+  </div>
+)}
+
     </section>
   )
 }

@@ -13,6 +13,7 @@ import FreelancerDashboard from './pages/freelancer/Dashboard'
 import Perfil from './pages/Perfil'
 import ContratanteDashboard from './pages/contratante/Dashboard'
 import Candidatos from './pages/contratante/Candidatos'
+import Freelancers from './pages/contratante/Freelancers'
 import PortfolioFreelancer from './pages/contratante/PortfolioFreelancer'
 import CriarProjeto from './pages/contratante/CriarProjeto'
 import ProjetoDetalhe from './pages/ProjetoDetalhe'
@@ -43,6 +44,7 @@ function App() {
 
             <Route path="/contratante" element={<ContratanteDashboard />} />
             <Route path="/contratante/candidatos" element={<Candidatos />} />
+            <Route path="/contratante/freelancers" element={<Freelancers />} />
             <Route path="/contratante/freelancer/:usuId" element={<PortfolioFreelancer />} />
             <Route path="/contratante/projetos/:id" element={<ProjetoDetalhe />} />
             <Route path="/contratante/historico" element={<Historico />} />
