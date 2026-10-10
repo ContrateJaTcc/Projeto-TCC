@@ -19,6 +19,7 @@ interface Projeto {
   vagas: number
   formaPagamento: string
   postadoEm: string
+  jaCandidatado: boolean
   autor: {
     nome: string
     bio: string
@@ -52,6 +53,7 @@ interface Servico {
   contratante_foto: string | null
   contratante_data_criacao: string
   contratante_servicos_postados: number
+  ja_candidatado: number | boolean
 }
 
 interface OutroProjeto {
@@ -86,6 +88,8 @@ export default function ProjetoDetalhe() {
   const [outrosProjetos, setOutrosProjetos] = useState<OutroProjeto[]>([])
   const [carregando, setCarregando] = useState(true)
   const [erro, setErro] = useState('')
+  const [enviandoCandidatura, setEnviandoCandidatura] = useState(false)
+  const [mensagemCandidatura, setMensagemCandidatura] = useState('')
 
   const base = role === 'contratante' ? '/contratante' : '/freelancer'
 
@@ -119,6 +123,7 @@ export default function ProjetoDetalhe() {
 
         const projetoFormatado: Projeto = {
           id: String(servico.serv_id),
+          jaCandidatado: Boolean(servico.ja_candidatado),
           titulo: servico.serv_titulo,
           descricao: servico.serv_desc,
           categoria: servico.categoria,
@@ -189,6 +194,56 @@ export default function ProjetoDetalhe() {
       carregarProjeto()
     }
   }, [id, role])
+
+  
+async function candidatarSe() {
+  if (!id || enviandoCandidatura || projeto?.jaCandidatado) return
+
+  const token = localStorage.getItem('token')
+
+  if (!token) {
+    setMensagemCandidatura('Entre na sua conta para se candidatar.')
+    return
+  }
+
+  setEnviandoCandidatura(true)
+  setMensagemCandidatura('')
+
+  try {
+    const resposta = await fetch(
+      `https://backendtcc-zeta.vercel.app/servicos/${id}/candidaturas`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    )
+
+    const dados = await resposta.json()
+
+    if (!resposta.ok) {
+      throw new Error(dados.erro || 'Não foi possível enviar a candidatura.')
+    }
+
+    setProjeto((atual) =>
+      atual ? { ...atual, jaCandidatado: true } : atual
+    )
+
+    setMensagemCandidatura(
+      dados.mensagem || 'Candidatura enviada com sucesso!'
+    )
+  } catch (e) {
+    setMensagemCandidatura(
+      e instanceof Error
+        ? e.message
+        : 'Erro ao enviar candidatura.'
+    )
+  } finally {
+    setEnviandoCandidatura(false)
+  }
+}
 
   if (carregando) {
     return (
@@ -363,6 +418,39 @@ export default function ProjetoDetalhe() {
             </span>
           </div>
         </div>
+
+        
+{role === 'freelancer' && (
+  <div className={styles.candidatura}>
+    {projeto.jaCandidatado ? (
+      <button
+        type="button"
+        className={styles.botaoCandidatura}
+        disabled
+      >
+        Candidatura enviada
+      </button>
+    ) : (
+      <button
+        type="button"
+        className={styles.botaoCandidatura}
+        onClick={candidatarSe}
+        disabled={enviandoCandidatura}
+      >
+        {enviandoCandidatura
+          ? 'Enviando candidatura...'
+          : 'Candidatar-se ao projeto'}
+      </button>
+    )}
+
+    {mensagemCandidatura && (
+      <p className={styles.mensagemCandidatura}>
+        {mensagemCandidatura}
+      </p>
+    )}
+  </div>
+)}
+
 
         {outrosProjetos.length > 0 && (
           <section className={styles.outrosProjetos}>
