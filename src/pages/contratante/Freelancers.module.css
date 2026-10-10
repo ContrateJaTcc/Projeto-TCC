@@ -1,0 +1,102 @@
+
+.pagina {
+  width: min(1100px, 100%);
+  margin: 0 auto;
+  padding: 32px 24px;
+}
+
+.cabecalho {
+  margin-bottom: 24px;
+}
+
+.cabecalho h1 {
+  margin: 0 0 8px;
+  font-size: 28px;
+}
+
+.cabecalho p {
+  margin: 0;
+  color: #666;
+}
+
+.busca {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding: 12px 16px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+}
+
+.busca input {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  font: inherit;
+}
+
+.lista {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 18px;
+}
+
+.card {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 20px;
+  border: 1px solid #e5e5e5;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.informacoes {
+  min-width: 0;
+  flex: 1;
+}
+
+.informacoes h2 {
+  margin: 0 0 8px;
+  font-size: 18px;
+}
+
+.local {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #666;
+  font-size: 13px;
+}
+
+.descricao {
+  overflow-wrap: anywhere;
+  color: #444;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.botao {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 8px;
+  padding: 9px 12px;
+  border-radius: 8px;
+  background: #222;
+  color: #fff;
+  text-decoration: none;
+}
+
+.vazio {
+  padding: 32px 0;
+  color: #666;
+}
+
+@media (max-width: 600px) {
+  .pagina {
+    padding: 24px 16px;
+  }
+}
