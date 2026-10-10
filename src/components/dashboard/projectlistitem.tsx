@@ -3,7 +3,6 @@ import { MapPin, Clock, CalendarDays, CircleCheck, ArrowRight } from 'lucide-rea
 import { formatarValorServico, haQuanto } from '../../utils/formatar'
 import styles from './projectlistitem.module.css'
 
-/* O formato que os dois painéis (freelancer e contratante) montam a partir da API. */
 export interface ItemProjeto {
   id: string | number
   titulo: string
@@ -17,6 +16,7 @@ export interface ItemProjeto {
   postadoEm: string
   contratanteNome?: string
   jaCandidatado?: boolean
+  statusCandidatura?: 'pendente' | 'aceita' | 'recusada' | 'cancelada'
 }
 
 const ROTULO_STATUS: Record<string, string> = {
@@ -30,16 +30,9 @@ const ROTULO_STATUS: Record<string, string> = {
 interface ProjectListItemProps {
   projeto: ItemProjeto
   linkBase: string
-  /* O contratante vê o status do próprio projeto; o freelancer, quem publicou. */
   mostrarStatus?: boolean
 }
 
-/*
- * Antes o card tinha um menu "..." cujas opções não faziam nada e uma
- * estrela com nota sempre 0. Os dois saíram; no lugar entrou o que ajuda a
- * decidir: categoria, há quanto tempo foi publicado e o prazo.
- * O card inteiro é clicável.
- */
 export default function ProjectListItem({ projeto, linkBase, mostrarStatus = false }: ProjectListItemProps) {
   const rascunho = projeto.status === 'rascunho'
   const destino = rascunho ? `/contratante/criar-projeto?id=${projeto.id}` : `${linkBase}/${projeto.id}`
@@ -56,13 +49,19 @@ export default function ProjectListItem({ projeto, linkBase, mostrarStatus = fal
           <span className={`${styles.status} ${statusClass}`}>
             {statusLabel}
           </span>
-        ) : (
-          projeto.jaCandidatado && (
-            <span className={styles.enviada}>
-              <CircleCheck size={14} strokeWidth={2.4} /> Candidatura enviada
-            </span>
-          )
-        )}
+        ) : projeto.statusCandidatura ? (
+          <span className={styles.enviada}>
+            <CircleCheck size={14} strokeWidth={2.4} />
+            {projeto.statusCandidatura === 'aceita'
+              ? 'Candidatura aceita'
+              : 'Candidatura enviada'}
+          </span>
+        ) : projeto.jaCandidatado ? (
+          <span className={styles.enviada}>
+            <CircleCheck size={14} strokeWidth={2.4} />
+            Candidatura enviada
+          </span>
+        ) : null}
       </div>
 
       <h3 className={styles.titulo}>{projeto.titulo}</h3>
