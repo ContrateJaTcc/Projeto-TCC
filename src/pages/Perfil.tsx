@@ -40,12 +40,7 @@ const UFS = [
   'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO',
 ]
 
-/*
- * Mesma página para os dois papéis: os dados cadastrais e a edição são iguais.
- * Muda o que vem embaixo — o freelancer vê nível, insígnias, avaliações e
- * portfólio; o contratante, os números dos projetos, a reputação e quem já
- * contratou. Áreas de atuação só existem para o freelancer.
- */
+
 export default function Perfil({ papel }: { papel: 'freelancer' | 'contratante' }) {
   const ehFreelancer = papel === 'freelancer'
 
@@ -56,6 +51,7 @@ export default function Perfil({ papel }: { papel: 'freelancer' | 'contratante' 
   const [areas, setAreas] = useState<Tipo[]>([])
   const [carregando, setCarregando] = useState(true)
   const [erro, setErro] = useState('')
+  const [erroGamificacao, setErroGamificacao] = useState('')
   const toast = useToast()
 
   const [editando, setEditando] = useState(false)
@@ -76,35 +72,57 @@ export default function Perfil({ papel }: { papel: 'freelancer' | 'contratante' 
   const [senha, setSenha] = useState({ nova: '', confirma: '' })
   const [salvandoSenha, setSalvandoSenha] = useState(false)
 
-  const carregar = useCallback(async () => {
-    try {
-      if (ehFreelancer) {
-        const [dadosPerfil, dadosAreas, dadosTipos, dadosGamificacao] = await Promise.all([
-          api<PerfilCompleto>('/usuarios/eu'),
-          api<{ areas: Tipo[] }>('/usuarios/eu/areas'),
-          api<{ tipos: Tipo[] }>('/tipos-servico'),
-          api<PerfilFreelancer>('/perfil/freelancer/eu'),
-        ])
+  
+const carregar = useCallback(async () => {
+  setErro('')
+  setErroGamificacao('')
 
-        setPerfil(dadosPerfil)
-        setAreas(dadosAreas.areas)
-        setTipos(dadosTipos.tipos)
+  try {
+    if (ehFreelancer) {
+      // Dados essenciais do perfil são carregados separadamente das conquistas.
+      const [dadosPerfil, dadosAreas, dadosTipos] = await Promise.all([
+        api<PerfilCompleto>('/usuarios/eu'),
+        api<{ areas: Tipo[] }>('/usuarios/eu/areas'),
+        api<{ tipos: Tipo[] }>('/tipos-servico'),
+      ])
+
+      setPerfil(dadosPerfil)
+      setAreas(dadosAreas.areas)
+      setTipos(dadosTipos.tipos)
+
+      try {
+        const dadosGamificacao =
+          await api<PerfilFreelancer>('/perfil/freelancer/eu')
+
         setGamificacao(dadosGamificacao)
-      } else {
-        const [dadosPerfil, dadosPainel] = await Promise.all([
-          api<PerfilCompleto>('/usuarios/eu'),
-          api<PerfilContratante>('/perfil/contratante/eu'),
-        ])
-
-        setPerfil(dadosPerfil)
-        setPainel(dadosPainel)
+      } catch (e) {
+        console.error('Erro ao carregar conquistas:', e)
+        setGamificacao(null)
+        setErroGamificacao(
+          e instanceof ErroApi
+            ? e.message
+            : 'Não foi possível carregar suas conquistas.'
+        )
       }
-    } catch (e) {
-      setErro(e instanceof ErroApi ? e.message : 'Não foi possível conectar ao servidor.')
-    } finally {
-      setCarregando(false)
+    } else {
+      const [dadosPerfil, dadosPainel] = await Promise.all([
+        api<PerfilCompleto>('/usuarios/eu'),
+        api<PerfilContratante>('/perfil/contratante/eu'),
+      ])
+
+      setPerfil(dadosPerfil)
+      setPainel(dadosPainel)
     }
-  }, [ehFreelancer])
+  } catch (e) {
+    setErro(
+      e instanceof ErroApi
+        ? e.message
+        : 'Não foi possível conectar ao servidor.'
+    )
+  } finally {
+    setCarregando(false)
+  }
+}, [ehFreelancer])
 
   useEffect(() => {
     const t = setTimeout(carregar, 0)
@@ -143,9 +161,6 @@ export default function Perfil({ papel }: { papel: 'freelancer' | 'contratante' 
     setSalvando(true)
 
     try {
-      /* Dados pessoais e áreas vivem em tabelas diferentes, então são duas
-         requisições. A do perfil vem primeiro: se ela falhar, não faz sentido
-         gravar as áreas. */
       await api(`/usuarios/${perfil.usu_id}`, {
         metodo: 'PUT',
         corpo: { ...campos, usu_foto: foto },
@@ -158,8 +173,6 @@ export default function Perfil({ papel }: { papel: 'freelancer' | 'contratante' 
         })
       }
 
-      /* Recarregar também atualiza as insígnias: foto, descrição e áreas
-         contam para "Perfil Completo". */
       await carregar()
       setEditando(false)
       toast.mostrar('Perfil atualizado!')
@@ -415,6 +428,23 @@ export default function Perfil({ papel }: { papel: 'freelancer' | 'contratante' 
           </div>
         </form>
       )}
+
+{ehFreelancer && erroGamificacao && (
+  <section className={secoes.secao}>
+    <h2>Conquistas</h2>
+    <p className="msg-erro">{erroGamificacao}</p>
+    <button
+      type="button"
+      className={styles.editar}
+      onClick={async () => {
+  setCarregando(true)
+  await carregar()
+}}
+    >
+      Tentar carregar conquistas novamente
+    </button>
+  </section>
+)}
 
       {ehFreelancer && gamificacao && (
         <>
