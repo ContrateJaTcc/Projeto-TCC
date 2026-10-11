@@ -98,9 +98,9 @@ export default function PortfolioFreelancer() {
   if (erro || !perfil) {
     return (
       <div className={styles.pagina}>
-        <Link to="/contratante/candidatos" className={styles.voltar}>
+       <Link to="/contratante/freelancers" className={styles.voltar}>
           <ArrowLeft size={15} strokeWidth={2.2} />
-          Voltar para candidatos
+          Voltar para freelancers
         </Link>
         <p className="msg-erro">{erro || 'Freelancer não encontrado.'}</p>
       </div>
@@ -111,9 +111,9 @@ export default function PortfolioFreelancer() {
 
   return (
     <div className={styles.pagina}>
-      <Link to="/contratante/candidatos" className={styles.voltar}>
+      <Link to="/contratante/freelancers" className={styles.voltar}>
         <ArrowLeft size={15} strokeWidth={2.2} />
-        Voltar para candidatos
+        Voltar para freelancers
       </Link>
 
       <header className={styles.cabecalho}>
