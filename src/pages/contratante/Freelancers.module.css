@@ -1,8 +1,8 @@
 
 .pagina {
-  width: min(1100px, 100%);
+  width: min(1180px, 100%);
   margin: 0 auto;
-  padding: 32px 24px;
+  padding: 32px 24px 48px;
 }
 
 .cabecalho {
@@ -11,12 +11,21 @@
 
 .cabecalho h1 {
   margin: 0 0 8px;
-  font-size: 28px;
+  font-size: clamp(24px, 3vw, 32px);
+  color: #29213d;
 }
 
 .cabecalho p {
   margin: 0;
-  color: #666;
+  color: #716b7c;
+}
+
+.painelFiltros {
+  margin-bottom: 28px;
+  padding: 22px;
+  border: 1px solid #e8e4ef;
+  border-radius: 14px;
+  background: #fff;
 }
 
 .busca {
@@ -24,22 +33,118 @@
   align-items: center;
   gap: 12px;
   margin-bottom: 24px;
-  padding: 12px 16px;
-  border: 1px solid #ddd;
+  padding: 12px 14px;
+  border: 1px solid #ded9e8;
   border-radius: 10px;
+  color: #716b7c;
+}
+
+.busca:focus-within {
+  border-color: #7450b5;
+  box-shadow: 0 0 0 3px rgb(116 80 181 / 10%);
 }
 
 .busca input {
   width: 100%;
+  min-width: 0;
   border: none;
   outline: none;
   background: transparent;
+  color: #29213d;
   font: inherit;
+}
+
+.limparBusca {
+  display: inline-flex;
+  padding: 4px;
+  border: 0;
+  background: transparent;
+  color: #716b7c;
+  cursor: pointer;
+}
+
+.tituloFiltros {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 16px;
+  color: #4d376e;
+}
+
+.tituloFiltros h2 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.filtros {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.campo span {
+  color: #4d4658;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.campo input,
+.campo select {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 43px;
+  padding: 10px 12px;
+  border: 1px solid #ded9e8;
+  border-radius: 8px;
+  background: #fff;
+  color: #29213d;
+  font: inherit;
+}
+
+.campo input:focus,
+.campo select:focus {
+  outline: 2px solid #c8b4ed;
+  outline-offset: 1px;
+}
+
+.resumoFiltros {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid #eeeaf4;
+  color: #716b7c;
+  font-size: 14px;
+}
+
+.limparFiltros,
+.botaoSecundario {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 9px 12px;
+  border: 1px solid #ded9e8;
+  border-radius: 8px;
+  background: #fff;
+  color: #4d376e;
+  font: inherit;
+  cursor: pointer;
 }
 
 .lista {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
   gap: 18px;
 }
 
@@ -47,56 +152,129 @@
   display: flex;
   align-items: flex-start;
   gap: 16px;
-  padding: 20px;
-  border: 1px solid #e5e5e5;
-  border-radius: 12px;
+  min-width: 0;
+  padding: 22px;
+  border: 1px solid #e8e4ef;
+  border-radius: 14px;
   background: #fff;
+  box-shadow: 0 3px 12px rgb(38 22 61 / 4%);
 }
 
 .informacoes {
-  min-width: 0;
   flex: 1;
+  min-width: 0;
 }
 
 .informacoes h2 {
   margin: 0 0 8px;
+  overflow-wrap: anywhere;
+  color: #29213d;
   font-size: 18px;
 }
 
 .local {
   display: flex;
   align-items: center;
-  gap: 5px;
-  color: #666;
+  gap: 6px;
+  margin: 0 0 12px;
+  color: #716b7c;
   font-size: 13px;
 }
 
 .descricao {
+  margin: 0 0 14px;
   overflow-wrap: anywhere;
-  color: #444;
+  color: #514b5b;
   font-size: 14px;
-  line-height: 1.5;
+  line-height: 1.6;
+  white-space: pre-line;
+}
+
+.areas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-bottom: 16px;
+}
+
+.areas span {
+  padding: 5px 9px;
+  border: 1px solid #e5dbf4;
+  border-radius: 20px;
+  background: #f7f2ff;
+  color: #5b3d85;
+  font-size: 12px;
 }
 
 .botao {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  margin-top: 8px;
-  padding: 9px 12px;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 2px;
+  padding: 10px 13px;
+  border: 0;
   border-radius: 8px;
-  background: #222;
+  background: #382458;
   color: #fff;
+  font-size: 14px;
+  font-weight: 600;
   text-decoration: none;
+  transition: background 0.2s ease;
+}
+
+.botao:hover {
+  background: #503477;
 }
 
 .vazio {
-  padding: 32px 0;
-  color: #666;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 48px 20px;
+  border: 1px dashed #ded9e8;
+  border-radius: 14px;
+  color: #716b7c;
+  text-align: center;
+}
+
+.vazio h2 {
+  margin: 14px 0 6px;
+  color: #29213d;
+  font-size: 18px;
+}
+
+.vazio p {
+  margin: 0 0 18px;
+  line-height: 1.5;
+}
+
+@media (max-width: 800px) {
+  .lista {
+    grid-template-columns: 1fr;
+  }
+
+  .filtros {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 600px) {
   .pagina {
-    padding: 24px 16px;
+    padding: 24px 16px 36px;
+  }
+
+  .painelFiltros {
+    padding: 16px;
+  }
+
+  .card {
+    padding: 16px;
+    gap: 12px;
+  }
+
+  .resumoFiltros {
+    align-items: flex-start;
+    flex-direction: column;
   }
 }
