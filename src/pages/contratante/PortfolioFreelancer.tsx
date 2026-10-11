@@ -39,30 +39,56 @@ export default function PortfolioFreelancer() {
   const [carregando, setCarregando] = useState(true)
   const [erro, setErro] = useState('')
 
+  
   useEffect(() => {
+    let ativo = true
+
     async function carregar() {
+      setCarregando(true)
+      setErro('')
+
       try {
-        const [dados, dadosGamificacao] = await Promise.all([
-          api<{
-            perfil: PerfilPublico
-            areas: Area[]
-            itens: ItemPortfolio[]
-          }>(`/portfolio/freelancer/${usuId}`),
-          api<PerfilFreelancer>(`/perfil/freelancer/${usuId}`),
-        ])
+        const dados = await api<{
+          perfil: PerfilPublico
+          areas: Area[]
+          itens: ItemPortfolio[]
+        }>(`/portfolio/freelancer/${usuId}`)
+
+        if (!ativo) return
 
         setPerfil(dados.perfil)
         setAreas(dados.areas)
         setItens(dados.itens)
-        setGamificacao(dadosGamificacao)
+
+        // A gamificação é independente do perfil e do portfólio.
+        try {
+          const dadosGamificacao = await api<PerfilFreelancer>(
+            `/perfil/freelancer/${usuId}`
+          )
+
+          if (ativo) setGamificacao(dadosGamificacao)
+        } catch (e) {
+          console.error('Erro ao carregar gamificação do freelancer:', e)
+          if (ativo) setGamificacao(null)
+        }
       } catch (e) {
-        setErro(e instanceof ErroApi ? e.message : 'Não foi possível conectar ao servidor.')
+        if (!ativo) return
+
+        setErro(
+          e instanceof ErroApi
+            ? e.message
+            : 'Não foi possível conectar ao servidor.'
+        )
       } finally {
-        setCarregando(false)
+        if (ativo) setCarregando(false)
       }
     }
 
     carregar()
+
+    return () => {
+      ativo = false
+    }
   }, [usuId])
 
   if (carregando) {
