@@ -9,11 +9,6 @@ import styles from './gerenciarportfolio.module.css'
 
 const CAMPOS_VAZIOS = { port_titulo: '', port_desc: '', port_link: '', port_img: '' }
 
-/*
- * Bloco autossuficiente: carrega, cria, edita e remove os trabalhos do
- * freelancer logado. Fica separado da pagina de perfil para que nenhuma das
- * duas partes precise conhecer o estado da outra.
- */
 export default function GerenciarPortfolio() {
   const toast = useToast()
   const [itens, setItens] = useState<ItemPortfolio[]>([])
@@ -180,6 +175,22 @@ export default function GerenciarPortfolio() {
                 placeholder="https://..."
               />
             </label>
+            ```tsx
+            {campos.port_img.trim() && (
+              <div className={styles.previaImagem}>
+                <span>Prévia da imagem:</span>
+                <img
+                  src={campos.port_img.trim()}
+                  alt="Prévia do trabalho"
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none'
+                  }}
+                  onLoad={(e) => {
+                    e.currentTarget.style.display = 'block'
+                  }}
+                />
+              </div>
+            )}
           </div>
 
           {/* A imagem do trabalho fica hospedada fora: aqui o banco guarda so
