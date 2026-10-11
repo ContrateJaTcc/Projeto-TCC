@@ -1,6 +1,6 @@
 
 import { useEffect, useMemo, useState } from 'react'
-import { Search, MapPin, UserRound, SlidersHorizontal, X } from 'lucide-react'
+import { MapPin, Search, UserRound, SlidersHorizontal, X } from 'lucide-react'
 import Avatar from '../../components/avatar/avatar'
 import Carregando from '../../components/carregando/carregando'
 import EstadoErro from '../../components/carregando/estadoerro'
@@ -22,7 +22,6 @@ const normalizar = (texto: string) =>
 
 export default function Freelancers() {
   const [freelancers, setFreelancers] = useState<Freelancer[]>([])
-  const [busca, setBusca] = useState('')
   const [areaSelecionada, setAreaSelecionada] = useState('')
   const [cidade, setCidade] = useState('')
   const [estado, setEstado] = useState('')
@@ -78,29 +77,17 @@ export default function Freelancers() {
     ].sort()
   }, [freelancers])
 
+  
   const filtrados = useMemo(() => {
-    const termo = normalizar(busca)
     const cidadeBusca = normalizar(cidade)
     const estadoBusca = estado.trim().toUpperCase()
     const areaBusca = normalizar(areaSelecionada)
 
     return freelancers.filter((freelancer) => {
-      const nome = normalizar(freelancer.usu_nome)
-      const descricao = normalizar(freelancer.usu_desc ?? '')
-      const localidade = normalizar(
-        `${freelancer.usu_cid ?? ''} ${freelancer.usu_est ?? ''}`
-      )
       const areas = (freelancer.areas_atuacao ?? '')
         .split(',')
         .map(normalizar)
         .filter(Boolean)
-
-      const correspondeBusca =
-        !termo ||
-        nome.includes(termo) ||
-        descricao.includes(termo) ||
-        localidade.includes(termo) ||
-        areas.some((area) => area.includes(termo))
 
       const correspondeArea =
         !areaBusca || areas.some((area) => area === areaBusca)
@@ -113,55 +100,29 @@ export default function Freelancers() {
         !estadoBusca ||
         (freelancer.usu_est ?? '').trim().toUpperCase() === estadoBusca
 
-      return (
-        correspondeBusca &&
-        correspondeArea &&
-        correspondeCidade &&
-        correspondeEstado
-      )
+      return correspondeArea && correspondeCidade && correspondeEstado
     })
-  }, [freelancers, busca, areaSelecionada, cidade, estado])
+  }, [freelancers, areaSelecionada, cidade, estado])
 
-  function limparFiltros() {
-    setBusca('')
-    setAreaSelecionada('')
-    setCidade('')
-    setEstado('')
-  }
+ function limparFiltros() {
+  setAreaSelecionada('')
+  setCidade('')
+  setEstado('')
+}
 
-  const existemFiltros = Boolean(busca || areaSelecionada || cidade || estado)
+  const existemFiltros = Boolean(areaSelecionada || cidade || estado)
 
   return (
     <main className={styles.pagina}>
       <header className={styles.cabecalho}>
         <div>
           <h1>Encontre freelancers</h1>
-          <p>Pesquise profissionais para os seus projetos.</p>
+          <p>Encontre profissionais usando os filtros do seu projeto.</p>
         </div>
       </header>
 
       <section className={styles.painelFiltros} aria-label="Filtros de freelancers">
-        <div className={styles.busca}>
-          <Search size={18} />
-          <input
-            type="search"
-            placeholder="Nome, descrição ou área de atuação..."
-            value={busca}
-            onChange={(e) => setBusca(e.target.value)}
-            aria-label="Buscar freelancers"
-          />
-          {busca && (
-            <button
-              type="button"
-              className={styles.limparBusca}
-              onClick={() => setBusca('')}
-              aria-label="Limpar busca"
-            >
-              <X size={16} />
-            </button>
-          )}
-        </div>
-
+    
         <div className={styles.tituloFiltros}>
           <SlidersHorizontal size={17} />
           <h2>Filtrar profissionais</h2>
@@ -239,7 +200,7 @@ export default function Freelancers() {
           <h2>Nenhum profissional encontrado</h2>
           <p>
             {existemFiltros
-              ? 'Tente mudar os filtros ou pesquisar por outros termos.'
+              ? 'Tente alterar os filtros selecionados.'
               : 'Ainda não há freelancers disponíveis para exibir.'}
           </p>
           {existemFiltros && (
