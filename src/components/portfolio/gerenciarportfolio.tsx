@@ -175,7 +175,6 @@ export default function GerenciarPortfolio() {
                 placeholder="https://..."
               />
             </label>
-            ```tsx
             {campos.port_img.trim() && (
               <div className={styles.previaImagem}>
                 <span>Prévia da imagem:</span>
