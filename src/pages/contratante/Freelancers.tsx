@@ -25,6 +25,7 @@ export default function Freelancers() {
   const [areaSelecionada, setAreaSelecionada] = useState('')
   const [cidade, setCidade] = useState('')
   const [estado, setEstado] = useState('')
+  const [perfilPreenchido, setPerfilPreenchido] = useState(false)
   const [carregando, setCarregando] = useState(true)
   const [erro, setErro] = useState('')
 
@@ -89,6 +90,9 @@ export default function Freelancers() {
         .map(normalizar)
         .filter(Boolean)
 
+      const correspondePerfil =
+        !perfilPreenchido || Boolean(freelancer.usu_desc?.trim())
+
       const correspondeArea =
         !areaBusca || areas.some((area) => area === areaBusca)
 
@@ -100,17 +104,31 @@ export default function Freelancers() {
         !estadoBusca ||
         (freelancer.usu_est ?? '').trim().toUpperCase() === estadoBusca
 
-      return correspondeArea && correspondeCidade && correspondeEstado
+      return (
+        correspondeArea &&
+        correspondeCidade &&
+        correspondeEstado &&
+        correspondePerfil
+      )
     })
-  }, [freelancers, areaSelecionada, cidade, estado])
+  }, [
+    freelancers,
+    areaSelecionada,
+    cidade,
+    estado,
+    perfilPreenchido,
+  ])
 
  function limparFiltros() {
   setAreaSelecionada('')
   setCidade('')
   setEstado('')
+  setPerfilPreenchido(false)
 }
 
-  const existemFiltros = Boolean(areaSelecionada || cidade || estado)
+ const existemFiltros = Boolean(
+  areaSelecionada || cidade || estado || perfilPreenchido
+)
 
   return (
     <main className={styles.pagina}>
@@ -168,6 +186,18 @@ export default function Freelancers() {
               ))}
             </select>
           </label>
+          <label className={styles.campo}>
+  <span>Perfil profissional</span>
+  <select
+    value={perfilPreenchido ? 'preenchido' : ''}
+    onChange={(e) =>
+      setPerfilPreenchido(e.target.value === 'preenchido')
+    }
+  >
+    <option value="">Todos os perfis</option>
+    <option value="preenchido">Com descrição profissional</option>
+  </select>
+</label>
         </div>
 
         <div className={styles.resumoFiltros}>
