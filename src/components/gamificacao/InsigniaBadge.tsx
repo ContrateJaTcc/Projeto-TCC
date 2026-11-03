@@ -6,10 +6,10 @@ import {
 } from '../../services/insigniasService'
 
 const VISUAL: Record<NomeInsignia, { nivel: string; imagem: string }> = {
-  'Quartzo Rosa':      { nivel: 'Bronze',   imagem: '/insignias/quartzo-rosa.png' },
+  'Quartzo Rosa':      { nivel: 'Bronze',   imagem: '/insignias/quartzo_rosa.png' },
   'Rubelita':          { nivel: 'Prata',    imagem: '/insignias/rubelita.png' },
-  'Opala de Fogo':     { nivel: 'Ouro',     imagem: '/insignias/opala-de-fogo.png' },
-  'Turmalina Paraíba': { nivel: 'Diamante', imagem: '/insignias/turmalina-paraiba.png' },
+  'Opala de Fogo':     { nivel: 'Ouro',     imagem: '/insignias/opala_de_fogo.png' },
+  'Turmalina Paraíba': { nivel: 'Diamante', imagem: '/insignias/turmalina_paraiba.png' },
 }
 
 export default function InsigniaBadge({ freeId }: { freeId: number }) {
