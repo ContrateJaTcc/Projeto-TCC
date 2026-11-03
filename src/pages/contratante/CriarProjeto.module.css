@@ -14,7 +14,7 @@
 
 .cabecalho h1 {
   margin: 8px 0;
-  font-size: 32px;
+  font-size: 52px;
 }
 
 .cabecalho p {
@@ -27,10 +27,13 @@
   gap: 24px;
 }
 
+/* Cada seção é um cartão sólido: o formulário fica legível sobre o cenário nos dois temas */
 .secao {
   padding: 24px;
-  border: 1px solid #ddd;
-  border-radius: 12px;
+  background: var(--color-surface);
+  border: 2px solid var(--color-borda-pixel);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
 }
 
 .secao h2 {
@@ -49,8 +52,8 @@
 .secao textarea,
 .secao select {
   padding: 12px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
+  border: 1px solid var(--color-borda-pixel);
+  border-radius: var(--radius-sm);
   font: inherit;
 }
 
@@ -69,7 +72,7 @@
 .acoes button {
   padding: 12px 20px;
   border: 0;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
 }
 .revisao {
@@ -91,7 +94,7 @@
 
 .informacao span {
   font-size: 14px;
-  color: #666;
+  color: var(--color-text-muted);
 }
 
 .informacao strong {
@@ -102,4 +105,209 @@
   margin: 0;
   line-height: 1.5;
   white-space: pre-wrap;
+}
+/* Modelos prontos */
+.modelos {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  margin-bottom: 1.2rem;
+  padding: 1rem 1.2rem;
+  background: var(--color-surface);
+  border: 2px solid var(--color-borda-pixel);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.modelosTopo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 0.6rem;
+  color: var(--color-titulo);
+}
+
+.modelosTopo span {
+  color: var(--color-text-muted);
+  font-size: 0.84rem;
+}
+
+.modelosLista {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.modelosLista button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.9rem;
+  border: 2px solid var(--color-borda-pixel);
+  border-radius: var(--radius-pill);
+  background: var(--color-bg-alt);
+  color: var(--color-titulo);
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 0.84rem;
+  cursor: pointer;
+}
+
+.modelosLista button:hover {
+  border-color: var(--color-accent);
+  background: var(--color-accent-tint);
+}
+
+/* Rascunho recuperado */
+.recuperado {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.7rem;
+  margin-bottom: 1.2rem;
+  padding: 0.7rem 1rem;
+  background: linear-gradient(var(--color-accent-tint), var(--color-accent-tint)), var(--color-surface);
+  border: 2px solid var(--color-accent);
+  border-radius: var(--radius-md);
+  color: var(--color-titulo);
+  font-weight: 600;
+  font-size: 0.88rem;
+}
+
+.recuperado button {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  border: 2px solid var(--color-borda-pixel);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  color: var(--color-titulo);
+  padding: 0.3rem 0.8rem;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+/* Sugestão de preço pelos projetos parecidos */
+.sugestao {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem 0.7rem;
+  padding: 0.6rem 0.8rem;
+  background: var(--color-bg-alt);
+  border-left: 3px solid var(--color-accent);
+  font-size: 0.84rem;
+  color: var(--color-text-soft);
+}
+
+.sugestao svg {
+  flex-shrink: 0;
+  color: var(--color-ouro-texto);
+}
+
+.sugestao span {
+  flex: 1 1 240px;
+}
+
+.sugestao strong {
+  color: var(--color-titulo);
+}
+
+.sugestao button {
+  border: 2px solid var(--color-borda-pixel);
+  background: var(--color-surface);
+  color: var(--color-titulo);
+  padding: 0.25rem 0.7rem;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 0.78rem;
+  cursor: pointer;
+}
+
+.sugestao button:hover {
+  border-color: var(--color-accent);
+}
+
+/* Nota de qualidade do anúncio */
+.qualidade {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem 1.2rem;
+  background: var(--color-surface);
+  border: 2px solid var(--color-borda-pixel);
+  box-shadow: var(--shadow-sm);
+}
+
+.qualidadeTopo {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--color-titulo);
+}
+
+.qualidadeTopo svg {
+  color: var(--color-ouro-texto);
+}
+
+.qualidadeBarra {
+  height: 12px;
+  background: var(--color-bg-alt);
+  border: 2px solid var(--color-border);
+}
+
+.qualidadeBarra span {
+  display: block;
+  height: 100%;
+  background: var(--color-accent);
+  transition: width var(--dur-media) steps(4, end);
+}
+
+.qualidadeBarra span[data-nivel='fraco'] {
+  background: var(--color-danger);
+}
+
+.qualidadeBarra span[data-nivel='bom'] {
+  background: var(--color-sucesso);
+}
+
+.qualidade ul {
+  margin: 0;
+  padding-left: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.84rem;
+  color: var(--color-text-soft);
+}
+
+.qualidade p {
+  font-size: 0.84rem;
+  color: var(--color-sucesso);
+  font-weight: 700;
+}
+
+.recuperado > span {
+  flex: 1 1 240px;
+}
+
+/* Celular: os pares de campos viram um embaixo do outro e os botões quebram a linha */
+.linha > * {
+  min-width: 0;
+}
+
+.acoes {
+  flex-wrap: wrap;
+}
+
+@media (max-width: 560px) {
+  .linha {
+    grid-template-columns: 1fr;
+  }
+  .acoes button {
+    flex: 1 1 auto;
+  }
 }

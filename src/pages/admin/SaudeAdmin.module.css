@@ -1,0 +1,89 @@
+.caixa {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.aviso {
+    padding: 0.5rem 0.8rem;
+    font-size: 0.85rem;
+    color: var(--color-titulo);
+    background: var(--color-surface);
+    border: 2px dashed var(--color-accent);
+}
+
+.lista {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+    gap: 0.6rem;
+}
+
+.lista li {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.8rem 0.9rem;
+    background: var(--color-surface);
+    border: 2px solid var(--color-borda-pixel);
+    border-left-width: 6px;
+    color: var(--color-titulo);
+}
+
+.lista li > div {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+}
+
+.lista li span {
+    font-size: 0.8rem;
+    color: var(--color-text);
+}
+
+.ok {
+    border-left-color: var(--color-sucesso) !important;
+}
+
+.ok > svg:last-child {
+    color: var(--color-sucesso);
+}
+
+.ruim {
+    border-left-color: var(--color-danger) !important;
+}
+
+.ruim > svg:last-child {
+    color: var(--color-danger);
+}
+
+.neutro {
+    border-left-color: var(--color-borda-pixel);
+}
+
+.rodape {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.6rem 0.8rem;
+    font-size: 0.8rem;
+    color: var(--color-text);
+    background: var(--color-surface);
+    border: 2px solid var(--color-borda-pixel);
+}
+
+.atualizar {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.3rem 0.6rem;
+    font-family: var(--font-sans);
+    font-weight: 700;
+    color: var(--color-titulo);
+    background: var(--color-bg-alt);
+    border: 2px solid var(--color-borda-pixel);
+    cursor: pointer;
+}

@@ -1,0 +1,91 @@
+.barraXp {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    min-width: 0;
+}
+
+.nivel {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 2px;
+    padding: 0.2rem 0.45rem;
+    background: var(--gradient-ouro);
+    color: var(--color-tinta);
+    font-family: var(--font-magica);
+    font-size: 0.7rem;
+    border: 2px solid var(--color-sombra-pixel);
+    box-shadow: 2px 2px 0 0 var(--color-sombra-pixel);
+}
+
+.nivel small {
+    font-size: 0.45rem;
+}
+
+.corpo {
+    flex: 1;
+    min-width: 90px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+/* Trilho em blocos */
+.trilho {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 2px;
+    padding: 2px;
+    background: var(--color-sombra-pixel);
+    border: 2px solid var(--color-borda-pixel);
+}
+
+.segmento {
+    height: 8px;
+    background: #383a61;
+}
+
+.cheio {
+    background: linear-gradient(180deg, #fbf5ef 0 40%, #f2d3ab 40%);
+}
+
+/* Bloco que está enchendo */
+.atual {
+    background: linear-gradient(180deg, #c4b0ff 0 40%, #8b6d9c 40%);
+    animation: pulsar 1.2s steps(2, end) infinite;
+}
+
+@keyframes pulsar {
+    50% { opacity: 0.45; }
+}
+
+.texto {
+    font-family: var(--font-display);
+    font-size: 0.72rem;
+    color: var(--color-text-soft);
+    white-space: nowrap;
+}
+
+/* Cabeçalho */
+.compacta .corpo {
+    min-width: 110px;
+}
+
+.compacta .segmento {
+    height: 6px;
+}
+
+.compacta .texto {
+    font-size: 0.66rem;
+    color: rgba(255, 255, 255, 0.75);
+}
+
+:global(:root[data-movimento='reduzido']) .atual {
+    animation: none;
+}
+
+/* No cabeçalho claro o texto da barra vira tinta */
+:global(:root[data-theme='light']) .compacta .texto {
+    color: #494d7e;
+}

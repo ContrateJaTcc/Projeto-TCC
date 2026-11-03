@@ -1,0 +1,103 @@
+/* Modo TV: fundo noturno próprio (sem o cenário), letras grandes para ler de longe */
+.tela {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(1rem, 3vw, 2.2rem);
+    padding: clamp(1rem, 3vw, 2.5rem);
+    background: var(--estrelas, none), linear-gradient(180deg, #1b1b30 0%, #26134d 100%);
+    color: #fff;
+}
+
+.topo {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+}
+
+.marca {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: #fff;
+    text-decoration: none;
+    font-family: var(--font-titulo);
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    margin-right: auto;
+}
+
+.marca img {
+    height: clamp(40px, 6vw, 64px);
+    width: auto;
+}
+
+.hora {
+    font-family: var(--font-magica);
+    font-size: clamp(0.9rem, 2vw, 1.3rem);
+    color: #ffc23d;
+}
+
+.cheia {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.5rem 0.9rem;
+    font-family: var(--font-sans);
+    font-weight: 700;
+    color: #1b1b30;
+    background: #ffc23d;
+    border: 2px solid #1b1b30;
+    cursor: pointer;
+}
+
+.aviso {
+    padding: 0.8rem 1rem;
+    border: 2px solid #ff6b5e;
+    background: rgba(255, 107, 94, 0.15);
+}
+
+.numeros {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+    gap: clamp(0.8rem, 2vw, 1.4rem);
+}
+
+.numeros li {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    padding: clamp(1rem, 2.5vw, 1.6rem);
+    background: #2a1a4a;
+    border: 4px solid #ffc23d;
+    box-shadow: 6px 6px 0 0 #0d0d1a;
+}
+
+.numeros li svg {
+    color: #ffc23d;
+}
+
+.numeros strong {
+    font-family: var(--font-titulo);
+    font-weight: 400;
+    font-size: clamp(3.4rem, 9vw, 6.5rem);
+    line-height: 0.9;
+}
+
+.numeros span {
+    font-size: clamp(1rem, 2vw, 1.35rem);
+    font-weight: 700;
+    color: #e6dadb;
+}
+
+.mural {
+    max-width: 900px;
+}
+
+.rodape {
+    margin-top: auto;
+    font-size: 0.85rem;
+    color: #c9bfe3;
+}

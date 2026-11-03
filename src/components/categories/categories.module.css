@@ -5,15 +5,13 @@
 }
 
 .categorias h2 {
-    font-family: var(--font-display);
-    font-size: clamp(2.5rem, 5vw, 3.8rem);
-    color: var(--color-primary);
+    font-family: var(--font-titulo);
+    font-size: clamp(4.07rem, 8.13vw, 6.17rem);
+    color: var(--color-titulo);
     margin-bottom: 1.5rem;
 }
 
-/* Com largura fixa nos cards sobrava um vão à direita (a soma deles nunca
-   fechava com a largura do container). Em grid as colunas se esticam, então a
-   linha termina sempre alinhada com o painel de detalhe abaixo. */
+/* Grid */
 .grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
@@ -47,7 +45,7 @@
 
 .verde {
     background: var(--color-accent);
-    color: #1f1c34;
+    color: var(--color-tinta);
 }
 
 .roxo {
@@ -70,8 +68,7 @@
     background: rgba(255, 255, 255, 0.16);
 }
 
-/* Mesma caixa dos cards para o grid não quebrar o ritmo, mas tracejado e
-   sem preenchimento: precisa ler como "ação", não como mais uma categoria. */
+/* Ver mais */
 .verMais {
     display: flex;
     flex-direction: column;
@@ -82,7 +79,7 @@
     border-radius: var(--radius-md);
     border: 2px dashed var(--color-border);
     background: transparent;
-    color: var(--color-primary);
+    color: var(--color-titulo);
     font-family: var(--font-sans);
     font-size: 0.95rem;
     font-weight: 700;
@@ -106,12 +103,11 @@
     justify-content: center;
     border-radius: 50%;
     background: var(--color-surface-muted);
-    color: var(--color-primary);
+    color: var(--color-titulo);
     flex-shrink: 0;
 }
 
-/* Como o preenchimento agora alterna por índice, o "selecionado" precisa de um
-   sinal próprio: anel de contorno + elevação, legível sobre as duas cores. */
+/* Selecionada */
 .selecionada {
     box-shadow: 0 0 0 3px var(--color-primary-dark), var(--shadow-md);
     transform: translateY(-3px);
@@ -152,8 +148,8 @@
 }
 
 .cabecalho h3 {
-    font-family: var(--font-display);
-    font-size: 1.35rem;
+    font-family: var(--font-titulo);
+    font-size: 2.2rem;
 }
 
 .papel {
@@ -163,7 +159,7 @@
 }
 
 .descricao {
-    color: #d8cfe6;
+    color: var(--color-text-soft);
     line-height: 1.55;
     font-size: 0.95rem;
     max-width: 640px;
@@ -177,10 +173,10 @@
 
 .stat {
     background: var(--color-accent);
-    color: #1f1c34;
+    color: var(--color-tinta);
     font-weight: 700;
     font-size: 0.8rem;
-    border-radius: 999px;
+    border-radius: var(--radius-pill);
     padding: 0.45rem 1rem;
 }
 
@@ -201,7 +197,7 @@
 .insignia {
     background: rgba(255, 255, 255, 0.12);
     border: 1px solid rgba(255, 255, 255, 0.16);
-    border-radius: 999px;
+    border-radius: var(--radius-pill);
     padding: 0.4rem 0.9rem;
     font-size: 0.8rem;
     font-weight: 600;
@@ -215,13 +211,13 @@
     align-items: center;
     gap: 0.5rem;
     background: var(--color-accent);
-    color: #1f1c34;
+    color: var(--color-tinta);
     text-decoration: none;
     font-weight: 700;
     font-size: 0.92rem;
-    border-radius: 999px;
+    border-radius: var(--radius-pill);
     padding: 0.85rem 1.5rem;
-    box-shadow: 0 10px 24px rgba(28, 13, 51, 0.28);
+    box-shadow: var(--shadow-md);
     transition: background 0.2s ease, transform 0.2s ease;
     white-space: nowrap;
 }
@@ -258,4 +254,48 @@
         white-space: normal;
         margin-top: 0.25rem;
     }
+}
+
+/* Bruxa */
+.detalhe {
+    background: var(--estrelas), var(--gradient-dark);
+    border: 1px solid rgba(242, 211, 171, 0.22);
+}
+
+.card:hover {
+    box-shadow: var(--shadow-md), 0 0 0 2px var(--color-ouro-brilho);
+}
+
+.roxo {
+    background: linear-gradient(150deg, var(--color-feitico), var(--color-primary) 70%);
+}
+
+/* Tema claro: o painel da categoria escolhida fica creme, com tinta escura */
+:global(:root[data-theme='light']) .detalhe {
+    background: var(--estrelas-claras), linear-gradient(180deg, #f8f6fc 0 34%, #efebf8 34% 67%, #e6e1f3 67%);
+    border: 2px solid var(--color-borda-pixel);
+    color: var(--color-titulo);
+}
+
+:global(:root[data-theme='light']) .iconeDetalhe {
+    background: rgba(39, 39, 68, 0.08);
+}
+
+:global(:root[data-theme='light']) .insignia {
+    background: rgba(39, 39, 68, 0.06);
+    border-color: rgba(39, 39, 68, 0.15);
+}
+
+:global(:root[data-theme='light']) .papel {
+    color: #8a3fb0;
+}
+
+/* No pôr do sol o "ver mais" ganha fundo (transparente, o texto sumia no cenário) */
+:global(:root[data-theme='light']) .verMais {
+    background: var(--color-surface);
+    border-color: var(--color-borda-pixel);
+}
+
+:global(:root[data-theme='light']) .insigniasLabel {
+    color: #8a3fb0;
 }

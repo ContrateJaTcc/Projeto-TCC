@@ -1,6 +1,6 @@
 import { createContext } from 'react'
 
-export type Role = 'freelancer' | 'contratante'
+export type Role = 'freelancer' | 'contratante' | 'administrador'
 
 export interface RoleContextValue {
   role: Role | null

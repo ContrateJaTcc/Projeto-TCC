@@ -1,0 +1,132 @@
+.envolve {
+    position: relative;
+    display: flex;
+}
+
+/* Celular estreito: o cabeçalho não tem espaço; a chama fica de fora */
+@media (max-width: 520px) {
+    .envolve {
+        display: none;
+    }
+}
+
+/* Mesmo vidro dos botões redondos do cabeçalho */
+.chama {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
+    height: 38px;
+    padding: 0 0.6rem 0 0.45rem;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    cursor: pointer;
+    font-family: var(--font-display);
+}
+
+.chama b {
+    font-size: 0.95rem;
+}
+
+.chama:hover {
+    border-color: var(--color-accent);
+}
+
+.fogo {
+    image-rendering: pixelated;
+    filter: drop-shadow(0 0 3px rgba(255, 160, 70, 0.6));
+    animation: tremer 1.2s steps(2, end) infinite;
+    transform-origin: center bottom;
+}
+
+.fraca .fogo {
+    filter: grayscale(0.7) brightness(0.8);
+    animation: none;
+}
+
+@keyframes tremer {
+    50% { transform: scaleY(1.08); }
+}
+
+:global(:root[data-movimento='reduzido']) .fogo {
+    animation: none;
+}
+
+:global(:root[data-theme='light']) .chama {
+    color: #272744;
+    background: rgba(39, 39, 68, 0.06);
+    border-color: rgba(39, 39, 68, 0.2);
+}
+
+.balao {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    z-index: 30;
+    width: 270px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    padding: 0.9rem 1rem;
+    background: var(--color-surface);
+    border: 2px solid var(--color-accent);
+    box-shadow: var(--shadow-lg);
+    color: var(--color-text);
+    font-family: var(--font-sans);
+    animation: entrar var(--dur-media) steps(4, end) both;
+}
+
+.balao strong {
+    font-family: var(--font-titulo);
+    font-weight: 400;
+    font-size: 1.5rem;
+    line-height: 1.05;
+    color: var(--color-titulo);
+}
+
+.balao p {
+    font-size: 0.82rem;
+    line-height: 1.45;
+    color: var(--color-text-soft);
+}
+
+.balao small {
+    font-size: 0.74rem;
+    color: var(--color-text-muted);
+}
+
+.semana {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.25rem;
+}
+
+.semana li {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+    font-size: 0.66rem;
+    color: var(--color-text-muted);
+}
+
+.semana i {
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--color-borda-pixel);
+    background: var(--color-bg-alt);
+}
+
+.semana .feito i {
+    background: #e0782a;
+    border-color: #ffd45e;
+}
+
+@media (max-width: 640px) {
+    .balao {
+        right: -60px;
+    }
+}

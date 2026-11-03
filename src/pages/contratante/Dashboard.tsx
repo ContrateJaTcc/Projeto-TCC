@@ -1,6 +1,11 @@
 import { useEffect, useState } from 'react'
+import FaixaEvento from '../../components/evento/faixaevento'
+import { useNavigate } from 'react-router-dom'
+import { api, ErroApi } from '../../services/api'
+import Carregando from '../../components/carregando/carregando'
+import EstadoErro from '../../components/carregando/estadoerro'
 import ProjectListSection from '../../components/dashboard/projectlistsection'
-import type { Projeto } from '../../data/mock'
+import type { ItemProjeto } from '../../components/dashboard/projectlistitem'
 import { Plus } from 'lucide-react'
 import Candidatos from './Candidatos'
 
@@ -19,87 +24,48 @@ interface Servico {
   serv_estado: string | null
   serv_status: string
   serv_data_criacao: string
+  serv_moderacao?: 'pendente' | 'aprovado' | 'recusado' | null
+  serv_moderacao_motivo?: string | null
 }
 
 export default function ContratanteDashboard() {
-  const [projetos, setProjetos] = useState<Projeto[]>([])
+  const [projetos, setProjetos] = useState<ItemProjeto[]>([])
   const [carregando, setCarregando] = useState(true)
   const [erro, setErro] = useState('')
+  const navigate = useNavigate()
+  const criar = () => navigate('/contratante/criar-projeto', { viewTransition: true })
 
   useEffect(() => {
     async function carregarProjetos() {
       try {
-        const token = localStorage.getItem('token')
+        const dados = await api<{ projetos: Servico[] }>('/servicos/meus')
 
-        if (!token) {
-          setErro('Você precisa estar logado para ver seus projetos.')
-          return
-        }
-
-        const resposta = await fetch(
-          'https://backendtcc-zeta.vercel.app/servicos/meus',
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        )
-
-        const dados = await resposta.json()
-
-        if (!resposta.ok) {
-          setErro(dados.erro || 'Erro ao carregar projetos.')
-          return
-        }
-
-        const projetosFormatados: Projeto[] = dados.projetos.map(
-          (servico: Servico) => ({
-            id: String(servico.serv_id),
-            status: servico.serv_status,
-            titulo: servico.serv_titulo,
-            categoria: servico.categoria,
-            descricao: servico.serv_desc,
-
-            orcamento:
-              servico.serv_tipo_valor === 'hora'
-                ? `R$ ${Number(servico.serv_valor).toFixed(2)}/hora`
-                : `R$ ${Number(servico.serv_valor).toFixed(2)}`,
-
-            prazo: servico.serv_qtd_dias
-              ? `${servico.serv_qtd_dias} dias`
-              : 'Não informado',
-
-            nota: 0,
-            pagamentoVerificado: false,
-
-            local:
-              servico.serv_local === 'remoto'
-                ? 'Remoto'
-                : servico.serv_cidade
-                  ? `${servico.serv_cidade}${servico.serv_estado ? ` - ${servico.serv_estado}` : ''}`
-                  : servico.serv_local,
-
-            postadoEm: servico.serv_data_criacao,
-
-            autor: {
-              nome: 'Você',
-              bio: 'Contratante',
-              membroDesde: '',
-              numeroVerificado: false,
-              pagamentoVerificado: false,
-              totalPago: 'R$ 0,00',
-              servicosPostados: 0,
-              nota: 0,
-              totalAvaliacoes: 0,
-            },
-          })
-        )
+        /* Mesmos campos que o card lê (valor, tipoValor, prazoDias) */
+        const projetosFormatados: ItemProjeto[] = dados.projetos.map((servico) => ({
+          id: servico.serv_id,
+          status: servico.serv_status,
+          titulo: servico.serv_titulo,
+          categoria: servico.categoria,
+          descricao: servico.serv_desc,
+          valor: Number(servico.serv_valor) || 0,
+          tipoValor: servico.serv_tipo_valor,
+          prazoDias: servico.serv_qtd_dias,
+          local:
+            servico.serv_local === 'remoto'
+              ? 'Remoto'
+              : servico.serv_cidade
+                ? `${servico.serv_cidade}${servico.serv_estado ? ` - ${servico.serv_estado}` : ''}`
+                : servico.serv_local,
+          postadoEm: servico.serv_data_criacao,
+          moderacao: servico.serv_moderacao ?? null,
+          moderacaoMotivo: servico.serv_moderacao_motivo ?? null,
+        }))
 
         setProjetos(projetosFormatados)
         
       } catch (erro) {
         console.error(erro)
-        setErro('Não foi possível conectar ao servidor :().')
+        setErro(erro instanceof ErroApi ? erro.message : 'Não foi possível conectar ao servidor.')
       } finally {
         setCarregando(false)
       }
@@ -109,14 +75,16 @@ export default function ContratanteDashboard() {
   }, [])
 
   if (carregando) {
-    return <p>Carregando seus projetos, espere um tempinho 0.0...</p>
+    return <Carregando variante="lista" />
   }
 
   if (erro) {
-    return <p>{erro}</p>
+    return <EstadoErro mensagem={erro} onTentarDeNovo={() => window.location.reload()} />
   }
 
   return (
+    <>
+    <FaixaEvento />
     <ProjectListSection
       papel="contratante"
       titulo="Seus projetos"
@@ -143,7 +111,7 @@ abas={[
      acao={
   <button
     type="button"
-    onClick={() => (window.location.href = '/contratante/criar-projeto')}
+    onClick={criar}
   >
     <Plus size={18} strokeWidth={2.5} />
     Criar projeto
@@ -153,11 +121,12 @@ abas={[
         titulo: 'Você ainda não tem projetos publicados',
         texto: 'Crie o primeiro projeto e comece a receber propostas.',
         acao: (
-          <button type="button" onClick={() => (window.location.href = '/contratante/criar-projeto')}>
+          <button type="button" onClick={criar}>
             Criar projeto
           </button>
         ),
       }}
     />
+    </>
   )
 }

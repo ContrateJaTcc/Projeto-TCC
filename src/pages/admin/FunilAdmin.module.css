@@ -1,0 +1,107 @@
+.caixa {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.periodos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+}
+
+.periodos button {
+    padding: 0.4rem 0.8rem;
+    font-family: var(--font-sans);
+    font-size: 0.84rem;
+    font-weight: 700;
+    color: var(--color-titulo);
+    background: var(--color-surface);
+    border: 2px solid var(--color-borda-pixel);
+    cursor: pointer;
+}
+
+.periodos button[aria-pressed='true'] {
+    color: var(--color-tinta);
+    background: var(--color-accent);
+    border-color: var(--color-tinta);
+}
+
+.grade {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr));
+    gap: 1rem;
+}
+
+.funil {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: 1rem 1.1rem;
+    background: var(--color-surface);
+    border: 2px solid var(--color-borda-pixel);
+    box-shadow: var(--shadow-md);
+}
+
+.funil h3 {
+    font-family: var(--font-titulo);
+    font-size: 1.8rem;
+    line-height: 1;
+    color: var(--color-titulo);
+}
+
+.funil ol {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+}
+
+.funil li {
+    display: grid;
+    grid-template-columns: minmax(7rem, 9.5rem) 1fr 2.4rem 2.8rem;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.84rem;
+    color: var(--color-text);
+}
+
+.funil li strong {
+    text-align: right;
+    color: var(--color-titulo);
+}
+
+.trilho {
+    height: 14px;
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-borda-pixel);
+}
+
+.barra {
+    display: block;
+    height: 100%;
+    background: var(--color-feitico);
+}
+
+.taxa {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    text-align: right;
+}
+
+.alerta {
+    font-size: 0.84rem;
+    color: var(--color-text);
+    border-left: 3px solid var(--color-accent);
+    padding-left: 0.5rem;
+}
+
+@media (max-width: 480px) {
+    .funil li {
+        grid-template-columns: 1fr 2.2rem 2.6rem;
+    }
+    .rotulo {
+        grid-column: 1 / -1;
+    }
+}

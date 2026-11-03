@@ -1,11 +1,15 @@
 import { useState } from 'react'
-import { useNavigate, useLocation, Link } from 'react-router-dom'
+import { useNavigate, useLocation, useSearchParams, Link } from 'react-router-dom'
 import { Check } from 'lucide-react'
 import logo from '../components/imgs/logo.png'
 import EtapaPerfil, { type Perfil } from '../components/cadastro/etapaperfil'
 import EtapaFormulario from '../components/cadastro/etapaformulario'
+import ConfirmarEmail, { type PedidoConfirmacao } from '../components/cadastro/confirmaremail'
+import { salvarSessao } from '../services/api'
+import { useRole } from '../context/useRole'
 import styles from '../components/cadastro/cadastro.module.css'
 import type { DadosGoogle } from '../services/google'
+import { t, useIdioma } from '../utils/idioma'
 
 const etapas = [
   { numero: 1, titulo: 'Escolha seu perfil' },
@@ -15,14 +19,21 @@ const etapas = [
 
 export default function Cadastro() {
   const navigate = useNavigate()
-  /* Vindo do "Continuar com Google" do login, com uma conta Google ainda sem cadastro. */
+  useIdioma()
+  /* Vindo do Google */
   const vindoDoLogin = useLocation().state as { google?: DadosGoogle; perfil?: Perfil } | null
 
   const [etapa, setEtapa] = useState<'perfil' | 'formulario'>('perfil')
   const [perfil, setPerfil] = useState<Perfil>(vindoDoLogin?.perfil ?? 'freelancer')
   const [google, setGoogle] = useState<DadosGoogle | null>(vindoDoLogin?.google ?? null)
+  const [confirmacao, setConfirmacao] = useState<PedidoConfirmacao | null>(null)
+  const { setRole } = useRole()
 
-  const etapaAtual = etapa === 'perfil' ? 1 : 2
+  /* Convide um amigo: o link de convite traz ?convite=ANA-7K2Q */
+  const [params] = useSearchParams()
+  const convite = (params.get('convite') ?? '').trim().toUpperCase().slice(0, 12)
+
+  const etapaAtual = confirmacao ? 3 : etapa === 'perfil' ? 1 : 2
 
   return (
     <div className={styles.pagina}>
@@ -32,11 +43,17 @@ export default function Cadastro() {
         </Link>
 
         <div>
-          <h1>Bem-Vindo ao <span>ContrateJá</span></h1>
+          <h1>{t('Bem-Vindo ao')} <span>ContrateJá</span></h1>
           <p className={styles.tagline}>
-            Complete esses passos rápidos para criar sua conta e começar sua jornada.
+            {t('Complete esses passos rápidos para criar sua conta e começar sua jornada.')}
           </p>
         </div>
+
+        {convite && (
+          <p className={styles.convite}>
+            Você chegou por um convite. Quando concluir o seu primeiro projeto, você e quem convidou ganham XP.
+          </p>
+        )}
 
         <ol className={styles.listaEtapas}>
           {etapas.map((e) => (
@@ -47,14 +64,24 @@ export default function Cadastro() {
               }
             >
               <span className={styles.numeroEtapa}>{e.numero < etapaAtual ? <Check size={14} strokeWidth={3} /> : e.numero}</span>
-              {e.titulo}
+              {t(e.titulo)}
             </li>
           ))}
         </ol>
       </aside>
 
       <main className={styles.painelFormulario}>
-        {etapa === 'perfil' ? (
+        {confirmacao ? (
+          <ConfirmarEmail
+            pedido={confirmacao}
+            aoConfirmar={(sessao) => {
+              const tipo = salvarSessao(sessao.token, sessao.tipo)
+              if (!tipo) return
+              setRole(tipo)
+              navigate(`/${tipo}`, { viewTransition: true })
+            }}
+          />
+        ) : etapa === 'perfil' ? (
           <EtapaPerfil
             selecionado={perfil}
             onSelecionar={setPerfil}
@@ -63,13 +90,14 @@ export default function Cadastro() {
         ) : (
           <EtapaFormulario
             perfil={perfil}
+            onTrocarPerfil={setPerfil}
+            convite={convite}
             google={google}
             onGoogle={setGoogle}
             onVoltar={() => setEtapa('perfil')}
+            onConfirmarEmail={setConfirmacao}
             onCriarConta={(email) => {
-              /* O cadastro não devolve token. Abrir o dashboard aqui fazia a
-                 primeira requisição voltar 401 e mostrar "sessão expirou".
-                 O login salva o token e define o papel a partir do servidor. */
+              /* Vai para o login */
               navigate('/login', { state: { cadastrado: true, email } })
             }}
           />

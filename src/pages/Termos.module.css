@@ -1,0 +1,104 @@
+.pagina {
+    min-height: 100vh;
+    background: transparent;
+}
+
+.topo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 14px clamp(16px, 4vw, 40px);
+    background: var(--estrelas), var(--gradient-dark);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    border-bottom: 2px solid var(--color-accent);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--color-accent);
+    font-family: var(--font-magica);
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.logo img {
+    height: 36px;
+}
+
+.voltar {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: transparent;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-pill);
+    cursor: pointer;
+}
+
+.voltar:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+}
+
+.conteudo {
+    width: min(100% - 32px, 780px);
+    margin: 3rem auto 4rem;
+}
+
+.conteudo h1 {
+    text-align: center;
+    color: var(--color-titulo);
+    font-size: clamp(2.6rem, 8.13vw, 3.74rem);
+}
+
+.atualizado {
+    text-align: center;
+    color: var(--color-text-muted);
+    font-size: 0.85rem;
+    margin: 0.8rem 0 2rem;
+}
+
+.sumario {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 0.4rem 1rem;
+    padding: 1.2rem 1.4rem;
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    border: 2px solid var(--color-borda-pixel);
+    margin-bottom: 2rem;
+}
+
+.sumario a {
+    color: var(--color-feitico);
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.sumario a:hover {
+    color: var(--color-titulo);
+}
+
+.secao {
+    padding: 1.4rem 0;
+    border-bottom: 2px dashed var(--color-borda-pixel);
+    scroll-margin-top: 90px;
+}
+
+.secao h2 {
+    color: var(--color-titulo);
+    font-size: 1.95rem;
+    margin-bottom: 0.7rem;
+}
+
+.secao p {
+    color: var(--color-text-soft);
+    margin-bottom: 0.6rem;
+}

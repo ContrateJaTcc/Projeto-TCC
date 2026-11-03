@@ -17,11 +17,11 @@
     align-items: flex-start;
     gap: 0.65rem;
     padding: 0.85rem 0.9rem 0.95rem 1rem;
-    border-radius: 14px;
-    background: #fff;
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
     color: var(--color-text);
     box-shadow: var(--shadow-lg);
-    border: 1px solid var(--color-surface-muted);
+    border: 2px solid var(--color-borda-pixel);
     font-size: 0.88rem;
     font-weight: 500;
     line-height: 1.4;
@@ -39,7 +39,7 @@
     color: var(--color-text-muted);
     cursor: pointer;
     padding: 0.1rem;
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
     line-height: 0;
 }
 
@@ -53,11 +53,11 @@
     margin-top: 0.05rem;
 }
 
-.sucesso .icone { color: #1d7a4c; }
+.sucesso .icone { color: var(--color-sucesso); }
 .erro .icone { color: var(--color-danger); }
-.info .icone { color: var(--color-primary-light); }
+.info .icone { color: var(--color-feitico); }
 
-/* Barrinha embaixo mostrando quanto tempo falta para o aviso sumir. */
+/* Tempo */
 .tempo {
     position: absolute;
     left: 0;

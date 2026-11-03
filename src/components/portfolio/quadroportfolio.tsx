@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ExternalLink, Pencil, Trash2, ImageOff } from 'lucide-react'
+import { ExternalLink, Pencil, Trash2, ImageOff, BadgeCheck } from 'lucide-react'
 import styles from './quadroportfolio.module.css'
 
 export interface ItemPortfolio {
@@ -10,26 +10,24 @@ export interface ItemPortfolio {
   port_img: string | null
   port_data_criacao: string
   port_data_atualizacao: string
+  /* Veio de um projeto concluído na plataforma: ganha o selo "Feito aqui" */
+  port_serv_id?: number | null
 }
 
 interface QuadroProps {
   itens: ItemPortfolio[]
-  /* Passar os dois callbacks liga o modo de edicao. Na visao do contratante
-     eles ficam de fora, e o quadro vira somente leitura. */
+  /* Edição */
   onEditar?: (item: ItemPortfolio) => void
   onExcluir?: (item: ItemPortfolio) => void
-  /* Qual item esta sendo excluido agora, para desabilitar so o botao dele. */
+  /* Excluindo */
   excluindo?: number | null
 }
 
 export default function QuadroPortfolio({ itens, onEditar, onExcluir, excluindo }: QuadroProps) {
-  /* port_img e um endereco digitado pelo usuario: pode estar errado, ter
-     saido do ar ou bloquear hotlink. Guardamos quais falharam para trocar
-     a imagem por um marcador em vez de deixar o icone quebrado do navegador. */
+  /* Imagens quebradas */
   const [quebradas, setQuebradas] = useState<number[]>([])
   const editavel = Boolean(onEditar && onExcluir)
-  /* Excluir pede um segundo clique no mesmo botão, no lugar do window.confirm
-     (a caixa cinza do navegador que destoava do site). */
+  /* Confirmação */
   const [confirmando, setConfirmando] = useState<number | null>(null)
 
   return (
@@ -56,6 +54,11 @@ export default function QuadroPortfolio({ itens, onEditar, onExcluir, excluindo 
             </div>
 
             <div className={styles.corpo}>
+              {item.port_serv_id && (
+                <span className={styles.feitoAqui} title="Este trabalho foi entregue num projeto concluído no ContrateJá">
+                  <BadgeCheck size={13} strokeWidth={2.6} aria-hidden="true" /> Feito aqui
+                </span>
+              )}
               <strong className={styles.titulo}>{item.port_titulo}</strong>
               <p className={styles.desc}>{item.port_desc}</p>
 

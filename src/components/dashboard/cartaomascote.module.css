@@ -1,0 +1,75 @@
+.corpo {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+/* Um pedacinho de grama embaixo do mascote */
+.palco {
+    flex-shrink: 0;
+    display: grid;
+    place-items: end center;
+    width: 104px;
+    height: 104px;
+    padding-bottom: 6px;
+    background: linear-gradient(to top, #3a8a4b 0 10px, #2f6f3e 10px 14px, var(--color-bg-alt) 14px);
+    border: 2px solid var(--color-borda-pixel);
+}
+
+.ovo {
+    display: grid;
+    place-items: center;
+    width: 56px;
+    height: 68px;
+    margin-bottom: 8px;
+    background: #fff3d6;
+    border: 3px solid var(--color-tinta);
+    border-radius: 50% 50% 46% 46% / 60% 60% 40% 40%;
+    color: var(--color-tinta);
+    font-family: var(--font-titulo);
+    font-size: 2rem;
+}
+
+.texto {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.texto strong {
+    font-family: var(--font-titulo);
+    font-weight: 400;
+    font-size: 1.7rem;
+    line-height: 1.05;
+    color: var(--color-titulo);
+}
+
+.texto span {
+    font-size: 0.86rem;
+    color: var(--color-text);
+}
+
+.texto small {
+    font-size: 0.76rem;
+    color: var(--color-text-muted);
+}
+
+.link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 0.95rem;
+    font-size: 0.86rem;
+    font-weight: 700;
+    text-decoration: none;
+    color: var(--color-tinta);
+    background: var(--color-accent);
+    border: 2px solid var(--color-tinta);
+    box-shadow: 3px 3px 0 0 var(--color-tinta);
+}
+
+.link:hover {
+    background: var(--color-accent-hover);
+}

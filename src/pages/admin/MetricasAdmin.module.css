@@ -1,0 +1,390 @@
+/* Cores dos gráficos (validadas: faixa de luminosidade, croma, daltonismo e contraste com a superfície) */
+.metricas {
+    --serie-1: #2aa3bb;
+    --serie-2: #9467e0;
+    margin: 1.8rem 0 0.4rem;
+}
+
+:global(:root[data-theme='light']) .metricas {
+    --serie-1: #1a8fa6;
+    --serie-2: #8250c8;
+}
+
+.cabeca {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.cabeca h2 {
+    font-family: var(--font-titulo);
+    color: var(--color-titulo);
+    font-size: 2.2rem;
+}
+
+.alternar {
+    border: 2px solid var(--color-borda-pixel);
+    background: var(--color-surface);
+    color: var(--color-titulo);
+    border-radius: var(--radius-pill);
+    padding: 0.4rem 0.9rem;
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 0.82rem;
+    cursor: pointer;
+}
+
+.alternar:hover {
+    background: var(--color-bg-alt);
+}
+
+.esqueleto {
+    height: 280px;
+    margin-top: 1.8rem;
+    border-radius: var(--radius-lg);
+}
+
+.grade {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1.1rem;
+}
+
+.painel {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    background: var(--color-surface);
+    border: 2px solid var(--color-borda-pixel);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    padding: 1.2rem 1.3rem;
+    min-width: 0;
+}
+
+.largo {
+    grid-column: span 1;
+}
+
+.grade > .painel:last-child {
+    grid-column: 1 / -1;
+}
+
+.painel header h3 {
+    font-family: var(--font-titulo);
+    color: var(--color-titulo);
+    font-size: 1.6rem;
+    line-height: 1;
+}
+
+.painel header p {
+    margin-top: 0.2rem;
+    color: var(--color-text-muted);
+    font-size: 0.8rem;
+}
+
+/* Legenda */
+.legenda {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 1rem;
+    font-size: 0.8rem;
+    color: var(--color-text);
+}
+
+.legenda li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.amostra,
+.amostraVazia {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+}
+
+.amostraVazia {
+    background: transparent;
+}
+
+.serieFreelancer {
+    background: var(--serie-1);
+}
+
+.serieContratante {
+    background: var(--serie-2);
+}
+
+/* Colunas empilhadas */
+.colunasArea {
+    display: flex;
+    gap: 0.5rem;
+    height: 190px;
+}
+
+.eixo {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-bottom: 1.5rem;
+    color: var(--color-text-muted);
+    font-size: 0.7rem;
+    text-align: right;
+    min-width: 1.4rem;
+}
+
+.eixo span {
+    transform: translateY(-50%);
+}
+
+.eixo span:last-child {
+    transform: translateY(50%);
+}
+
+.colunas {
+    position: relative;
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 0.4rem;
+    padding-bottom: 1.5rem;
+}
+
+/* Linhas de grade recessivas, dentro da área do gráfico */
+.grade1 {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 1px;
+    margin-bottom: 1.5rem;
+    background: var(--color-border, var(--color-borda-pixel));
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.coluna {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    height: 100%;
+    outline: none;
+    border-radius: 4px;
+    cursor: default;
+}
+
+.coluna:hover,
+.coluna:focus-visible {
+    background: var(--color-bg-alt);
+}
+
+.coluna:focus-visible {
+    box-shadow: 0 0 0 2px var(--color-accent);
+}
+
+/* Segmentos com 2px de folga entre si; ponta arredondada só em cima */
+.pilha {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    width: min(70%, 34px);
+    min-height: 0;
+}
+
+.pilha span {
+    flex-basis: 0;
+    min-height: 3px;
+}
+
+.pilha span:first-child {
+    border-radius: 4px 4px 0 0;
+}
+
+.rotuloSemana {
+    position: absolute;
+    bottom: -1.4rem;
+    color: var(--color-text-muted);
+    font-size: 0.68rem;
+    white-space: nowrap;
+}
+
+/* Dica ao passar o mouse ou focar uma coluna */
+.dica {
+    position: absolute;
+    z-index: 5;
+    transform: translate(-50%, calc(-100% - 8px));
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    min-width: 150px;
+    padding: 0.55rem 0.7rem;
+    background: var(--color-surface);
+    border: 2px solid var(--color-borda-pixel);
+    box-shadow: var(--shadow-sm);
+    color: var(--color-text);
+    font-size: 0.78rem;
+    pointer-events: none;
+}
+
+.dica strong {
+    color: var(--color-titulo);
+    font-size: 0.8rem;
+}
+
+.dica span {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.dica b {
+    margin-left: auto;
+    color: var(--color-titulo);
+}
+
+/* Taxa de conclusão */
+.destaque {
+    justify-content: space-between;
+}
+
+.numero {
+    font-family: var(--font-titulo);
+    color: var(--color-titulo);
+    font-size: 4.6rem;
+    line-height: 1;
+}
+
+.resumo {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    font-size: 0.84rem;
+    color: var(--color-text-muted);
+}
+
+.resumo b {
+    color: var(--color-titulo);
+}
+
+/* Barras deitadas */
+.barras {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.barras li {
+    display: grid;
+    grid-template-columns: 150px 1fr 2.5rem;
+    align-items: center;
+    gap: 0.7rem;
+    font-size: 0.82rem;
+}
+
+.nomeBarra {
+    color: var(--color-text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.trilhoBarra {
+    height: 14px;
+}
+
+.trilhoBarra span {
+    display: block;
+    height: 100%;
+    min-width: 4px;
+    border-radius: 0 4px 4px 0;
+}
+
+.valorBarra {
+    color: var(--color-titulo);
+    font-weight: 700;
+}
+
+.vazio {
+    color: var(--color-text-muted);
+    font-size: 0.86rem;
+}
+
+/* Tabelas */
+.tabelas {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.1rem;
+}
+
+.tabela {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--color-surface);
+    border: 2px solid var(--color-borda-pixel);
+    font-size: 0.84rem;
+}
+
+.tabela caption {
+    text-align: left;
+    padding: 0 0 0.4rem;
+    color: var(--color-titulo);
+    font-weight: 700;
+}
+
+.tabela th,
+.tabela td {
+    padding: 0.45rem 0.7rem;
+    text-align: left;
+    border-bottom: 1px solid var(--color-border, var(--color-borda-pixel));
+    color: var(--color-text);
+}
+
+.tabela th {
+    color: var(--color-titulo);
+    background: var(--color-bg-alt);
+}
+
+@media (max-width: 860px) {
+    .grade,
+    .tabelas {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 520px) {
+    .barras li {
+        grid-template-columns: 100px 1fr 2rem;
+    }
+
+    .rotuloSemana {
+        font-size: 0.58rem;
+    }
+}
+
+.botoesCabeca {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.botoesCabeca .alternar {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    text-decoration: none;
+}

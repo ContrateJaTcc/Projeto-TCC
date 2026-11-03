@@ -1,0 +1,129 @@
+.tour {
+    position: fixed;
+    inset: 0;
+    z-index: 900;
+}
+
+/* O "buraco" iluminado em volta do alvo: a sombra enorme escurece o resto */
+.foco {
+    position: fixed;
+    border: 3px solid var(--color-accent);
+    box-shadow: 0 0 0 9999px rgba(11, 11, 19, 0.62), 0 0 18px var(--color-accent);
+    pointer-events: none;
+    transition: top 0.25s ease, left 0.25s ease, width 0.25s ease, height 0.25s ease;
+}
+
+.veu {
+    position: fixed;
+    inset: 0;
+    background: rgba(11, 11, 19, 0.62);
+}
+
+.balao {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1.1rem 1.2rem 1rem;
+    background: var(--color-surface);
+    border: 2px solid var(--color-borda-pixel);
+    box-shadow: 4px 4px 0 0 var(--color-tinta);
+    color: var(--color-text);
+    animation: entrar var(--dur-media) var(--ease-out) both;
+}
+
+.centro {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.fechar {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    display: inline-flex;
+    padding: 0.3rem;
+    border: none;
+    background: none;
+    color: var(--color-text-muted);
+    cursor: pointer;
+}
+
+.contador {
+    color: var(--color-ouro-texto);
+    font-size: 0.74rem;
+    font-weight: 800;
+}
+
+.balao h2 {
+    font-family: var(--font-titulo);
+    color: var(--color-titulo);
+    font-size: 1.8rem;
+    line-height: 1;
+}
+
+.balao p {
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.pontos {
+    display: flex;
+    gap: 0.3rem;
+}
+
+.pontos span {
+    width: 8px;
+    height: 8px;
+    background: var(--color-borda-pixel);
+}
+
+.pontos .pontoAtual {
+    width: 20px;
+    background: var(--color-accent);
+}
+
+.acoes {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.3rem;
+}
+
+.acoes button {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: pointer;
+}
+
+.pular {
+    margin-right: auto;
+    border: none;
+    background: none;
+    color: var(--color-text-muted);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    padding: 0.3rem 0;
+}
+
+.voltar {
+    border: 2px solid var(--color-borda-pixel);
+    background: var(--color-surface);
+    color: var(--color-titulo);
+    border-radius: var(--radius-pill);
+    padding: 0.4rem 0.9rem;
+}
+
+.proximo {
+    border: 2px solid var(--color-tinta);
+    background: var(--color-accent);
+    color: var(--color-tinta);
+    padding: 0.4rem 1.1rem;
+    box-shadow: 2px 2px 0 0 var(--color-tinta);
+}
+
+.proximo:hover {
+    background: var(--color-accent-hover);
+}

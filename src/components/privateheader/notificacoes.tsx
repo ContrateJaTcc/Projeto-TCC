@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { Bell, BellOff } from 'lucide-react'
 import { api } from '../../services/api'
 import { haQuanto } from '../../utils/formatar'
+import IconeNotificacao from './iconenotificacao'
 import styles from './notificacoes.module.css'
 
 interface Notificacao {
@@ -12,26 +13,47 @@ interface Notificacao {
   not_data: string
 }
 
-/* Busca de tempos em tempos: aceite de candidatura, avaliação e insígnia chegam sem recarregar. */
+/* Intervalo */
 const INTERVALO = 60_000
 
-/*
- * Sininho do topo. As notificações já eram gravadas no banco, mas o botão
- * não fazia nada.
- */
+/* Notificações */
 export default function Notificacoes() {
   const [aberto, setAberto] = useState(false)
   const [itens, setItens] = useState<Notificacao[]>([])
   const [naoLidas, setNaoLidas] = useState(0)
+  /* Em páginas: as 20 mais novas atualizam sozinhas; "Carregar mais" traz as anteriores */
+  const [antigas, setAntigas] = useState<Notificacao[]>([])
+  const [mais, setMais] = useState(false)
+  const [buscando, setBuscando] = useState(false)
   const caixa = useRef<HTMLDivElement>(null)
+  const antigasRef = useRef<Notificacao[]>([])
+
+  async function carregarMais() {
+    const todas = [...itens, ...antigas]
+    const ultima = todas[todas.length - 1]
+    if (!ultima) return
+    setBuscando(true)
+    try {
+      const dados = await api<{ notificacoes: Notificacao[]; mais?: boolean }>(`/notificacoes?antes=${ultima.not_id}`, { silencioso: true })
+      const novas = [...antigas, ...dados.notificacoes.filter((n) => !todas.some((t) => t.not_id === n.not_id))]
+      antigasRef.current = novas
+      setAntigas(novas)
+      setMais(Boolean(dados.mais))
+    } catch {
+      /* Tenta de novo no próximo clique */
+    } finally {
+      setBuscando(false)
+    }
+  }
 
   const carregar = useCallback(async () => {
     try {
-      const dados = await api<{ notificacoes: Notificacao[]; naoLidas: number }>('/notificacoes')
+      const dados = await api<{ notificacoes: Notificacao[]; naoLidas: number; mais?: boolean }>('/notificacoes')
       setItens(dados.notificacoes)
       setNaoLidas(dados.naoLidas)
+      setMais((atual) => (antigasRef.current.length ? atual : Boolean(dados.mais)))
     } catch {
-      /* Falhar aqui não deve atrapalhar a tela; tenta de novo no próximo ciclo. */
+      /* Ignora falha */
     }
   }, [])
 
@@ -44,7 +66,7 @@ export default function Notificacoes() {
     }
   }, [carregar])
 
-  /* Fecha ao clicar fora ou apertar Esc. */
+  /* Fechar */
   useEffect(() => {
     if (!aberto) return
 
@@ -65,8 +87,7 @@ export default function Notificacoes() {
     const abrindo = !aberto
     setAberto(abrindo)
 
-    /* Abrir conta como "ver": zera o contador, mas os itens continuam
-       destacados até fechar, para a pessoa saber quais eram novos. */
+    /* Marcar lidas */
     if (abrindo && naoLidas > 0) {
       setNaoLidas(0)
       api('/notificacoes/lidas', { metodo: 'PUT' }).catch(() => {})
@@ -78,7 +99,7 @@ export default function Notificacoes() {
   }
 
   return (
-    <div className={styles.caixa} ref={caixa}>
+    <div className={styles.caixa} ref={caixa} data-tour="notificacoes">
       <button
         type="button"
         className={`${styles.sino} ${aberto ? styles.sinoAtivo : ''}`}
@@ -103,13 +124,23 @@ export default function Notificacoes() {
             </div>
           ) : (
             <ul className={styles.lista}>
-              {itens.map((n) => (
+              {[...itens, ...antigas.filter((a) => !itens.some((n) => n.not_id === a.not_id))].map((n) => (
                 <li key={n.not_id} className={n.not_lida ? '' : styles.nova}>
-                  <strong>{n.not_titulo}</strong>
-                  <p>{n.not_desc}</p>
-                  <span>{haQuanto(n.not_data)}</span>
+                  <IconeNotificacao titulo={n.not_titulo} />
+                  <div>
+                    <strong>{n.not_titulo}</strong>
+                    <p>{n.not_desc}</p>
+                    <span>{haQuanto(n.not_data)}</span>
+                  </div>
                 </li>
               ))}
+              {mais && (
+                <li className={styles.maisItem}>
+                  <button type="button" className={styles.mais} onClick={carregarMais} disabled={buscando}>
+                    {buscando ? 'Carregando...' : 'Carregar mais antigas'}
+                  </button>
+                </li>
+              )}
             </ul>
           )}
         </div>

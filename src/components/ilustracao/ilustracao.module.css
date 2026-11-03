@@ -1,0 +1,51 @@
+.ilustracao {
+    display: block;
+    margin: 0 auto 0.4rem;
+    image-rendering: pixelated;
+    overflow: visible;
+}
+
+/* Fumaça subindo um pixel por vez e sumindo */
+.fumaca {
+    animation: subirFumaca 2.4s steps(4, end) infinite;
+}
+
+@keyframes subirFumaca {
+    0% { transform: translateY(1px); opacity: 1; }
+    100% { transform: translateY(-3px); opacity: 0; }
+}
+
+/* A coruja pisca de vez em quando */
+.piscar {
+    opacity: 0;
+    animation: piscarCoruja 4s steps(1, end) infinite;
+}
+
+@keyframes piscarCoruja {
+    0% { opacity: 0; }
+    88% { opacity: 1; }
+    92% { opacity: 0; }
+}
+
+/* O morcego balança no galho e o "zzz" sobe */
+.balanco {
+    animation: balancoMorcego 3s steps(1, end) infinite;
+}
+
+@keyframes balancoMorcego {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(1px); }
+}
+
+.zzz {
+    animation: subirZzz 3s steps(3, end) infinite;
+}
+
+@keyframes subirZzz {
+    0% { transform: translateY(1px); opacity: 0.4; }
+    100% { transform: translateY(-2px); opacity: 1; }
+}
+
+:global(:root[data-movimento='reduzido']) .ilustracao * {
+    animation: none;
+}

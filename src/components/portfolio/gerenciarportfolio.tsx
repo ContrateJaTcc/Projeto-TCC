@@ -5,6 +5,7 @@ import type { ItemPortfolio } from './quadroportfolio'
 import { api, ErroApi } from '../../services/api'
 import { useToast } from '../../context/useToast'
 import Carregando from '../carregando/carregando'
+import Ilustracao from '../ilustracao/ilustracao'
 import styles from './gerenciarportfolio.module.css'
 
 const CAMPOS_VAZIOS = { port_titulo: '', port_desc: '', port_link: '', port_img: '' }
@@ -16,7 +17,7 @@ export default function GerenciarPortfolio() {
   const [erro, setErro] = useState('')
 
   const [formAberto, setFormAberto] = useState(false)
-  /* Com um item em edicao, o mesmo formulario faz PUT em vez de POST. */
+  /* Edição */
   const [editando, setEditando] = useState<ItemPortfolio | null>(null)
   const [campos, setCampos] = useState(CAMPOS_VAZIOS)
   const [salvando, setSalvando] = useState(false)
@@ -105,7 +106,8 @@ export default function GerenciarPortfolio() {
   return (
     <section className={styles.secao}>
       <div className={styles.topo}>
-        <div>
+        {/* Plaquinha: no tema claro o texto fica direto sobre o pôr do sol */}
+        <div className="placa">
           <h2>Portfólio</h2>
           <p className={styles.subtitulo}>
             Os trabalhos adicionados aqui aparecem para o contratante quando ele
@@ -119,7 +121,7 @@ export default function GerenciarPortfolio() {
         </button>
       </div>
 
-      {erro && <p className={styles.erro}>{erro}</p>}
+      {erro && <p className={`${styles.erro} placa`}>{erro}</p>}
 
       {formAberto && (
         <form className={styles.form} onSubmit={salvar}>
@@ -192,8 +194,7 @@ export default function GerenciarPortfolio() {
             )}
           </div>
 
-          {/* A imagem do trabalho fica hospedada fora: aqui o banco guarda so
-              o endereco. Diferente do avatar, que e enviado como arquivo. */}
+          {/* Dica */}
           <p className={styles.dica}>
             Hospede a imagem em algum lugar (Imgur, Google Drive com link público,
             Behance) e cole aqui o endereço que termina em .jpg ou .png.
@@ -214,6 +215,7 @@ export default function GerenciarPortfolio() {
         <Carregando variante="cartoes" quantidade={3} />
       ) : itens.length === 0 ? (
         <div className={styles.vazio}>
+          <Ilustracao tipo="caldeirao" />
           <strong>Seu portfólio está vazio</strong>
           <p>
             Adicione os trabalhos que você já fez. Contratantes costumam olhar o

@@ -184,8 +184,7 @@ export function getHistorico(): ItemHistorico[] {
   ]
 }
 
-/* Deriva de getHistorico() em vez de manter outra lista: um trabalho entregue
-   é o mesmo registro do histórico, só que ainda pendente de avaliação. */
+/* Entregues */
 export function getEntregues(): ItemHistorico[] {
   return getHistorico().filter((item) => item.status === 'Em avaliação')
 }

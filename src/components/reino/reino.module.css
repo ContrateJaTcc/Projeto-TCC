@@ -1,0 +1,81 @@
+/* Peças do reino: mascote, brasão das guildas e os selos que aparecem nos cartões */
+.mascote,
+.brasao {
+    display: block;
+    flex-shrink: 0;
+    image-rendering: pixelated;
+}
+
+/* O mascote respira (dois quadros, como os sprites do cenário) */
+.balanca {
+    animation: respirar 1.6s steps(2, end) infinite;
+    transform-origin: center bottom;
+}
+
+@keyframes respirar {
+    50% { transform: translateY(-3%); }
+}
+
+:global(:root[data-movimento='reduzido']) .balanca {
+    animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .balanca {
+        animation: none;
+    }
+}
+
+/* Selo da guilda: brasão pequeno + nome */
+.seloGuilda {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.12rem 0.55rem 0.12rem 0.3rem;
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--color-titulo);
+    background: var(--color-surface);
+    border: 2px solid var(--color-borda-pixel);
+    white-space: nowrap;
+    text-shadow: none;
+    letter-spacing: 0;
+    vertical-align: middle;
+    max-width: 100%;
+}
+
+.seloGuilda span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Selos dos testes de habilidade */
+.testes {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+}
+
+.seloTeste {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.12rem 0.5rem;
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--color-feitico);
+    background: var(--color-surface);
+    border: 2px solid currentColor;
+    white-space: nowrap;
+    text-shadow: none;
+    letter-spacing: 0;
+}
+
+/* Selo de teste com nome de área comprido quebra a linha em vez de passar da tela */
+.seloTeste {
+    max-width: 100%;
+    white-space: normal;
+    overflow-wrap: anywhere;
+}

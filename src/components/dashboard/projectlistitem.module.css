@@ -1,7 +1,7 @@
 .card {
-    background: #fff;
-    border: 1px solid var(--color-surface-muted);
-    border-radius: 20px;
+    background: var(--color-surface);
+    border: 2px solid var(--color-borda-pixel);
+    border-radius: var(--radius-lg);
     padding: 1.5rem 1.75rem;
     display: flex;
     flex-direction: column;
@@ -20,7 +20,7 @@
 }
 
 .categoria {
-    color: var(--color-primary-light);
+    color: var(--color-feitico);
     font-size: 0.78rem;
     font-weight: 700;
     text-transform: uppercase;
@@ -28,14 +28,14 @@
 }
 
 .titulo {
-    font-family: var(--font-display);
-    color: var(--color-primary);
-    font-size: 1.2rem;
+    font-family: var(--font-titulo);
+    color: var(--color-titulo);
+    font-size: 1.95rem;
     transition: color var(--dur-media);
 }
 
 .card:hover .titulo {
-    color: var(--color-primary-light);
+    color: var(--color-feitico);
 }
 
 .descricao {
@@ -89,7 +89,7 @@
 }
 
 .valor {
-    color: var(--color-primary);
+    color: var(--color-titulo);
     font-size: 1.1rem;
     white-space: nowrap;
 }
@@ -125,8 +125,8 @@
     display: inline-flex;
     align-items: center;
     gap: 0.3rem;
-    background: #e3f5ec;
-    color: #1d7a4c;
+    background: var(--color-sucesso-tint);
+    color: var(--color-sucesso);
     border-radius: var(--radius-pill);
     padding: 0.3rem 0.75rem;
     font-size: 0.76rem;
@@ -143,13 +143,13 @@
 }
 
 .aberto {
-    background: #e3f5ec;
-    color: #1d7a4c;
+    background: var(--color-sucesso-tint);
+    color: var(--color-sucesso);
 }
 
 .rascunho {
     background: var(--color-accent-tint);
-    color: #7a5c00;
+    color: var(--color-ouro-texto);
 }
 
 @media (max-width: 560px) {
@@ -161,4 +161,70 @@
         width: 100%;
         justify-content: space-between;
     }
+}
+
+/* Salvar para ver depois */
+.envolto {
+    position: relative;
+}
+
+.comSalvar .topo {
+    padding-right: 2.8rem;
+}
+
+.salvar {
+    position: absolute;
+    top: 1.1rem;
+    right: 1.2rem;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--color-borda-pixel);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface);
+    color: var(--color-text-muted);
+    cursor: pointer;
+    transition: transform 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.salvar:hover {
+    color: var(--color-titulo);
+    border-color: var(--color-accent);
+    transform: translateY(-1px);
+}
+
+.salvo {
+    color: var(--color-tinta);
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+}
+
+.salvo:hover {
+    color: var(--color-tinta);
+}
+
+/* Inscrições acabando */
+.tags .urgente {
+    background: rgba(255, 107, 94, 0.14);
+    color: var(--color-danger);
+    font-weight: 700;
+}
+
+/* Filtro de spam: projeto esperando (ou recusado pela) administração */
+.revisao {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    background: var(--color-accent-tint);
+    color: var(--color-ouro-texto);
+    border-color: var(--color-accent);
+}
+
+.motivoRevisao {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    border-left: 3px solid var(--color-accent);
+    padding-left: 0.5rem;
 }

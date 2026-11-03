@@ -5,9 +5,9 @@
 }
 
 .como > h2 {
-    font-family: var(--font-display);
-    font-size: clamp(2.5rem, 5vw, 3.8rem);
-    color: #322258;
+    font-family: var(--font-titulo);
+    font-size: clamp(4.07rem, 8.13vw, 6.17rem);
+    color: var(--color-titulo);
     margin-bottom: 2.5rem;
 }
 
@@ -18,7 +18,7 @@
 }
 
 .card {
-    background: #F4F1F8;
+    background: var(--color-bg-alt);
     border-radius: var(--radius-md);
     padding: 1.5rem 1.25rem;
     text-align: left;
@@ -31,20 +31,20 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 12px;
-    background: #fff;
-    color: var(--color-primary);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    color: var(--color-titulo);
 }
 
 .card h3 {
-    font-family: var(--font-display);
-    color: #322258;
+    font-family: var(--font-titulo);
+    color: var(--color-titulo);
     margin: 0.6rem 0 0.3rem 0;
-    font-size: 1.2rem;
+    font-size: 1.95rem;
 }
 
 .card p {
-    color: #555;
+    color: var(--color-text-muted);
     font-size: 0.95rem;
     line-height: 1.3;
 }

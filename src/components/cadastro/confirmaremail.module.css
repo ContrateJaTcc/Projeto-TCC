@@ -1,0 +1,72 @@
+.caixa {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    width: 100%;
+    max-width: 440px;
+    color: var(--color-text-soft);
+}
+
+.icone {
+    color: var(--color-accent);
+}
+
+.caixa h2 {
+    font-family: var(--font-titulo);
+    font-size: 2.2rem;
+    color: #fff;
+    line-height: 1;
+}
+
+.caixa strong {
+    color: #fff;
+}
+
+.caixa label {
+    font-size: 0.85rem;
+    color: var(--color-text-soft);
+}
+
+.codigo {
+    font-family: var(--font-magica);
+    font-size: 1.4rem;
+    letter-spacing: 0.4em;
+    text-align: center;
+    padding: 0.7rem;
+    color: #fff;
+    background: var(--color-campo);
+    border: 2px solid var(--color-borda-pixel);
+}
+
+.confirmar {
+    padding: 0.85rem 1.5rem;
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-tinta);
+    background: var(--color-accent);
+    border: none;
+    cursor: pointer;
+}
+
+.confirmar:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.links button {
+    padding: 0;
+    background: none;
+    border: none;
+    color: var(--color-accent);
+    font-family: var(--font-sans);
+    font-weight: 700;
+    text-decoration: underline;
+    cursor: pointer;
+}

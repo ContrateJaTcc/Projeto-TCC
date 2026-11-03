@@ -22,7 +22,7 @@
 }
 
 .links a {
-    color: #e6e0f0;
+    color: #fbf5ef;
     text-decoration: none;
     font-size: 0.85rem;
 }
@@ -36,7 +36,7 @@
     font-size: 0.78rem;
 }
 
-/* No celular os links do rodapé passavam da largura da tela. */
+/* Celular */
 @media (max-width: 560px) {
     .footer {
         flex-direction: column;
@@ -48,4 +48,21 @@
         justify-content: center;
         gap: 0.8rem 1.2rem;
     }
+}
+
+/* Bruxa */
+.footer {
+    background: var(--estrelas), var(--gradient-footer);
+    border-top: 2px solid var(--color-accent);
+}
+
+.logo {
+    font-family: var(--font-magica);
+    font-weight: 700;
+}
+
+/* Continua o chão do cenário */
+.footer {
+    background: #1b1b30;
+    border-top: 3px solid var(--color-borda-pixel);
 }

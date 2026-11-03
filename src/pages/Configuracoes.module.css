@@ -1,0 +1,468 @@
+.pagina {
+    width: min(92%, 1060px);
+    margin: 2.5rem auto 3.5rem auto;
+}
+
+.pagina h1 {
+    font-family: var(--font-titulo);
+    font-weight: 700;
+    color: var(--color-titulo);
+    font-size: 2.77rem;
+    margin-bottom: 1.4rem;
+}
+
+.grade {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.4rem;
+    align-items: start;
+}
+
+/* Painel em pixel */
+.painel {
+    background: var(--color-surface);
+    border: 3px solid var(--color-borda-pixel);
+    box-shadow: var(--shadow-md);
+    padding: 1.4rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    min-width: 0;
+}
+
+.painel h2 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-titulo);
+    font-size: 1.87rem;
+    color: var(--color-titulo);
+    padding-bottom: 0.7rem;
+    border-bottom: 3px dotted var(--color-borda-pixel);
+}
+
+.painel h2 svg {
+    color: var(--color-accent);
+}
+
+/* Linha de opção */
+.opcao {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.opcaoTexto {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    min-width: 0;
+}
+
+.opcaoTexto strong {
+    font-family: var(--font-display);
+    color: var(--color-titulo);
+    font-size: 0.98rem;
+}
+
+.opcaoTexto span,
+.texto,
+.conta span,
+.perigo span {
+    color: var(--color-text-muted);
+    font-size: 0.82rem;
+    line-height: 1.45;
+}
+
+.texto a {
+    color: var(--color-feitico);
+    text-decoration: underline;
+}
+
+/* Dark / Light */
+.temas {
+    display: flex;
+    flex-shrink: 0;
+    border: 3px solid var(--color-borda-pixel);
+    box-shadow: var(--shadow-sm);
+}
+
+.temas button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.5rem 0.85rem;
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    font-weight: 600;
+    background: var(--color-surface-muted);
+    color: var(--color-text-soft);
+    border: none;
+    cursor: pointer;
+}
+
+.temas button + button {
+    border-left: 3px solid var(--color-borda-pixel);
+}
+
+/* Opção com muitos botões: o texto em cima e os botões embaixo */
+.opcaoColuna {
+    flex-direction: column;
+    align-items: stretch;
+}
+
+/* Clima: os botões quebram linha em telas estreitas */
+.climas {
+    flex-wrap: wrap;
+    flex-shrink: 1;
+    /* O vão mostra a cor da borda: vira a linha entre os botões, também quando quebram */
+    gap: 3px;
+    background: var(--color-borda-pixel);
+}
+
+.climas button {
+    flex: 1 1 auto;
+    justify-content: center;
+}
+
+.climas button + button {
+    border-left: none;
+}
+
+.temas .temaAtivo {
+    background: var(--gradient-ouro);
+    color: var(--color-tinta);
+}
+
+/* Chave pixel */
+.chave {
+    position: relative;
+    flex-shrink: 0;
+    width: 52px;
+    height: 28px;
+    padding: 0;
+    background: var(--color-surface-muted);
+    border: 3px solid var(--color-borda-pixel);
+    cursor: pointer;
+}
+
+.bolinha {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 16px;
+    height: 16px;
+    background: var(--color-text-muted);
+    transition: transform var(--dur-media) steps(3, end);
+}
+
+.chaveLigada {
+    background: var(--color-feitico-tint);
+    border-color: var(--color-accent);
+}
+
+.chaveLigada .bolinha {
+    background: var(--color-accent);
+    transform: translateX(24px);
+}
+
+.chave:focus-visible,
+.temas button:focus-visible {
+    outline: 3px solid var(--color-feitico);
+    outline-offset: 2px;
+}
+
+.acoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+}
+
+/* Botões */
+.botao,
+.botaoOuro,
+.botaoPerigo {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    padding: 0.55rem 1rem;
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    font-weight: 600;
+    border: 3px solid var(--color-borda-pixel);
+    background: var(--color-surface-muted);
+    color: var(--color-titulo);
+    box-shadow: var(--shadow-sm);
+    cursor: pointer;
+    align-self: flex-start;
+}
+
+.botao:hover:not(:disabled) {
+    border-color: var(--color-feitico);
+}
+
+.botaoOuro {
+    background: var(--gradient-ouro);
+    border-color: #8b6d9c;
+    color: var(--color-tinta);
+}
+
+.botaoPerigo {
+    background: var(--color-perigo-tint);
+    border-color: var(--color-danger);
+    color: var(--color-danger);
+}
+
+.botaoPerigo:hover:not(:disabled) {
+    background: var(--color-danger);
+    color: #fff;
+}
+
+/* Conta */
+.conta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    overflow-wrap: anywhere;
+}
+
+.conta strong {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    color: var(--color-titulo);
+}
+
+.link {
+    color: var(--color-feitico);
+    font-weight: 600;
+    font-size: 0.88rem;
+    text-decoration: underline;
+    align-self: flex-start;
+}
+
+.form,
+.perigo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    padding: 1rem;
+    background: var(--color-bg-alt);
+    border: 2px dashed var(--color-borda-pixel);
+}
+
+.form strong,
+.perigo strong {
+    font-family: var(--font-display);
+    color: var(--color-titulo);
+}
+
+.perigo {
+    border-color: var(--color-danger);
+}
+
+.form label,
+.perigo label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    font-size: 0.84rem;
+    font-weight: 600;
+    color: var(--color-text);
+}
+
+.form input,
+.perigo input {
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    color: var(--color-text);
+    background: var(--color-campo);
+    border: 2px solid var(--color-borda-pixel);
+    padding: 0.55rem 0.75rem;
+    width: 100%;
+}
+
+.form input:focus,
+.perigo input:focus {
+    outline: 2px solid var(--color-feitico);
+    outline-offset: 1px;
+}
+
+@media (max-width: 820px) {
+    .grade {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .opcao {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .painel {
+        padding: 1.1rem;
+    }
+}
+
+.chave:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+/* Prévia do resumo semanal por e-mail */
+.previaEmail {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.8rem 0.9rem;
+    background: var(--color-bg-alt);
+    border: 2px dashed var(--color-borda-pixel);
+    font-size: 0.86rem;
+    color: var(--color-text-soft);
+}
+
+.previaEmail strong {
+    color: var(--color-titulo);
+}
+
+.previaEmail ul {
+    margin: 0;
+    padding-left: 1.1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.previaEmail a {
+    color: var(--color-ouro-texto);
+    font-weight: 700;
+    text-decoration: underline;
+}
+
+.previaEmail small {
+    display: block;
+    color: var(--color-text-muted);
+}
+
+/* "Esqueci minha senha" dentro da dica do campo */
+.form small {
+    font-size: 0.78rem;
+    color: var(--color-text-muted);
+}
+
+.form small a {
+    color: inherit;
+    font-weight: 700;
+    text-decoration: underline;
+}
+
+/* Índice das seções no topo (vira uma faixa que rola de lado no celular) */
+.indice {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 1.2rem;
+}
+
+.indice a {
+    padding: 0.35rem 0.75rem;
+    font-size: 0.84rem;
+    font-weight: 700;
+    color: var(--color-titulo);
+    background: var(--color-surface);
+    border: 2px solid var(--color-borda-pixel);
+    text-decoration: none;
+}
+
+.indice a:hover {
+    border-color: var(--color-accent);
+}
+
+/* Some atrás do cabeçalho fixo ao pular para a seção */
+.painel[id],
+.ancora {
+    scroll-margin-top: 6rem;
+}
+
+.ancora {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.horario {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+}
+
+.horario label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--color-titulo);
+}
+
+.horario select {
+    padding: 0.4rem 0.5rem;
+    font-family: var(--font-sans);
+    color: var(--color-titulo);
+    background: var(--color-campo);
+    border: 2px solid var(--color-borda-pixel);
+}
+
+.atalhos {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+}
+
+.atalhos > div {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.3rem 0.7rem;
+}
+
+.atalhos dt {
+    min-width: 9.5rem;
+}
+
+.atalhos dd {
+    color: var(--color-text-muted);
+    font-size: 0.85rem;
+}
+
+.atalhos kbd {
+    display: inline-block;
+    padding: 0.15rem 0.45rem;
+    font-family: ui-monospace, Consolas, monospace;
+    font-size: 0.8rem;
+    color: var(--color-titulo);
+    background: var(--color-bg-alt);
+    border: 2px solid var(--color-borda-pixel);
+    box-shadow: 0 2px 0 0 var(--color-borda-pixel);
+}
+
+.link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+/* Celular: o índice vira uma faixa só, que rola de lado */
+@media (max-width: 560px) {
+    .indice {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        padding-bottom: 0.3rem;
+        scrollbar-width: thin;
+    }
+    .indice a {
+        flex-shrink: 0;
+    }
+}

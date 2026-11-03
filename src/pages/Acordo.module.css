@@ -1,0 +1,210 @@
+.barra {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-bottom: 0.4rem;
+}
+
+.barra > * {
+    margin-bottom: 0;
+}
+
+/* O termo é uma folha de pergaminho clara nos dois temas, como sai impressa */
+.folha {
+    background:
+        repeating-linear-gradient(0deg, rgba(139, 109, 156, 0.05) 0 2px, transparent 2px 28px),
+        #fffaf2;
+    color: #1b1b30;
+    border: 3px solid #8b6d9c;
+    box-shadow: 6px 6px 0 0 #272744;
+    padding: 2.4rem 2.6rem;
+    font-family: var(--font-sans);
+    font-size: 0.94rem;
+    line-height: 1.6;
+}
+
+.cabecalho {
+    text-align: center;
+    padding-bottom: 1rem;
+    margin-bottom: 0.4rem;
+    border-bottom: 3px double #8b6d9c;
+}
+
+.marca {
+    font-family: var(--font-titulo);
+    font-size: 1.3rem;
+    color: #5b349a;
+}
+
+.cabecalho h1,
+.folha h2 {
+    text-shadow: none;
+}
+
+.cabecalho h1 {
+    font-family: var(--font-titulo);
+    font-size: 2.7rem;
+    line-height: 1;
+    color: #1b1b30;
+}
+
+.cabecalho p {
+    color: #555470;
+    font-size: 0.86rem;
+    margin-top: 0.3rem;
+}
+
+.folha section {
+    margin-top: 1.2rem;
+    break-inside: avoid;
+}
+
+.folha section p + p {
+    margin-top: 0.4rem;
+}
+
+.folha h2 {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    font-weight: 800;
+    color: #1b1b30;
+    margin-bottom: 0.35rem;
+}
+
+.folha ol {
+    margin: 0.3rem 0 0;
+    padding-left: 1.4rem;
+}
+
+.folha a {
+    color: #5b349a;
+    text-decoration: underline;
+}
+
+.aviso {
+    display: inline;
+    font-style: normal;
+    font-weight: 700;
+    color: #7a4b00;
+}
+
+.aceites {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.8rem;
+    margin-top: 1.6rem !important;
+}
+
+.aceites > div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    padding: 0.8rem 0.9rem;
+    border: 2px dashed #b9a6c9;
+    background: #ffffff;
+}
+
+.aceites .assinado {
+    border-style: solid;
+    border-color: #0d6a40;
+    background: #eef8f2;
+}
+
+.papel {
+    font-size: 0.72rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #555470;
+}
+
+.aceites strong {
+    font-family: var(--font-titulo);
+    font-size: 1.5rem;
+    font-weight: 400;
+    line-height: 1.1;
+}
+
+.situacao {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #555470;
+}
+
+.assinado .situacao {
+    color: #0d6a40;
+}
+
+.concordar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.8rem;
+    margin-top: 1.2rem;
+    padding: 0.9rem 1rem;
+    background: #f3eefb;
+    border: 2px solid #8b6d9c;
+}
+
+.marcar {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.marcar input {
+    width: 18px;
+    height: 18px;
+    accent-color: #5b349a;
+}
+
+.rodape {
+    margin-top: 1.8rem;
+    padding-top: 0.7rem;
+    border-top: 1px solid #d4cce8;
+    color: #555470;
+    font-size: 0.74rem;
+    text-align: center;
+}
+
+@media (max-width: 640px) {
+    .folha {
+        padding: 1.3rem;
+    }
+
+    .aceites {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Impressão: só a folha */
+@media print {
+    :global(body):has(.folha) :global(header):not(.cabecalho),
+    :global(body):has(.folha) :global(footer):not(.rodape),
+    :global(body):has(.folha) [aria-hidden='true'],
+    :global(body):has(.folha) [role='status'],
+    :global(body):has(.folha) button[aria-label='Ver só o fundo'],
+    .barra,
+    .concordar {
+        display: none !important;
+    }
+
+    :global(body):has(.folha) {
+        background: #fff !important;
+    }
+
+    .folha {
+        border: none;
+        box-shadow: none;
+        padding: 0;
+        background: #fff;
+    }
+}

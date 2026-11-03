@@ -1,0 +1,141 @@
+/* Botão discreto: não compete com as ações principais da página */
+.botao {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.35rem 0.7rem;
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    background: var(--color-surface);
+    border: 2px solid var(--color-border);
+    cursor: pointer;
+}
+
+.botao:hover,
+.botao:focus-visible {
+    color: var(--color-danger);
+    border-color: var(--color-danger);
+}
+
+.janela {
+    /* O reset do site (* { margin: 0 }) tira a centralização que o navegador dá ao dialog */
+    margin: auto;
+    width: min(92vw, 440px);
+    padding: 0;
+    color: var(--color-text);
+    background: var(--color-surface);
+    border: 3px solid var(--color-borda-pixel);
+    box-shadow: var(--shadow-lg);
+}
+
+.janela::backdrop {
+    background: rgba(12, 6, 24, 0.6);
+}
+
+.formulario {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    padding: 1.2rem 1.3rem;
+}
+
+.formulario header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.formulario h2 {
+    font-size: 1.7rem;
+    color: var(--color-titulo);
+}
+
+.formulario p {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+}
+
+.fechar {
+    display: grid;
+    place-items: center;
+    padding: 0.2rem;
+    color: var(--color-text-soft);
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.formulario fieldset {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    padding: 0;
+    border: none;
+}
+
+.formulario legend {
+    margin-bottom: 0.4rem;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--color-titulo);
+}
+
+.opcao {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.92rem;
+    cursor: pointer;
+}
+
+.opcao input {
+    accent-color: var(--color-danger);
+}
+
+.detalhe {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    font-size: 0.85rem;
+    color: var(--color-text-soft);
+}
+
+.detalhe textarea {
+    font: inherit;
+    padding: 0.5rem 0.6rem;
+    color: var(--color-text);
+    background: var(--color-campo);
+    border: 2px solid var(--color-borda-pixel);
+    resize: vertical;
+}
+
+.acoes {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
+.cancelar,
+.enviar {
+    padding: 0.5rem 1rem;
+    font-family: var(--font-display);
+    font-weight: 600;
+    border: 2px solid var(--color-borda-pixel);
+    cursor: pointer;
+}
+
+.cancelar {
+    color: var(--color-text-soft);
+    background: transparent;
+}
+
+.enviar {
+    color: #fff;
+    background: var(--color-danger);
+    border-color: var(--color-danger);
+}
+
+.enviar:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}

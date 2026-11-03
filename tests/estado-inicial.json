@@ -1,0 +1,12 @@
+{
+  "cookies": [],
+  "origins": [
+    {
+      "origin": "http://localhost:4173",
+      "localStorage": [
+        { "name": "tour-visto:freelancer", "value": "1" },
+        { "name": "tour-visto:contratante", "value": "1" }
+      ]
+    }
+  ]
+}

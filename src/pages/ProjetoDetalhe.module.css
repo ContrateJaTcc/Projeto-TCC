@@ -11,14 +11,15 @@
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
-    background: var(--color-bg-alt);
-    border: none;
+    background: var(--color-surface);
+    border: 2px solid var(--color-borda-pixel);
+    box-shadow: var(--shadow-sm);
     border-radius: 50%;
     width: 42px;
     height: 42px;
     justify-content: center;
     font-size: 1.1rem;
-    color: var(--color-primary);
+    color: var(--color-titulo);
     text-decoration: none;
     margin-bottom: 1.25rem;
 }
@@ -29,37 +30,62 @@
     gap: 1.25rem;
 }
 
+/* Capa do projeto: título, data e descrição num cartão sólido (legível nos dois temas) */
+.capa {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    background: var(--color-surface);
+    border: 2px solid var(--color-borda-pixel);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    padding: 1.4rem 1.6rem;
+}
+
 .cabecalho {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: space-between;
-    gap: 1rem;
+    flex-wrap: wrap;
+    gap: 0.6rem 1rem;
+}
+
+.categoriaCapa {
+    padding: 0.2rem 0.7rem;
+    border-radius: var(--radius-pill);
+    background: var(--color-accent-tint);
+    color: var(--color-ouro-texto);
+    font-size: 0.78rem;
+    font-weight: 800;
 }
 
 .titulo {
-    font-family: var(--font-display);
-    color: var(--color-primary);
-    font-size: 1.6rem;
-    max-width: 640px;
+    font-family: var(--font-titulo);
+    color: var(--color-titulo);
+    font-size: 2.6rem;
+    line-height: 1.05;
+    overflow-wrap: anywhere;
 }
 
 .meta {
-    text-align: right;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
     color: var(--color-text-muted);
-    font-size: 0.85rem;
+    font-size: 0.82rem;
 }
 
 .estrelas {
     display: inline-flex;
     align-items: center;
     gap: 0.3rem;
-    color: var(--color-accent-hover);
+    color: var(--color-ouro-texto);
     font-weight: 700;
     justify-content: flex-end;
 }
 
 .descricao {
-    color: #555;
+    color: var(--color-text-soft, var(--color-text));
     line-height: 1.6;
     font-size: 0.98rem;
 }
@@ -69,8 +95,8 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 1px;
     background: var(--color-border);
-    border: 1px solid var(--color-border);
-    border-radius: 6px;
+    border: 2px solid var(--color-borda-pixel);
+    border-radius: var(--radius-sm);
     overflow: hidden;
 }
 .localizacao {
@@ -85,7 +111,7 @@
 }
 
 .info strong {
-    color: var(--color-primary);
+    color: var(--color-titulo);
     font-size: 0.85rem;
 }
 
@@ -96,14 +122,16 @@
 .habilidades {
     display: flex;
     flex-direction: column;
-    gap: 0.4rem;
-    background: var(--color-bg-alt);
-    border-radius: 16px;
+    gap: 0.6rem;
+    /* Mesmo cartão da tabela de informações acima */
+    background: var(--color-surface);
+    border: 2px solid var(--color-borda-pixel);
+    border-radius: var(--radius-sm);
     padding: 1.25rem 1.5rem;
 }
 
 .habilidades strong {
-    color: var(--color-primary);
+    color: var(--color-titulo);
     font-size: 0.85rem;
 }
 
@@ -113,9 +141,9 @@
 }
 .contratacaoCard {
     margin-top: 1rem;
-    background: #fff;
-    border: 1px solid var(--color-surface-muted);
-    border-radius: 20px;
+    background: var(--color-surface);
+    border: 2px solid var(--color-borda-pixel);
+    border-radius: var(--radius-lg);
     padding: 1.5rem 1.75rem;
     display: flex;
     flex-direction: column;
@@ -124,9 +152,9 @@
 
 .contratacaoCard h2 {
     margin: 0;
-    color: var(--color-primary);
-    font-family: var(--font-display);
-    font-size: 1.15rem;
+    color: var(--color-titulo);
+    font-family: var(--font-titulo);
+    font-size: 1.87rem;
 }
 
 .contratacaoItem {
@@ -136,7 +164,7 @@
 }
 
 .contratacaoItem strong {
-    color: var(--color-primary);
+    color: var(--color-titulo);
     font-size: 0.85rem;
 }
 
@@ -146,9 +174,9 @@
 }
 
 .outros h2 {
-    font-family: var(--font-display);
-    color: var(--color-primary);
-    font-size: 1.2rem;
+    font-family: var(--font-titulo);
+    color: var(--color-titulo);
+    font-size: 1.95rem;
     margin: 0.5rem 0 1rem 0;
 }
 
@@ -159,16 +187,16 @@
 }
 
 .outroCard {
-    background: #fff;
-    border: 1px solid var(--color-surface-muted);
-    border-radius: 14px;
+    background: var(--color-surface);
+    border: 2px solid var(--color-borda-pixel);
+    border-radius: var(--radius-md);
     padding: 1rem 1.25rem;
     text-decoration: none;
     display: block;
 }
 
 .outroCard strong {
-    color: var(--color-primary);
+    color: var(--color-titulo);
     font-size: 0.95rem;
     display: block;
     margin-bottom: 0.3rem;
@@ -185,9 +213,9 @@
 }
 
 .autorCard {
-    background: #fff;
-    border: 1px solid var(--color-surface-muted);
-    border-radius: 20px;
+    background: var(--color-surface);
+    border: 2px solid var(--color-borda-pixel);
+    border-radius: var(--radius-lg);
     padding: 1.75rem;
     display: flex;
     flex-direction: column;
@@ -201,7 +229,7 @@
 }
 
 .autorNome {
-    color: var(--color-primary);
+    color: var(--color-titulo);
     font-weight: 700;
 }
 
@@ -209,7 +237,7 @@
     display: inline-flex;
     align-items: center;
     gap: 0.3rem;
-    color: var(--color-accent-hover);
+    color: var(--color-ouro-texto);
     font-size: 0.85rem;
     font-weight: 700;
 }
@@ -232,7 +260,7 @@
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
-    color: var(--color-primary);
+    color: var(--color-titulo);
     font-weight: 600;
 }
 
@@ -250,7 +278,7 @@
 
 .outrosProjetos h2 {
   margin: 0 0 20px;
-  font-size: 24px;
+  font-size: 39px;
 }
 
 .outrosLista {
@@ -264,33 +292,33 @@
   flex-direction: column;
   gap: 10px;
   padding: 20px;
-  border: 1px solid #e5e5e5;
-  border-radius: 12px;
+  border: 1px solid var(--color-borda-pixel);
+  border-radius: var(--radius-md);
   text-decoration: none;
   color: inherit;
-  background: #fff;
+  background: var(--color-surface);
   transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .outroCard:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--shadow-md);
 }
 
 .outroCategoria {
   font-size: 13px;
-  color: #666;
+  color: var(--color-text-muted);
 }
 
 .outroCard h3 {
   margin: 0;
-  font-size: 18px;
+  font-size: 29.25px;
 }
 
 .outroCard p {
   margin: 0;
   font-size: 14px;
-  color: #666;
+  color: var(--color-text-muted);
   display: -webkit-box;
   -webkit-line-clamp: 3;
   line-clamp: 3;
@@ -304,7 +332,7 @@
 
 .outroCard > span:last-child {
   font-size: 13px;
-  color: #666;
+  color: var(--color-text-muted);
 }
 
 
@@ -320,7 +348,7 @@
   min-height: 48px;
   padding: 0.85rem 1rem;
   border: none;
-  border-radius: 10px;
+  border-radius: var(--radius-sm);
   background: #ffe710;
   color: #000;
   font-size: 1.2rem;
@@ -345,7 +373,7 @@
   line-height: 1.5;
 }
 .candidaturaEnviada {
-  background: #7c3aed;
+  background: #8b6d9c;
   color: #fff;
   opacity: 1;
   cursor: default;
@@ -358,7 +386,7 @@
 }
 
 .candidaturaEnviada {
-  background: #7c3aed;
+  background: #8b6d9c;
   color: #fff;
 }
 
@@ -376,4 +404,279 @@
   color: var(--color-text);
   font-size: 0.9rem;
   line-height: 1.5;
+}
+.denunciar {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 1rem;
+}
+
+/* Contraproposta */
+.proposta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 1rem;
+  background: var(--color-bg-alt);
+  border: 2px dashed var(--color-borda-pixel);
+  border-radius: var(--radius-md);
+  animation: entrar var(--dur-media) var(--ease-out) both;
+}
+
+.proposta strong {
+  color: var(--color-titulo);
+  font-size: 0.95rem;
+}
+
+.proposta p {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.84rem;
+  line-height: 1.45;
+}
+
+.proposta label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  color: var(--color-titulo);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.proposta input,
+.proposta textarea {
+  border: 2px solid var(--color-borda-pixel);
+  border-radius: var(--radius-sm);
+  padding: 0.55rem 0.75rem;
+  background: var(--color-campo, var(--color-surface));
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  font-weight: 400;
+  resize: vertical;
+}
+
+.proposta input:focus,
+.proposta textarea:focus {
+  outline: none;
+  border-color: var(--color-accent);
+}
+
+.propostaCampos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+}
+
+.botaoProposta {
+  align-self: stretch;
+  min-height: 42px;
+  /* Fica sobre o cenário: leva fundo próprio para ser lido em qualquer tema */
+  border: 2px solid var(--color-borda-pixel);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  padding: 0.4rem 1rem;
+  color: var(--color-titulo);
+  font-family: var(--font-sans);
+  font-size: 0.86rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.botaoProposta:hover {
+  border-color: var(--color-accent);
+  background: var(--color-bg-alt);
+}
+
+.minhaProposta {
+  margin: 0;
+  padding: 0.55rem 0.8rem;
+  background: var(--color-accent-tint);
+  border-radius: var(--radius-sm);
+  color: var(--color-titulo);
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+/* Campos lado a lado sem estourar a caixa */
+.propostaCampos label,
+.propostaCampos input {
+  min-width: 0;
+  width: 100%;
+}
+
+/* Habilidades em etiquetas */
+.etiquetas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+}
+
+.etiquetas span {
+    background: var(--color-bg-alt);
+    color: var(--color-titulo);
+    border-radius: var(--radius-pill);
+    padding: 0.25rem 0.8rem;
+    font-size: 0.84rem;
+    font-weight: 700;
+}
+
+/* Salvar, prazo das inscrições e projetos parecidos */
+.metaDireita {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.salvar {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.8rem;
+  border: 2px solid var(--color-borda-pixel);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  color: var(--color-titulo);
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.salvar:hover {
+  border-color: var(--color-accent);
+}
+
+.salvo {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-tinta);
+}
+
+.inscricoes {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-pill);
+  background: var(--color-bg-alt);
+  color: var(--color-text);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.inscricoesUrgente {
+  background: rgba(255, 107, 94, 0.14);
+  color: var(--color-danger);
+}
+
+.parecidos {
+  margin-top: 0.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.parecidosTitulo {
+  align-self: flex-start;
+  font-family: var(--font-titulo);
+  color: var(--color-titulo);
+  font-size: 2rem;
+  background: var(--color-surface);
+  border: 2px solid var(--color-borda-pixel);
+  box-shadow: var(--shadow-sm);
+  padding: 0.3rem 1rem;
+}
+
+.parecidosLista {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+@media (max-width: 640px) {
+  .parecidosLista {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Candidatar com a guilda */
+.comGuilda {
+  align-self: stretch;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.6rem 0.8rem;
+  background: var(--color-surface);
+  border: 2px solid var(--color-borda-pixel);
+  border-radius: var(--radius-md);
+  color: var(--color-text);
+  font-size: 0.86rem;
+  cursor: pointer;
+}
+
+.comGuilda input {
+  width: 18px;
+  height: 18px;
+  margin-top: 0.1rem;
+  accent-color: var(--color-accent);
+  flex-shrink: 0;
+}
+
+.comGuilda span {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.comGuilda strong {
+  color: var(--color-titulo);
+}
+
+.comGuilda small {
+  font-size: 0.76rem;
+  color: var(--color-text-muted);
+}
+
+/* Mapinha da cidade do projeto */
+.mapaCidade {
+  margin: 1rem 0;
+}
+
+/* O que mudou no anúncio e os selos de reputação do contratante */
+.mudancas {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding: 0.6rem 0.8rem;
+    border: 2px dashed var(--color-accent);
+    background: var(--color-accent-tint);
+    color: var(--color-titulo);
+    font-size: 0.86rem;
+}
+
+.mudancas strong {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.mudancas ul {
+    list-style: none;
+    padding: 0;
+}
+
+.mudancas span {
+    color: var(--color-text-muted);
+    font-size: 0.78rem;
+}
+
+.seloReputacao {
+    font-weight: 700;
+}
+
+.seloReputacao svg {
+    color: var(--color-sucesso);
 }

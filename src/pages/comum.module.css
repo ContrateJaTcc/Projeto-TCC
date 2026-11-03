@@ -1,0 +1,162 @@
+/* Peças comuns das páginas novas (carteira, ganhos, loja, acordo): mesmo visual do resto da área logada */
+.pagina {
+    width: min(90%, 1100px);
+    margin: 2rem auto 3.5rem auto;
+}
+
+.estreita {
+    width: min(90%, 860px);
+}
+
+.pagina h1 {
+    font-family: var(--font-titulo);
+    color: var(--color-titulo);
+    font-size: 2.77rem;
+    margin-bottom: 0.6rem;
+}
+
+.subtitulo {
+    color: var(--color-text);
+    text-shadow: 0 2px 0 rgba(0, 0, 0, 0.75), 0 0 6px rgba(0, 0, 0, 0.6);
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+    max-width: 720px;
+}
+
+:global(:root[data-theme='light']) .subtitulo {
+    text-shadow: none;
+}
+
+.voltar {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-bottom: 1rem;
+    padding: 0.4rem 0.9rem;
+    background: var(--color-surface);
+    border: 2px solid var(--color-borda-pixel);
+    color: var(--color-titulo);
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.voltar:hover {
+    border-color: var(--color-accent);
+}
+
+.painel {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    background: var(--color-surface);
+    border: 2px solid var(--color-borda-pixel);
+    box-shadow: var(--shadow-md);
+    padding: 1.3rem 1.5rem;
+    min-width: 0;
+}
+
+.painel h2 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-titulo);
+    color: var(--color-titulo);
+    font-size: 1.9rem;
+    line-height: 1;
+    text-shadow: none;
+}
+
+.painel h2 svg {
+    flex-shrink: 0;
+}
+
+.nota {
+    color: var(--color-text-muted);
+    font-size: 0.84rem;
+    line-height: 1.5;
+}
+
+.botao,
+.botaoOuro {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    padding: 0.55rem 1.05rem;
+    font-family: var(--font-sans);
+    font-size: 0.86rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    border: 2px solid var(--color-borda-pixel);
+    background: var(--color-surface);
+    color: var(--color-titulo);
+}
+
+.botao:hover {
+    border-color: var(--color-primary-light);
+    background: var(--color-surface-muted);
+}
+
+.botaoOuro {
+    background: var(--color-accent);
+    border-color: var(--color-tinta);
+    color: var(--color-tinta);
+    box-shadow: 3px 3px 0 0 var(--color-tinta);
+}
+
+.botaoOuro:hover {
+    background: var(--color-accent-hover);
+}
+
+.botao:disabled,
+.botaoOuro:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.selo {
+    display: inline-block;
+    padding: 0.1rem 0.5rem;
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    background: var(--color-accent);
+    color: var(--color-tinta);
+    vertical-align: middle;
+    text-shadow: none;
+}
+
+.vazio {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    text-align: center;
+    padding: 2.5rem 1.5rem;
+    background: var(--color-surface);
+    border: 2px dashed var(--color-borda-pixel);
+    color: var(--color-text-muted);
+}
+
+.vazio strong {
+    color: var(--color-titulo);
+    font-size: 1.05rem;
+}
+
+@media (max-width: 640px) {
+    .pagina {
+        width: calc(100% - 32px);
+        margin-top: 1.6rem;
+    }
+
+    .pagina h1 {
+        font-size: 2.3rem;
+    }
+
+    .painel {
+        padding: 1.1rem;
+    }
+}

@@ -1,0 +1,113 @@
+/* Comparação: uma coluna por freelancer; o nome de cada linha fica em cima, ocupando a largura toda */
+.quadro {
+    display: flex;
+    flex-direction: column;
+    background: var(--color-surface);
+    border: 2px solid var(--color-borda-pixel);
+    box-shadow: var(--shadow-md);
+}
+
+.cabeca,
+.linha {
+    display: grid;
+    grid-template-columns: repeat(var(--colunas), minmax(0, 1fr));
+}
+
+.cabeca {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: var(--color-surface);
+    border-bottom: 2px solid var(--color-borda-pixel);
+}
+
+.pessoa {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 1rem 0.6rem;
+    text-align: center;
+    min-width: 0;
+}
+
+.pessoa + .pessoa {
+    border-left: 2px solid var(--color-borda-pixel);
+}
+
+.pessoa strong {
+    color: var(--color-titulo);
+    overflow-wrap: anywhere;
+}
+
+.tirar {
+    position: absolute;
+    top: 0.3rem;
+    right: 0.3rem;
+    width: 32px;
+    height: 32px;
+    display: grid;
+    place-items: center;
+    border: 2px solid var(--color-borda-pixel);
+    background: var(--color-bg-alt);
+    color: var(--color-titulo);
+    cursor: pointer;
+}
+
+.verificado {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--color-sucesso);
+}
+
+.rotulo {
+    grid-column: 1 / -1;
+    padding: 0.5rem 0.8rem 0.2rem;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    background: var(--color-bg-alt);
+}
+
+.valor {
+    padding: 0.6rem 0.8rem;
+    color: var(--color-titulo);
+    font-size: 0.9rem;
+    min-width: 0;
+    overflow-wrap: anywhere;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.valor + .valor {
+    border-left: 2px solid var(--color-borda-pixel);
+}
+
+.melhor {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.15rem;
+    padding: 0 0.35rem;
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: var(--color-tinta);
+    background: var(--color-accent);
+}
+
+@media (max-width: 560px) {
+    .pessoa {
+        padding: 2.4rem 0.3rem 0.8rem;
+    }
+    .valor {
+        padding: 0.5rem 0.45rem;
+        font-size: 0.8rem;
+    }
+}

@@ -2,7 +2,7 @@ import { Zap, Star, BriefcaseBusiness } from 'lucide-react'
 import type { ResumoFreelancer } from './tipos'
 import styles from './gamificacao.module.css'
 
-/* Nível, barra de XP até o próximo nível, nota média e projetos concluídos. */
+/* Painel de nível */
 export default function PainelNivel({ resumo }: { resumo: ResumoFreelancer }) {
   const faixa = resumo.xpProximoNivel - resumo.xpNivelAtual
   const avancado = resumo.xp - resumo.xpNivelAtual
@@ -25,6 +25,7 @@ export default function PainelNivel({ resumo }: { resumo: ResumoFreelancer }) {
         <div
           className={styles.barra}
           role="progressbar"
+          aria-label={`Progresso para o nível ${resumo.nivel + 1}`}
           aria-valuemin={0}
           aria-valuemax={100}
           aria-valuenow={Math.round(percentual)}

@@ -1,0 +1,47 @@
+.caixa {
+    width: min(90%, 560px);
+    margin: 4rem auto;
+    padding: 1.6rem 1.8rem;
+    background: var(--color-surface);
+    border: 3px solid var(--color-tinta);
+    box-shadow: 4px 4px 0 0 var(--color-tinta);
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.caixa h1 {
+    font-family: var(--font-titulo);
+    color: var(--color-titulo);
+    font-size: 2.4rem;
+    line-height: 1;
+}
+
+.caixa p {
+    color: var(--color-text);
+}
+
+.botoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+}
+
+.botoes button,
+.botoes a {
+    padding: 0.55rem 1.05rem;
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    font-weight: 700;
+    border: 2px solid var(--color-tinta);
+    background: var(--color-accent);
+    color: var(--color-tinta);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.botoes a {
+    background: var(--color-surface);
+    color: var(--color-titulo);
+    border-color: var(--color-borda-pixel);
+}

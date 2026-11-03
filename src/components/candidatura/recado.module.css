@@ -1,0 +1,82 @@
+.recado {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    width: 100%;
+    padding: 0.8rem 0.9rem;
+    background: var(--color-surface);
+    border: 2px solid var(--color-borda-pixel);
+}
+
+.recado label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--color-titulo);
+}
+
+.linha {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.4rem;
+}
+
+.recado textarea,
+.recado select,
+.guardar input {
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    color: var(--color-titulo);
+    background: var(--color-campo);
+    border: 2px solid var(--color-borda-pixel);
+    padding: 0.5rem 0.65rem;
+    min-width: 0;
+}
+
+.recado textarea {
+    resize: vertical;
+    width: 100%;
+}
+
+.recado small {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+}
+
+.recado small a {
+    color: inherit;
+    font-weight: 700;
+}
+
+.guardar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    flex: 1 1 100%;
+}
+
+.guardar input {
+    flex: 1 1 12rem;
+}
+
+.guardar button,
+.link {
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 0.4rem 0.7rem;
+    border: 2px solid var(--color-borda-pixel);
+    background: var(--color-surface);
+    color: var(--color-titulo);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.guardar button:disabled,
+.link:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}

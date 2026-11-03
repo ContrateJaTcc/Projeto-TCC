@@ -1,0 +1,583 @@
+.pagina {
+    width: min(100% - 32px, 1100px);
+    margin: 2.5rem auto 3.5rem;
+}
+
+.pagina h1 {
+    color: var(--color-titulo);
+    font-size: clamp(2.44rem, 6.5vw, 3.25rem);
+}
+
+.subtitulo {
+    color: var(--color-text-muted);
+    margin: 0.4rem 0 1.8rem;
+}
+
+/* Números */
+.numeros {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.numero {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    padding: 1.2rem 1.3rem;
+    border-radius: var(--radius-md);
+    background: var(--estrelas), var(--gradient-dark);
+    color: #fff;
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+}
+
+.numero svg {
+    color: var(--color-accent);
+}
+
+.numero strong {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    line-height: 1.1;
+    margin-top: 0.4rem;
+}
+
+.numero span {
+    font-weight: 700;
+}
+
+.numero small {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.78rem;
+}
+
+/* Abas e busca */
+.barra {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+}
+
+.abas {
+    display: flex;
+    gap: 0.3rem;
+    padding: 4px;
+    border-radius: var(--radius-pill);
+    background: var(--color-surface-muted);
+}
+
+.abas button {
+    border: none;
+    background: transparent;
+    color: var(--color-titulo);
+    padding: 0.55rem 1.1rem;
+    border-radius: var(--radius-pill);
+    cursor: pointer;
+}
+
+.abas .abaAtiva {
+    background: var(--color-primary);
+    color: var(--color-accent);
+    box-shadow: var(--shadow-sm);
+}
+
+.busca {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.55rem 1rem;
+    border: 2px solid var(--color-borda-pixel);
+    border-radius: var(--radius-pill);
+    background: var(--color-surface);
+    color: var(--color-text-muted);
+    flex: 1 1 220px;
+    max-width: 340px;
+}
+
+.busca input {
+    border: none;
+    outline: none;
+    background: transparent;
+    width: 100%;
+    color: var(--color-text);
+}
+
+.busca input:focus {
+    box-shadow: none;
+}
+
+/* Lista */
+.lista {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+}
+
+.linha {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.9rem 1.1rem;
+    background: var(--color-surface);
+    border: 2px solid var(--color-borda-pixel);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+}
+
+.info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.info strong {
+    color: var(--color-titulo);
+}
+
+.info span,
+.info small {
+    color: var(--color-text-muted);
+    font-size: 0.85rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.categoria {
+    color: var(--color-feitico) !important;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-size: 0.72rem !important;
+}
+
+.etiqueta {
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.3rem 0.75rem;
+    border-radius: var(--radius-pill);
+    background: var(--color-bg-alt);
+    color: var(--color-text);
+    white-space: nowrap;
+}
+
+.ativa,
+.aberto,
+.finalizado {
+    background: var(--color-sucesso-tint);
+    color: var(--color-sucesso);
+}
+
+.suspensa,
+.em_andamento {
+    background: var(--color-accent-tint);
+    color: var(--color-ouro-texto);
+}
+
+.banida,
+.cancelado {
+    background: var(--color-perigo-tint);
+    color: var(--color-danger);
+}
+
+.acoes {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.acao {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    border: 2px solid var(--color-borda-pixel);
+    background: var(--color-surface);
+    color: var(--color-titulo);
+    padding: 0.45rem 0.8rem;
+    border-radius: var(--radius-pill);
+    font-size: 0.8rem;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.reativar:hover {
+    border-color: var(--color-sucesso);
+    color: var(--color-sucesso);
+}
+
+.suspender:hover {
+    border-color: var(--color-accent-hover);
+    color: var(--color-ouro-texto);
+}
+
+.banir:hover {
+    border-color: var(--color-danger);
+    color: var(--color-danger);
+}
+
+.confirmar {
+    background: var(--color-danger);
+    border-color: var(--color-danger);
+    color: #fff !important;
+}
+
+.vazio {
+    color: var(--color-text-muted);
+    text-align: center;
+    padding: 2rem;
+}
+
+/* Celular */
+@media (max-width: 720px) {
+    .linha {
+        flex-wrap: wrap;
+    }
+
+    .info {
+        flex-basis: calc(100% - 60px);
+    }
+
+    .acoes {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .busca {
+        max-width: none;
+    }
+}
+
+/* ---------- Administrador supremo ---------- */
+.pagina h1 .coroa {
+    vertical-align: -0.12em;
+    margin-right: 0.3rem;
+    color: var(--color-accent);
+}
+
+.coroaPequena {
+    vertical-align: -0.1em;
+    color: var(--color-ouro-texto);
+}
+
+.entrar:hover {
+    border-color: var(--color-feitico);
+    color: var(--color-feitico);
+}
+
+select.acao {
+    font-family: inherit;
+}
+
+.supremoGrade {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1rem;
+    align-items: start;
+}
+
+.cartaoSupremo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    padding: 1.2rem 1.3rem;
+    background: var(--color-surface);
+    border: 2px solid var(--color-borda-pixel);
+    box-shadow: var(--shadow-sm);
+}
+
+.cartaoSupremo h2 {
+    color: var(--color-titulo);
+    font-size: 1.8rem;
+}
+
+.cartaoSupremo p {
+    color: var(--color-text-muted);
+    font-size: 0.88rem;
+}
+
+.campoSupremo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.campoSupremo strong {
+    color: var(--color-titulo);
+    font-size: 0.9rem;
+}
+
+.opcoesSupremo {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+}
+
+.opcoesSupremo button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.4rem 0.7rem;
+    font-size: 0.8rem;
+    border: 2px solid var(--color-borda-pixel);
+    background: var(--color-surface-muted);
+    color: var(--color-text-soft);
+    cursor: pointer;
+}
+
+.opcoesSupremo .opcaoAtiva {
+    background: var(--gradient-ouro);
+    color: var(--color-tinta);
+    border-color: var(--color-sombra-pixel);
+}
+
+.botaoSupremo {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.55rem 1rem;
+    font-family: var(--font-display);
+    font-weight: 600;
+    background: var(--gradient-ouro);
+    color: var(--color-tinta);
+    border: 2px solid var(--color-sombra-pixel);
+    box-shadow: var(--shadow-sm);
+    cursor: pointer;
+}
+
+.botaoSupremo:disabled,
+.opcoesSupremo button:disabled {
+    opacity: 0.6;
+    cursor: wait;
+}
+
+.formSupremo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.formSupremo input,
+.formSupremo textarea,
+.formSupremo select {
+    width: 100%;
+    padding: 0.55rem 0.7rem;
+    font: inherit;
+    color: var(--color-text);
+    background: var(--color-campo);
+    border: 2px solid var(--color-borda-pixel);
+}
+
+/* Registro de ações */
+.iconeRegistro {
+    flex-shrink: 0;
+    color: var(--color-feitico);
+}
+
+.linhaSeria {
+    border-left: 6px solid var(--color-danger);
+}
+
+.quando {
+    flex-shrink: 0;
+    color: var(--color-text-muted);
+    font-size: 0.8rem;
+    white-space: nowrap;
+}
+
+/* Denúncias */
+.subAbas {
+    display: flex;
+    gap: 0.3rem;
+    margin-bottom: 0.9rem;
+}
+
+.subAbas button {
+    padding: 0.4rem 0.8rem;
+    font-family: var(--font-display);
+    font-size: 0.82rem;
+    color: var(--color-text-soft);
+    background: var(--color-surface);
+    border: 2px solid var(--color-borda-pixel);
+    cursor: pointer;
+}
+
+.subAbas .subAbaAtiva {
+    background: var(--color-primary);
+    color: var(--color-accent);
+}
+
+.linhaDenuncia {
+    align-items: flex-start;
+}
+
+.linhaDenuncia .info small {
+    white-space: normal;
+}
+
+.contagemDenuncia {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
+    margin-left: 0.5rem;
+    padding: 0.1rem 0.45rem;
+    font-size: 0.72rem;
+    color: #fff !important;
+    background: var(--color-danger);
+}
+
+/* Decisão da disputa */
+.formDisputa {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin-top: 0.6rem;
+    padding: 0.8rem 0.9rem;
+    background: var(--color-bg-alt);
+    border: 2px dashed var(--color-borda-pixel);
+}
+
+.formDisputa fieldset {
+    border: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.formDisputa legend {
+    margin-bottom: 0.3rem;
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: var(--color-titulo);
+}
+
+.formDisputa fieldset label {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding: 0.5rem 0.6rem;
+    border: 2px solid var(--color-border);
+    background: var(--color-surface);
+    cursor: pointer;
+    font-size: 0.82rem;
+    color: var(--color-text-soft);
+}
+
+.formDisputa fieldset label span {
+    display: flex;
+    flex-direction: column;
+}
+
+.formDisputa fieldset label b {
+    color: var(--color-titulo);
+}
+
+.opcaoDisputaAtiva {
+    border-color: var(--color-accent) !important;
+}
+
+.formDisputa > label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: var(--color-titulo);
+}
+
+.formDisputa textarea {
+    resize: vertical;
+    padding: 0.5rem 0.7rem;
+    background: var(--color-campo);
+    color: var(--color-text);
+    border: 2px solid var(--color-borda-pixel);
+    font-family: var(--font-sans);
+    font-size: 0.88rem;
+}
+
+/* Busca + planilha na mesma linha das abas */
+.ferramentas {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6rem;
+    flex: 1 1 320px;
+    justify-content: flex-end;
+}
+
+.planilha {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.55rem 1rem;
+    font-family: var(--font-sans);
+    font-size: 0.84rem;
+    font-weight: 700;
+    color: var(--color-titulo);
+    background: var(--color-surface);
+    border: 2px solid var(--color-borda-pixel);
+    border-radius: var(--radius-pill);
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.planilha:hover {
+    border-color: var(--color-accent);
+}
+
+/* Revisão de projetos (filtro de spam) e monitor de erros */
+.motivoRecusa {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    margin-top: 0.4rem;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--color-titulo);
+}
+
+.motivoRecusa input {
+    padding: 0.5rem 0.65rem;
+    font-family: var(--font-sans);
+    font-size: 0.88rem;
+    color: var(--color-titulo);
+    background: var(--color-campo);
+    border: 2px solid var(--color-borda-pixel);
+    min-width: 0;
+}
+
+.mensagemErro {
+    font-family: ui-monospace, 'Cascadia Code', Consolas, monospace;
+    font-size: 0.85rem;
+    overflow-wrap: anywhere;
+}
+
+/* Abas do painel: quebram a linha em vez de passar da tela */
+.abas {
+    flex-wrap: wrap;
+    border-radius: var(--radius-md);
+}
+
+@media (max-width: 560px) {
+    .abas button {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.85rem;
+    }
+}
+
+.mensagemDenunciada {
+    font-style: italic;
+    border-left: 3px solid var(--color-danger);
+    padding-left: 0.5rem;
+}

@@ -1,7 +1,7 @@
 .card {
-    background: #fff;
-    border: 1px solid var(--color-surface-muted);
-    border-radius: 20px;
+    background: var(--color-surface);
+    border: 2px solid var(--color-borda-pixel);
+    border-radius: var(--radius-lg);
     padding: 1.1rem 1.25rem;
     display: flex;
     align-items: center;
@@ -33,7 +33,7 @@
 }
 
 .texto strong {
-    color: var(--color-primary);
+    color: var(--color-titulo);
     font-size: 1rem;
     white-space: nowrap;
     overflow: hidden;
@@ -66,7 +66,7 @@
     height: 100%;
     background: linear-gradient(90deg, var(--color-accent), #ffd65c);
     border-radius: var(--radius-pill);
-    /* Enche ao aparecer, em vez de surgir já no tamanho final. */
+    /* Barra */
     animation: encher 1s var(--ease-out) both;
     transform-origin: left;
 }
@@ -83,7 +83,7 @@
 
 .card:hover .seta {
     transform: translateX(3px);
-    color: var(--color-primary);
+    color: var(--color-titulo);
 }
 
 @keyframes encher {
@@ -95,4 +95,34 @@
     .card {
         width: 100%;
     }
+}
+
+/* Bruxa */
+.card {
+    position: relative;
+    overflow: hidden;
+    transition: border-color var(--dur-media), box-shadow var(--dur-media);
+}
+
+.card::after {
+    content: '';
+    position: absolute;
+    right: -14px;
+    top: -10px;
+    width: 64px;
+    height: 54px;
+    background: var(--chapeu) center / contain no-repeat;
+    filter: brightness(0) saturate(100%) invert(26%) sepia(80%) saturate(3000%) hue-rotate(255deg);
+    opacity: 0.1;
+    transform: rotate(14deg);
+    pointer-events: none;
+}
+
+.card:hover {
+    border-color: var(--color-ouro-brilho);
+    box-shadow: var(--shadow-sm), 0 0 0 3px rgba(242, 211, 171, 0.15);
+}
+
+.progresso {
+    background: linear-gradient(90deg, var(--color-feitico), var(--color-accent));
 }

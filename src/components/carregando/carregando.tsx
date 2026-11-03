@@ -1,24 +1,18 @@
 import styles from './carregando.module.css'
 
 interface CarregandoProps {
-  /* Formato aproximado do conteúdo que vai aparecer, para a troca não "pular". */
-  variante?: 'lista' | 'perfil' | 'detalhe' | 'cartoes'
+  /* Variante */
+  variante?: 'lista' | 'perfil' | 'detalhe' | 'cartoes' | 'projetos'
   quantidade?: number
 }
 
-/*
- * Esqueleto de carregamento no lugar do texto "Carregando...".
- *
- * O texto aparecia sozinho no canto e depois era trocado de uma vez pela
- * página inteira, um salto brusco. O esqueleto já ocupa o espaço com a
- * forma do conteúdo, então a troca parece contínua.
- */
+/* Carregando */
 export default function Carregando({ variante = 'lista', quantidade = 3 }: CarregandoProps) {
   const repetir = (n: number) => Array.from({ length: n }, (_, i) => i)
 
   if (variante === 'perfil') {
     return (
-      <div className={styles.pagina} aria-busy="true" aria-label="Carregando">
+      <div className={styles.pagina} role="status" aria-busy="true" aria-label="Carregando">
         <div className={`skeleton ${styles.titulo}`} />
         <div className={styles.cartao}>
           <div className={`skeleton ${styles.avatar}`} />
@@ -38,7 +32,7 @@ export default function Carregando({ variante = 'lista', quantidade = 3 }: Carre
 
   if (variante === 'detalhe') {
     return (
-      <div className={styles.pagina} aria-busy="true" aria-label="Carregando">
+      <div className={styles.pagina} role="status" aria-busy="true" aria-label="Carregando">
         <div className={`skeleton ${styles.titulo}`} style={{ width: '55%' }} />
         <div className={`skeleton ${styles.linha}`} style={{ width: '90%' }} />
         <div className={`skeleton ${styles.linha}`} style={{ width: '75%' }} />
@@ -47,16 +41,40 @@ export default function Carregando({ variante = 'lista', quantidade = 3 }: Carre
     )
   }
 
+  /* Mesmo formato dos cartões de projeto: categoria, título, descrição, etiquetas, valor e botão */
+  if (variante === 'projetos') {
+    return (
+      <div className={styles.projetos} role="status" aria-busy="true" aria-label="Carregando projetos">
+        {repetir(quantidade).map((i) => (
+          <div key={i} className={styles.projeto}>
+            <div className={`skeleton ${styles.linha}`} style={{ width: '16%', height: 10 }} />
+            <div className={`skeleton ${styles.linha}`} style={{ width: '45%', height: 24 }} />
+            <div className={`skeleton ${styles.linha}`} style={{ width: '78%' }} />
+            <div className={styles.projetoRodape}>
+              <div className={styles.etiquetas}>
+                {repetir(3).map((j) => <div key={j} className={`skeleton ${styles.etiqueta}`} />)}
+              </div>
+              <div className={styles.etiquetas}>
+                <div className={`skeleton ${styles.etiqueta}`} style={{ width: 96 }} />
+                <div className={`skeleton ${styles.botao}`} />
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    )
+  }
+
   if (variante === 'cartoes') {
     return (
-      <div className={styles.grade} aria-busy="true" aria-label="Carregando">
+      <div className={styles.grade} role="status" aria-busy="true" aria-label="Carregando">
         {repetir(quantidade).map((i) => <div key={i} className={`skeleton ${styles.bloco}`} />)}
       </div>
     )
   }
 
   return (
-    <div className={styles.pagina} aria-busy="true" aria-label="Carregando">
+    <div className={styles.pagina} role="status" aria-busy="true" aria-label="Carregando">
       <div className={`skeleton ${styles.titulo}`} />
       {repetir(quantidade).map((i) => (
         <div key={i} className={styles.item}>

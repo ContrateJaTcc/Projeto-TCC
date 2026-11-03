@@ -1,0 +1,312 @@
+/* Missões da semana e ranking: cartões lado a lado no painel do freelancer */
+.grade {
+    width: min(94%, 1200px);
+    margin: 0 auto 2.5rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.2rem;
+    align-items: start;
+}
+
+.cartao {
+    padding: 1.2rem 1.4rem;
+    background: var(--color-surface);
+    border: 2px solid var(--color-borda-pixel);
+    box-shadow: var(--shadow-sm);
+}
+
+.cabeca {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.9rem;
+}
+
+.cabeca h2 {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 1.8rem;
+    color: var(--color-titulo);
+}
+
+.cabeca h2 svg {
+    color: var(--color-accent-hover);
+}
+
+.cabeca small {
+    color: var(--color-text-muted);
+    font-size: 0.8rem;
+}
+
+.lista {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+/* As do dia ficam em cima, separadas das da semana */
+.listaDia {
+    margin-bottom: 1.2rem;
+    padding-bottom: 1.1rem;
+    border-bottom: 2px dashed var(--color-borda-pixel);
+}
+
+.missao,
+.posicao {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.7rem 0.8rem;
+    background: var(--color-surface-muted);
+    border: 2px solid transparent;
+}
+
+.texto {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+.texto strong {
+    color: var(--color-titulo);
+    font-size: 0.95rem;
+}
+
+.texto strong a {
+    color: inherit;
+}
+
+.texto span {
+    color: var(--color-text-muted);
+    font-size: 0.82rem;
+}
+
+/* Progresso em blocos, como a barra de XP */
+.barra {
+    display: flex;
+    gap: 3px;
+    margin-top: 0.35rem;
+}
+
+.barra span {
+    flex: 1;
+    max-width: 42px;
+    height: 7px;
+    background: var(--color-border);
+}
+
+.barra .cheio {
+    background: linear-gradient(180deg, #fbf5ef 0 40%, #f2d3ab 40%);
+}
+
+.premio {
+    flex-shrink: 0;
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+    color: var(--color-ouro-texto);
+    white-space: nowrap;
+}
+
+.resgatar {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.45rem 0.8rem;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 0.82rem;
+    background: var(--gradient-ouro);
+    color: var(--color-tinta);
+    border: 2px solid var(--color-sombra-pixel);
+    box-shadow: var(--shadow-sm);
+    cursor: pointer;
+    animation: chamar 1.6s steps(2, end) infinite;
+}
+
+@keyframes chamar {
+    50% { transform: translateY(-2px); }
+}
+
+.selo {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--color-sucesso);
+}
+
+.feita {
+    opacity: 0.7;
+}
+
+/* Ranking */
+.periodos {
+    display: flex;
+    border: 2px solid var(--color-borda-pixel);
+}
+
+.periodos button {
+    padding: 0.3rem 0.7rem;
+    font-family: var(--font-display);
+    font-size: 0.8rem;
+    background: var(--color-surface-muted);
+    color: var(--color-text-soft);
+    border: none;
+    cursor: pointer;
+}
+
+.periodos .periodoAtivo {
+    background: var(--gradient-ouro);
+    color: var(--color-tinta);
+}
+
+.numero {
+    width: 2.2rem;
+    flex-shrink: 0;
+    font-family: var(--font-titulo);
+    font-size: 1.4rem;
+    color: var(--color-text-muted);
+    text-align: center;
+}
+
+/* Ouro, prata e bronze com contraste suficiente nos dois temas */
+.podio1 .numero { color: var(--color-ouro-texto); }
+.podio2 .numero { color: var(--color-text-soft); }
+.podio3 .numero { color: #e09a6a; }
+:global(:root[data-theme='light']) .podio3 .numero { color: #8a4a1f; }
+
+.podio1 {
+    border-color: #f2d3ab;
+}
+
+.euMesmo {
+    border-color: var(--color-feitico);
+}
+
+.minhaPosicao,
+.vazio {
+    margin-top: 0.8rem;
+    color: var(--color-text-muted);
+    font-size: 0.85rem;
+}
+
+/* Primeiros passos: ocupa a largura toda acima de missões e ranking */
+.passos {
+    grid-column: 1 / -1;
+}
+
+.irPasso {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.4rem 0.75rem;
+    font-family: var(--font-display);
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--color-titulo);
+    border: 2px solid var(--color-borda-pixel);
+    text-decoration: none;
+}
+
+.irPasso:hover {
+    border-color: var(--color-accent-hover);
+}
+
+/* Missão especial do evento do ano */
+.especial {
+    border-color: var(--color-accent);
+    background: linear-gradient(var(--color-accent-tint), var(--color-accent-tint)), var(--color-surface-muted);
+}
+
+.iconeEspecial {
+    flex-shrink: 0;
+    display: flex;
+}
+
+/* Temporada do ranking */
+.temporada {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.35rem;
+    margin: -0.3rem 0 0.8rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--color-text-muted);
+}
+
+.temporada svg {
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+    color: var(--color-ouro-texto);
+}
+
+.semEspaco:empty {
+    display: none;
+}
+
+.campeoes {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.6rem 0.9rem;
+    margin-top: 0.9rem;
+    padding-top: 0.8rem;
+    border-top: 2px dashed var(--color-borda-pixel);
+}
+
+.campeoes > span {
+    font-size: 0.78rem;
+    font-weight: 800;
+    color: var(--color-ouro-texto);
+}
+
+.campeoes ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 0.9rem;
+}
+
+.campeoes li {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.35rem;
+    padding-top: 6px;
+}
+
+.campeoes small {
+    font-size: 0.72rem;
+    color: var(--color-text-soft);
+}
+
+/* Ranking por cidade */
+.cidade {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    align-self: flex-start;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--color-titulo);
+    cursor: pointer;
+}
+
+.cidade input {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--color-feitico);
+}

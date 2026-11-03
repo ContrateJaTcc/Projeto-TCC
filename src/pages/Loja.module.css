@@ -1,0 +1,201 @@
+.vitrine {
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.2rem;
+    margin-bottom: 1.6rem;
+}
+
+.vitrineTexto {
+    flex: 1 1 240px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.nome {
+    font-family: var(--font-titulo);
+    font-weight: 400;
+    font-size: 2rem;
+    line-height: 1.05;
+    color: var(--color-titulo);
+}
+
+.campeao {
+    display: inline-flex;
+    align-items: flex-start;
+    gap: 0.35rem;
+    margin-top: 0.3rem;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--color-ouro-texto);
+}
+
+.campeao svg {
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+}
+
+.carteiraXp {
+    display: grid;
+    grid-template-columns: auto auto;
+    align-items: center;
+    column-gap: 0.4rem;
+    padding: 0.8rem 1.1rem;
+    background: var(--color-bg-alt);
+    border: 2px solid var(--color-accent);
+    color: var(--color-ouro-texto);
+}
+
+.carteiraXp strong {
+    font-family: var(--font-titulo);
+    font-weight: 400;
+    font-size: 2.6rem;
+    line-height: 1;
+    color: var(--color-titulo);
+}
+
+.carteiraXp span {
+    grid-column: 1 / -1;
+    font-weight: 700;
+    font-size: 0.82rem;
+    color: var(--color-titulo);
+}
+
+.carteiraXp small {
+    grid-column: 1 / -1;
+    font-size: 0.74rem;
+    color: var(--color-text-muted);
+}
+
+.secao {
+    margin-bottom: 1.6rem;
+}
+
+.secao header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    margin-bottom: 0.8rem;
+}
+
+.secao h2 {
+    font-family: var(--font-titulo);
+    color: var(--color-titulo);
+    font-size: 2.1rem;
+    line-height: 1;
+}
+
+.grade {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    gap: 1rem;
+}
+
+.item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.45rem;
+    padding: 1rem;
+    background: var(--color-surface);
+    border: 2px solid var(--color-borda-pixel);
+    box-shadow: var(--shadow-sm);
+}
+
+.item > strong {
+    color: var(--color-titulo);
+    font-size: 0.95rem;
+}
+
+.equipado {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 2px var(--color-accent-tint), var(--shadow-sm);
+}
+
+.previa {
+    align-self: stretch;
+    height: 86px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-bg-alt);
+    border: 2px solid var(--color-border);
+    overflow: hidden;
+}
+
+.nomePrevia {
+    font-family: var(--font-titulo);
+    font-weight: 400;
+    font-size: 2rem;
+    color: var(--color-titulo);
+}
+
+.descricao {
+    font-size: 0.82rem;
+    color: var(--color-text-muted);
+    flex: 1;
+}
+
+.falta {
+    font-size: 0.74rem;
+    color: var(--color-text-muted);
+}
+
+/* Miniatura dos cenários: um pedacinho de céu com o efeito parado */
+.ceu {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, #0b0b13, #272744 70%, #494d7e);
+    image-rendering: pixelated;
+}
+
+.tema_outono {
+    background:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' shape-rendering='crispEdges'%3E%3Crect x='6' y='8' width='3' height='2' fill='%23d9822b'/%3E%3Crect x='30' y='20' width='3' height='2' fill='%23b5551a'/%3E%3Crect x='16' y='34' width='2' height='2' fill='%23e8b04a'/%3E%3Crect x='40' y='40' width='3' height='2' fill='%23d9822b'/%3E%3C/svg%3E") 0 0 / 48px 48px,
+        linear-gradient(180deg, #2c1a2e, #5a3326 70%, #8a4b26);
+}
+
+.tema_cerejeira {
+    background:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' shape-rendering='crispEdges'%3E%3Crect x='6' y='8' width='2' height='1' fill='%23f6b7c8'/%3E%3Crect x='30' y='20' width='2' height='1' fill='%23fbe1e8'/%3E%3Crect x='16' y='34' width='1' height='2' fill='%23f6b7c8'/%3E%3Crect x='40' y='40' width='2' height='1' fill='%23fbe1e8'/%3E%3C/svg%3E") 0 0 / 48px 48px,
+        linear-gradient(180deg, #3a2440, #7a4a6a 70%, #c69fa5);
+}
+
+.tema_vagalumes {
+    background:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' shape-rendering='crispEdges'%3E%3Cg fill='%23e8ff8a'%3E%3Crect x='8' y='30' width='1' height='1'/%3E%3Crect x='30' y='38' width='1' height='1'/%3E%3Crect x='40' y='22' width='1' height='1'/%3E%3C/g%3E%3Cg fill='%23e8ff8a' fill-opacity='.35'%3E%3Crect x='7' y='29' width='3' height='3'/%3E%3Crect x='29' y='37' width='3' height='3'/%3E%3Crect x='39' y='21' width='3' height='3'/%3E%3C/g%3E%3C/svg%3E") 0 0 / 48px 48px,
+        linear-gradient(180deg, #0b0b13, #1b2a24 70%, #2f4a36);
+}
+
+.tema_aurora {
+    background:
+        repeating-linear-gradient(100deg, transparent 0 14px, rgba(95, 224, 160, 0.4) 14px 22px, rgba(94, 196, 214, 0.3) 22px 30px, rgba(200, 139, 255, 0.25) 30px 36px, transparent 36px 56px),
+        linear-gradient(180deg, #0b0b13, #1b1b30 70%, #272744);
+}
+
+.dicaXp {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.45rem;
+    padding: 0.7rem 1rem;
+    background: var(--color-surface);
+    border: 2px solid var(--color-borda-pixel);
+    font-size: 0.86rem;
+    color: var(--color-text-soft);
+}
+
+.dicaXp svg {
+    flex-shrink: 0;
+    margin-top: 0.15rem;
+}
+
+.dicaXp a {
+    color: var(--color-ouro-texto);
+    font-weight: 700;
+    text-decoration: underline;
+}

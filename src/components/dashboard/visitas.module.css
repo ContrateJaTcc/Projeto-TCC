@@ -1,0 +1,59 @@
+/* Visitas ao perfil: mesmo gráfico de colunas do painel de ganhos, com uma série só */
+.cores {
+    --serie-1: #2aa3bb;
+}
+
+:global(:root[data-theme='light']) .cores {
+    --serie-1: #1a8fa6;
+}
+
+.resumo {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+}
+
+.resumo strong {
+    font-family: var(--font-titulo);
+    font-weight: 400;
+    font-size: 3rem;
+    line-height: 1;
+    color: var(--color-titulo);
+}
+
+.resumo span {
+    font-size: 0.86rem;
+    color: var(--color-text);
+}
+
+.comparacao {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin: 0.3rem 0 1rem;
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+}
+
+.grafico {
+    position: relative;
+}
+
+div.area {
+    height: 140px;
+}
+
+div.seteColunas {
+    grid-template-columns: repeat(7, 1fr);
+}
+
+.rotuloTopo {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--color-titulo);
+    pointer-events: none;
+}

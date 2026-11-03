@@ -13,8 +13,8 @@ const linhas = [
 export default function Comparison() {
   return (
     <section className={styles.diferenciais} id="diferenciais">
-      <h2>O que nos torna diferentes?</h2>
-      <p className={styles.chamada}>
+      <h2 className="titulo-magico placa">O que nos torna diferentes?</h2>
+      <p className={`${styles.chamada} placa`}>
         Enquanto outras plataformas só conectam, nós reconhecemos e recompensamos!
       </p>
 

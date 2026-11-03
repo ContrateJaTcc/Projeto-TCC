@@ -1,0 +1,97 @@
+.caixa {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: 1.1rem 1.3rem;
+    background: var(--color-surface);
+    border: 2px solid var(--color-borda-pixel);
+    box-shadow: var(--shadow-md);
+}
+
+.caixa h2 {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--font-titulo);
+    font-size: 1.8rem;
+    line-height: 1;
+    color: var(--color-titulo);
+}
+
+.dica {
+    font-size: 0.85rem;
+    color: var(--color-text);
+}
+
+.dias {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+}
+
+.dias button {
+    min-width: 3rem;
+    padding: 0.45rem 0.6rem;
+    font-family: var(--font-sans);
+    font-weight: 700;
+    color: var(--color-titulo);
+    background: var(--color-bg-alt);
+    border: 2px solid var(--color-borda-pixel);
+    cursor: pointer;
+}
+
+.dias button[aria-pressed='true'] {
+    color: var(--color-tinta);
+    background: var(--color-accent);
+    border-color: var(--color-tinta);
+}
+
+.horas {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.horas label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--color-titulo);
+}
+
+.horas select {
+    padding: 0.4rem 0.5rem;
+    font-family: var(--font-sans);
+    color: var(--color-titulo);
+    background: var(--color-campo);
+    border: 2px solid var(--color-borda-pixel);
+}
+
+.salvar,
+.limpar {
+    padding: 0.45rem 0.85rem;
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    font-weight: 700;
+    border: 2px solid var(--color-tinta);
+    cursor: pointer;
+}
+
+.salvar {
+    color: var(--color-tinta);
+    background: var(--color-accent);
+}
+
+.salvar:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.limpar {
+    color: var(--color-titulo);
+    background: var(--color-surface);
+    border-color: var(--color-borda-pixel);
+}

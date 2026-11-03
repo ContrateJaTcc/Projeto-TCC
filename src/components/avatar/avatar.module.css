@@ -14,8 +14,154 @@
 .foto {
     border-radius: 50%;
     object-fit: cover;
-    /* Sem isto a foto encolhe dentro de containers flex, como nos cards. */
+    /* Não encolher */
     flex-shrink: 0;
     background: var(--color-bg-alt);
     display: block;
+}
+
+/* Moldura pelo nível do freelancer: um aro em volta do rosto, com contorno escuro */
+.moldura {
+    position: relative;
+    display: inline-flex;
+    flex-shrink: 0;
+    padding: 3px;
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px var(--aro-contorno);
+}
+
+.moldura > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* Madeira: veios em faixas */
+.madeira {
+    --aro-contorno: #3d2a1e;
+    background: repeating-linear-gradient(115deg, #8b6146 0 3px, #6b4630 3px 5px, #a07052 5px 7px);
+}
+
+.prata {
+    --aro-contorno: #3a3850;
+    background: linear-gradient(135deg, #f1eff7 0 30%, #a9a6bd 30% 65%, #6e6a86 65%);
+}
+
+.ouro {
+    --aro-contorno: #5c3d12;
+    background: linear-gradient(135deg, #fbf5ef 0 25%, #f2d3ab 25% 60%, #c08a3e 60%);
+}
+
+/* Mágica: as cores do castelo girando devagar em passos, com um brilho em volta */
+.magica {
+    --aro-contorno: #272744;
+    filter: drop-shadow(0 0 4px rgba(198, 159, 165, 0.6));
+}
+
+.magica::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: conic-gradient(#8b6d9c 0 25%, #c69fa5 25% 50%, #f2d3ab 50% 75%, #6a5d8d 75%);
+    animation: girarAro 4s steps(16, end) infinite;
+}
+
+@keyframes girarAro {
+    to { transform: rotate(1turn); }
+}
+
+:global(:root[data-movimento='reduzido']) .magica::before {
+    animation: none;
+}
+
+/* ---------- Molduras especiais: loja e temporada do ranking ---------- */
+
+/* Tábuas largas do portão, com cravos */
+.moldura_madeira {
+    --aro-contorno: #2a1a10;
+    padding: 4px;
+    background:
+        radial-gradient(circle at 50% 6%, #c9c2d6 0 2px, transparent 2.5px),
+        radial-gradient(circle at 50% 94%, #c9c2d6 0 2px, transparent 2.5px),
+        repeating-linear-gradient(90deg, #5a3a26 0 5px, #3d2618 5px 6px, #6e4a32 6px 11px);
+}
+
+/* Cristal: facetas frias com um brilho */
+.moldura_cristal {
+    --aro-contorno: #1d4f5e;
+    padding: 4px;
+    background: conic-gradient(from 20deg, #e8fbff 0 12%, #8bd8e6 12% 30%, #5ec4d6 30% 48%, #c8f2f8 48% 60%, #3d9fb2 60% 80%, #e8fbff 80%);
+    filter: drop-shadow(0 0 3px rgba(139, 216, 230, 0.55));
+}
+
+/* Céu noturno com estrelinhas */
+.moldura_estrelas {
+    --aro-contorno: #0b0b13;
+    padding: 4px;
+    background:
+        radial-gradient(circle at 20% 25%, #fbf5ef 0 1.5px, transparent 2px),
+        radial-gradient(circle at 78% 18%, #f2d3ab 0 1.5px, transparent 2px),
+        radial-gradient(circle at 86% 70%, #fbf5ef 0 1px, transparent 1.5px),
+        radial-gradient(circle at 15% 78%, #c69fa5 0 1.5px, transparent 2px),
+        radial-gradient(circle at 50% 95%, #fbf5ef 0 1px, transparent 1.5px),
+        linear-gradient(160deg, #272744, #131321);
+}
+
+/* Escamas verdes com brasa vermelha */
+.moldura_dragao {
+    --aro-contorno: #14301c;
+    padding: 4px;
+    background:
+        radial-gradient(circle at 50% 0, #ff6b5e 0 3px, transparent 3.5px),
+        repeating-conic-gradient(from 0deg, #2f7a46 0 15deg, #1f5232 15deg 30deg, #4c9a5e 30deg 45deg);
+    filter: drop-shadow(0 0 3px rgba(255, 107, 94, 0.45));
+}
+
+/* Campeões da temporada: aro do metal e uma coroa em cima */
+.campeao_ouro,
+.campeao_prata,
+.campeao_bronze {
+    padding: 4px;
+}
+
+.campeao_ouro {
+    --aro-contorno: #5c3d12;
+    background: conic-gradient(#fff3c4 0 15%, #f2c66d 15% 45%, #c08a3e 45% 65%, #f2c66d 65% 90%, #fff3c4 90%);
+    filter: drop-shadow(0 0 5px rgba(242, 198, 109, 0.65));
+}
+
+.campeao_prata {
+    --aro-contorno: #3a3850;
+    background: conic-gradient(#ffffff 0 15%, #c9c6da 15% 45%, #858199 45% 65%, #c9c6da 65% 90%, #ffffff 90%);
+    filter: drop-shadow(0 0 4px rgba(201, 198, 218, 0.6));
+}
+
+.campeao_bronze {
+    --aro-contorno: #3d2410;
+    background: conic-gradient(#f3c9a0 0 15%, #c27a45 15% 45%, #8a4f26 45% 65%, #c27a45 65% 90%, #f3c9a0 90%);
+}
+
+/* Coroa em pixel no topo */
+.campeao_ouro::after,
+.campeao_prata::after,
+.campeao_bronze::after {
+    content: '';
+    position: absolute;
+    z-index: 2;
+    top: -7px;
+    left: 50%;
+    width: 16px;
+    height: 10px;
+    transform: translateX(-50%);
+    background: var(--cor-coroa, #f2c66d);
+    clip-path: polygon(0 100%, 0 20%, 25% 60%, 50% 0, 75% 60%, 100% 20%, 100% 100%);
+    filter: drop-shadow(0 1px 0 rgba(0, 0, 0, 0.6));
+}
+
+.campeao_prata::after {
+    --cor-coroa: #dcd9ea;
+}
+
+.campeao_bronze::after {
+    --cor-coroa: #d08a52;
 }

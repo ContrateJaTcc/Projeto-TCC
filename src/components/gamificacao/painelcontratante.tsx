@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { FolderOpen, Hourglass, CircleCheckBig, Users, FilePen } from 'lucide-react'
 import Avatar from '../avatar/avatar'
 import Estrelas from './estrelas'
+import BarraXp from './barraxp'
 import ListaAvaliacoes from './listaavaliacoes'
 import type { Avaliacao } from './tipos'
 import styles from './gamificacao.module.css'
@@ -22,15 +23,13 @@ export interface PerfilContratante {
     usu_nome: string
     usu_foto: string | null
     free_nivel: number
+    free_xp?: number
     free_rank: number
     projetos: number
   }[]
 }
 
-/*
- * Área do contratante no perfil: números dos projetos, a reputação que os
- * freelancers dão a ele e quem ele já contratou, para recontratar.
- */
+/* Painel do contratante */
 export default function PainelContratante({ dados }: { dados: PerfilContratante }) {
   const { estatisticas: e, reputacao, avaliacoes, contratados } = dados
 
@@ -86,12 +85,12 @@ export default function PainelContratante({ dados }: { dados: PerfilContratante 
           <div className={styles.gradeContratados}>
             {contratados.map((c) => (
               <Link key={c.usu_id} to={`/contratante/freelancer/${c.usu_id}`} className={styles.contratado}>
-                <Avatar nome={c.usu_nome} size={48} foto={c.usu_foto} />
+                <Avatar nome={c.usu_nome} size={48} foto={c.usu_foto} nivel={c.free_nivel} />
                 <strong>{c.usu_nome}</strong>
-                <span className={styles.suave}>
-                  Nível {c.free_nivel}
-                  {c.free_rank > 0 && ` · ${c.free_rank.toLocaleString('pt-BR')} ★`}
-                </span>
+                <BarraXp xp={Number(c.free_xp ?? 0)} />
+                {c.free_rank > 0 && (
+                  <span className={styles.suave}>{c.free_rank.toLocaleString('pt-BR')} ★</span>
+                )}
                 <span className={styles.suave}>
                   {c.projetos} {c.projetos === 1 ? 'projeto juntos' : 'projetos juntos'}
                 </span>

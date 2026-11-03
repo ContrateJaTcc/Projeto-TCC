@@ -1,0 +1,212 @@
+/* Agenda: grade do mês no computador, lista dos dias com evento no celular */
+.topo {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.8rem;
+}
+
+.navMes {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.navMes h2 {
+    min-width: 12ch;
+    justify-content: center;
+}
+
+.legenda {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 0.9rem;
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+}
+
+.legenda li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.semana,
+.grade {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 4px;
+}
+
+.semana span {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-align: center;
+    color: var(--color-text-muted);
+}
+
+.grade {
+    list-style: none;
+    padding: 0;
+}
+
+.dia {
+    min-height: 92px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: 4px;
+    background: var(--color-bg-alt);
+    border: 2px solid var(--color-borda-pixel);
+    min-width: 0;
+}
+
+/* Dias do mês vizinho: tracejado em vez de apagado (o número continua legível) */
+.fora {
+    background: transparent;
+    border-style: dashed;
+}
+
+.fora .numero {
+    color: var(--color-text-muted);
+}
+
+.hoje {
+    border-color: var(--color-accent);
+    box-shadow: inset 0 0 0 1px var(--color-accent);
+}
+
+.numero {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--color-titulo);
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.diaSemana {
+    display: none;
+}
+
+.seloHoje {
+    font-size: 0.65rem;
+    padding: 0 0.3rem;
+    background: var(--color-accent);
+    color: var(--color-tinta);
+}
+
+.evento {
+    display: flex;
+    align-items: flex-start;
+    gap: 3px;
+    padding: 2px 4px;
+    font-size: 0.7rem;
+    line-height: 1.25;
+    color: var(--color-titulo);
+    background: var(--color-surface);
+    border-left: 4px solid currentColor;
+    text-decoration: none;
+    overflow: hidden;
+}
+
+.evento span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.evento svg {
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+.evento:hover {
+    background: var(--color-surface-muted);
+}
+
+/* Cor de cada tipo (sempre junto do ícone e do nome) */
+.prazo { color: var(--color-ouro-texto); }
+.pausa { color: var(--color-text-muted); }
+.reuniao { color: var(--color-feitico); }
+.etapa { color: var(--color-sucesso); }
+.inscricoes { color: var(--color-danger); }
+
+.evento.prazo,
+.evento.pausa,
+.evento.reuniao,
+.evento.etapa,
+.evento.inscricoes {
+    border-left-color: currentColor;
+}
+
+.evento.prazo span,
+.evento.pausa span,
+.evento.reuniao span,
+.evento.etapa span,
+.evento.inscricoes span {
+    color: var(--color-titulo);
+}
+
+.proximos {
+    margin-top: 1.2rem;
+}
+
+.proximos ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.proximos li {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    flex-wrap: wrap;
+}
+
+.proximos li > div {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 12rem;
+}
+
+.proximos li strong {
+    color: var(--color-titulo);
+}
+
+/* Celular: vira lista só com os dias que têm alguma coisa */
+@media (max-width: 640px) {
+    .semana {
+        display: none;
+    }
+    .grade {
+        grid-template-columns: 1fr;
+    }
+    .dia {
+        min-height: 0;
+    }
+    .semEvento,
+    .fora {
+        display: none;
+    }
+    .diaSemana {
+        display: inline;
+    }
+    .evento {
+        font-size: 0.85rem;
+        padding: 6px 8px;
+    }
+    .evento span {
+        -webkit-line-clamp: unset;
+        display: block;
+    }
+}

@@ -1,0 +1,406 @@
+/* Proposta dentro da bolha do chat */
+.proposta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    min-width: 200px;
+    padding: 0.65rem 0.75rem;
+    margin-bottom: 0.3rem;
+    background: var(--color-surface);
+    color: var(--color-text);
+    border: 2px solid var(--color-accent);
+    box-shadow: 2px 2px 0 0 var(--color-tinta);
+}
+
+.recusada {
+    border-color: var(--color-borda-pixel);
+    opacity: 0.8;
+}
+
+.aceita {
+    border-color: var(--color-sucesso);
+}
+
+.cancelada {
+    border-color: var(--color-borda-pixel);
+    opacity: 0.8;
+}
+
+/* Reunião marcada pelo chat */
+.reuniao {
+    border-color: var(--color-feitico);
+}
+
+.reuniao.aceita {
+    border-color: var(--color-sucesso);
+}
+
+.reuniaoQuando {
+    font-family: var(--font-titulo);
+    font-weight: 400;
+    font-size: 1.35rem;
+    line-height: 1.1;
+    color: var(--color-titulo);
+    text-transform: capitalize;
+}
+
+.reuniaoFalta {
+    font-size: 0.76rem;
+    font-weight: 700;
+    color: var(--color-feitico);
+}
+
+.reuniaoLink {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: var(--color-titulo);
+    text-decoration: underline;
+}
+
+/* Contato por fora antes da contratação */
+.alertaContato {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.4rem;
+    align-self: flex-start;
+    max-width: min(420px, 90%);
+    margin-top: -0.25rem;
+    padding: 0.45rem 0.65rem;
+    font-size: 0.76rem;
+    line-height: 1.4;
+    color: var(--color-text);
+    background: var(--color-surface);
+    border: 2px solid var(--color-danger);
+}
+
+.alertaContato svg {
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+    color: var(--color-danger);
+}
+
+.confirmarContato {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    border-top: 2px solid var(--color-danger);
+    background: var(--color-bg-alt);
+    font-size: 0.82rem;
+    line-height: 1.45;
+    color: var(--color-text);
+}
+
+.confirmarContato strong {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--color-titulo);
+}
+
+.confirmarContato strong svg {
+    color: var(--color-danger);
+}
+
+.propostaTitulo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-weight: 800;
+    font-size: 0.78rem;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--color-ouro-texto);
+}
+
+.propostaValores {
+    display: flex;
+    gap: 1.2rem;
+    margin: 0;
+}
+
+.propostaValores dt {
+    font-size: 0.7rem;
+    color: var(--color-text-muted);
+}
+
+.propostaValores dd {
+    margin: 0;
+    font-family: var(--font-titulo);
+    font-size: 1.5rem;
+    line-height: 1;
+    color: var(--color-titulo);
+}
+
+.propostaRecado {
+    font-size: 0.85rem;
+    color: var(--color-text-soft);
+}
+
+.propostaAcoes {
+    display: flex;
+    gap: 0.4rem;
+}
+
+.aceitar,
+.recusar {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.3rem 0.7rem;
+    font-family: var(--font-sans);
+    font-weight: 800;
+    font-size: 0.78rem;
+    cursor: pointer;
+    border: 2px solid var(--color-tinta);
+}
+
+.aceitar {
+    background: var(--color-accent);
+    color: var(--color-tinta);
+}
+
+.recusar {
+    background: var(--color-surface);
+    color: var(--color-titulo);
+    border-color: var(--color-borda-pixel);
+}
+
+.propostaStatus {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--color-text-muted);
+}
+
+.aceita .propostaStatus {
+    color: var(--color-sucesso);
+}
+
+/* Formulário de proposta (abre em cima do campo) */
+.formProposta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    border-top: 2px solid var(--color-borda-pixel);
+    background: var(--color-bg-alt);
+    animation: entrar var(--dur-media) steps(4, end) both;
+}
+
+.formPropostaTopo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.formPropostaTopo strong {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.88rem;
+    color: var(--color-titulo);
+}
+
+.formPropostaTopo button {
+    display: grid;
+    place-items: center;
+    background: none;
+    border: none;
+    color: var(--color-text-soft);
+    cursor: pointer;
+}
+
+.formPropostaCampos {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+}
+
+.formProposta label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    font-size: 0.76rem;
+    font-weight: 700;
+    color: var(--color-text-soft);
+}
+
+.formProposta input {
+    border: 2px solid var(--color-borda-pixel);
+    background: var(--color-campo);
+    color: var(--color-text);
+    padding: 0.45rem 0.6rem;
+    font-size: 0.88rem;
+    outline: none;
+    min-width: 0;
+}
+
+.formProposta input:focus {
+    border-color: var(--color-feitico);
+}
+
+.enviarProposta {
+    align-self: flex-end;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.45rem 0.9rem;
+    font-family: var(--font-sans);
+    font-weight: 800;
+    font-size: 0.82rem;
+    background: var(--color-accent);
+    color: var(--color-tinta);
+    border: 2px solid var(--color-tinta);
+    box-shadow: 2px 2px 0 0 var(--color-tinta);
+    cursor: pointer;
+}
+
+.enviarProposta:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+/* Respostas rápidas */
+.rapidas {
+    border-top: 2px solid var(--color-borda-pixel);
+    padding: 0.5rem 1rem 0;
+}
+
+.rapidasLista {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    overflow-x: auto;
+    padding-bottom: 0.45rem;
+    scrollbar-width: thin;
+}
+
+.rapidasIcone {
+    flex-shrink: 0;
+    color: var(--color-ouro-texto);
+}
+
+.rapida {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.6rem;
+    font-family: var(--font-sans);
+    font-size: 0.76rem;
+    font-weight: 600;
+    white-space: nowrap;
+    background: var(--color-bg-alt);
+    color: var(--color-text-soft);
+    border: 2px solid var(--color-border);
+    cursor: pointer;
+}
+
+button.rapida:hover {
+    border-color: var(--color-accent);
+    color: var(--color-titulo);
+}
+
+.rapida button {
+    display: grid;
+    place-items: center;
+    padding: 0;
+    background: none;
+    border: none;
+    color: var(--color-danger);
+    cursor: pointer;
+}
+
+.rapidasEditar {
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    background: none;
+    border: 2px solid var(--color-border);
+    color: var(--color-text-muted);
+    cursor: pointer;
+}
+
+.rapidasForm {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    padding-bottom: 0.5rem;
+}
+
+.rapidasForm input {
+    flex: 1 1 160px;
+    min-width: 0;
+    border: 2px solid var(--color-borda-pixel);
+    background: var(--color-campo);
+    color: var(--color-text);
+    padding: 0.35rem 0.6rem;
+    font-size: 0.82rem;
+    outline: none;
+}
+
+.rapidasForm button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.35rem 0.7rem;
+    font-family: var(--font-sans);
+    font-size: 0.78rem;
+    font-weight: 700;
+    background: var(--color-surface);
+    color: var(--color-titulo);
+    border: 2px solid var(--color-borda-pixel);
+    cursor: pointer;
+}
+
+/* "Visto" e "digitando..." */
+.visto {
+    align-self: flex-end;
+    margin-top: -0.3rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--color-text-muted);
+}
+
+.digitando {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 0.8rem;
+    background: var(--color-surface);
+    color: var(--color-text-muted);
+    font-size: 0.8rem;
+    font-style: italic;
+}
+
+.pontos {
+    display: inline-flex;
+    gap: 3px;
+}
+
+.pontos i {
+    width: 4px;
+    height: 4px;
+    background: currentColor;
+    animation: pular 1s steps(2, end) infinite;
+}
+
+.pontos i:nth-child(2) { animation-delay: 0.15s; }
+.pontos i:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes pular {
+    50% { transform: translateY(-3px); }
+}
+
+@media (max-width: 480px) {
+    .formPropostaCampos {
+        grid-template-columns: 1fr;
+    }
+}

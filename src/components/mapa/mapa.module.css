@@ -1,0 +1,81 @@
+/* Moldura em pixel do mapa (mesma borda grossa dos painéis) */
+.moldura {
+    border: 3px solid var(--color-tinta);
+    box-shadow: 4px 4px 0 0 var(--color-tinta);
+    background: var(--color-bg-alt);
+}
+
+.mapa {
+    width: 100%;
+    font-family: var(--font-sans);
+    z-index: 0;
+}
+
+/* Na noite o mapa escurece junto com o castelo */
+:global(:root[data-theme='dark']) .mapa :global(.leaflet-tile-pane) {
+    filter: invert(1) hue-rotate(185deg) brightness(0.85) contrast(0.9) saturate(0.6);
+}
+
+.mapa :global(.leaflet-control-attribution) {
+    font-size: 0.68rem;
+    background: rgba(255, 255, 255, 0.85);
+    color: #1b1b30;
+}
+
+.mapa :global(.leaflet-control-attribution a) {
+    color: #1b1b30;
+}
+
+.mapa :global(.leaflet-bar a) {
+    border-radius: 0 !important;
+    color: #1b1b30;
+}
+
+.mapa :global(.leaflet-bar) {
+    border: 2px solid #1b1b30;
+    border-radius: 0;
+    box-shadow: 2px 2px 0 0 #1b1b30;
+}
+
+/* Marcador: bandeirinha quadrada com o número, como um alfinete de pixel */
+.marcador {
+    background: none;
+    border: none;
+}
+
+.marcador span {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 26px;
+    background: #fff3d6;
+    color: #1b1b30;
+    border: 3px solid #1b1b30;
+    box-shadow: 2px 2px 0 0 rgba(27, 27, 48, 0.6);
+    font-family: var(--font-titulo);
+    font-size: 1.15rem;
+    line-height: 1;
+}
+
+/* Pontinha do alfinete */
+.marcador span::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: -9px;
+    width: 6px;
+    height: 6px;
+    margin-left: -3px;
+    background: #1b1b30;
+}
+
+.ativo span {
+    background: #ffd45e;
+}
+
+.marcador:focus-visible span {
+    outline: 3px solid #7c55b8;
+    outline-offset: 2px;
+}
+

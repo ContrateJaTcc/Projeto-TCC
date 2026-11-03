@@ -1,0 +1,253 @@
+/* Mapa do reino: um pergaminho com o caminho das regiões */
+.mapa {
+    display: block;
+    width: 100%;
+    height: auto;
+    background:
+        repeating-linear-gradient(90deg, rgba(122, 75, 42, 0.06) 0 1px, transparent 1px 10px),
+        repeating-linear-gradient(0deg, rgba(122, 75, 42, 0.06) 0 1px, transparent 1px 10px),
+        #f3e3c3;
+    border: 3px solid #7a4b2a;
+    box-shadow: 4px 4px 0 0 var(--color-tinta);
+    image-rendering: pixelated;
+}
+
+.bloqueada {
+    filter: grayscale(1);
+    opacity: 0.55;
+}
+
+.numeroRegiao {
+    font-family: var(--font-titulo);
+    font-size: 7px;
+    fill: #1b1b30;
+}
+
+.progresso {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.barra {
+    height: 14px;
+    background: var(--color-bg-alt);
+    border: 2px solid var(--color-borda-pixel);
+}
+
+.barra span {
+    display: block;
+    height: 100%;
+    background: var(--color-accent);
+}
+
+.regioes {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.45rem;
+}
+
+.regioes li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.55rem;
+    padding: 0.5rem 0.65rem;
+    background: var(--color-surface-muted);
+    border: 2px solid transparent;
+}
+
+.regioes .aqui {
+    border-color: var(--color-accent);
+    background: var(--color-surface);
+}
+
+/* Ainda não chegou: borda tracejada (o cadeado já diz; sem apagar o texto) */
+.regioes .falta {
+    border-style: dashed;
+    border-color: var(--color-border);
+}
+
+.icone {
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    border: 2px solid var(--color-borda-pixel);
+    color: var(--color-text-muted);
+}
+
+.passou .icone {
+    color: var(--color-sucesso);
+    border-color: var(--color-sucesso);
+}
+
+.aqui .icone {
+    color: var(--color-tinta);
+    background: var(--color-accent);
+    border-color: var(--color-tinta);
+}
+
+.textoRegiao {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+}
+
+.textoRegiao strong {
+    color: var(--color-titulo);
+    font-size: 0.88rem;
+}
+
+.textoRegiao small {
+    font-size: 0.76rem;
+    color: var(--color-text-muted);
+    line-height: 1.4;
+}
+
+/* Lido só pelo leitor de tela */
+.oculto {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}
+
+.mapaPainel {
+    margin-bottom: 1.4rem;
+}
+
+/* Mascote */
+.mascoteCorpo {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 1.4rem;
+}
+
+.palco {
+    flex-shrink: 0;
+    display: grid;
+    place-items: end center;
+    width: 160px;
+    height: 160px;
+    padding-bottom: 10px;
+    background: linear-gradient(to top, #3a8a4b 0 14px, #2f6f3e 14px 20px, var(--color-bg-alt) 20px);
+    border: 2px solid var(--color-borda-pixel);
+}
+
+.form {
+    flex: 1 1 280px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+}
+
+.form a {
+    color: var(--color-titulo);
+    font-weight: 700;
+}
+
+.form label {
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--color-text-soft);
+}
+
+.form input {
+    max-width: 320px;
+    border: 2px solid var(--color-borda-pixel);
+    background: var(--color-campo);
+    color: var(--color-text);
+    padding: 0.55rem 0.7rem;
+    font-size: 0.92rem;
+    outline: none;
+}
+
+.form input:focus {
+    border-color: var(--color-feitico);
+}
+
+.especies {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    border: none;
+    margin: 0;
+    padding: 0;
+    min-width: 0;
+}
+
+.especies legend {
+    margin-bottom: 0.35rem;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--color-text-soft);
+}
+
+.especie {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+    padding: 0.4rem 0.6rem;
+    background: var(--color-bg-alt);
+    border: 2px solid var(--color-border);
+    color: var(--color-titulo);
+    font-family: var(--font-sans);
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.especie:hover {
+    border-color: var(--color-accent);
+}
+
+.escolhida {
+    border-color: var(--color-accent);
+    outline: 3px solid var(--color-accent);
+    outline-offset: 1px;
+}
+
+@media (max-width: 640px) {
+    .regioes {
+        grid-template-columns: 1fr;
+    }
+
+    .palco {
+        width: 130px;
+        height: 130px;
+    }
+}
+
+.mural {
+    margin-top: 1.4rem;
+}
+
+.quarto {
+    margin-top: 1.4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.quarto h2 {
+    font-family: var(--font-titulo);
+    color: var(--color-titulo);
+    font-size: 2rem;
+    line-height: 1;
+    width: fit-content;
+}

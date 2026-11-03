@@ -1,0 +1,196 @@
+/* Desenhos por cima de uma camada: mesma posição e escala do cenário */
+.extra {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+/* Animações desligadas ou aba escondida: tudo parado */
+.parada *,
+:global([data-movimento='reduzido']) .extra *,
+:global([data-movimento='reduzido']) .confete,
+:global([data-movimento='reduzido']) .folhas,
+:global([data-movimento='reduzido']) .petalas,
+:global([data-movimento='reduzido']) .vagalumes,
+:global([data-movimento='reduzido']) .aurora {
+    animation: none !important;
+}
+
+.atrasado {
+    animation-delay: -4s !important;
+}
+
+.atrasado2 {
+    animation-delay: -9s !important;
+}
+
+/* ---------- Halloween ---------- */
+
+.abobora {
+    filter: drop-shadow(0 0 1.5px rgba(255, 180, 70, 0.75));
+}
+
+/* Morcegos: batem as asas (troca de desenho) e passeiam em volta da lua */
+.morcego {
+    animation: voarMorcego 14s steps(56, end) infinite;
+}
+
+.asaA,
+.asaB {
+    animation: bater 0.5s steps(1, end) infinite;
+}
+
+.asaB {
+    animation-delay: -0.25s;
+}
+
+@keyframes bater {
+    0% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+@keyframes voarMorcego {
+    0% { transform: translate(0, 0); }
+    25% { transform: translate(14px, -6px); }
+    50% { transform: translate(26px, 3px); }
+    75% { transform: translate(10px, 8px); }
+    100% { transform: translate(0, 0); }
+}
+
+/* ---------- Natal e Ano Novo ---------- */
+
+.piscaA {
+    animation: piscar 1.6s steps(1, end) infinite;
+}
+
+.piscaB {
+    animation: piscar 1.6s steps(1, end) infinite;
+    animation-delay: -0.8s;
+}
+
+@keyframes piscar {
+    0% { opacity: 1; }
+    50% { opacity: 0.25; }
+}
+
+.brilho {
+    filter: drop-shadow(0 0 2px rgba(255, 212, 94, 0.9));
+    animation: piscar 2.4s steps(1, end) infinite;
+}
+
+/* ---------- Festa Junina ---------- */
+
+.balao {
+    animation: subirBalao 22s linear infinite;
+}
+
+@keyframes subirBalao {
+    0% { transform: translate(0, 0); opacity: 0; }
+    8% { opacity: 1; }
+    50% { transform: translate(10px, -130px); }
+    92% { opacity: 1; }
+    100% { transform: translate(-4px, -260px); opacity: 0; }
+}
+
+.fogo {
+    transform-box: fill-box;
+    transform-origin: center bottom;
+    filter: drop-shadow(0 0 2px rgba(255, 140, 60, 0.85));
+    animation: crepitar 0.6s steps(3, end) infinite alternate;
+}
+
+@keyframes crepitar {
+    from { transform: scaleY(1); }
+    to { transform: scaleY(1.12); }
+}
+
+/* ---------- Partículas que cobrem a tela (carnaval e cenários da loja) ---------- */
+
+.confete,
+.folhas,
+.petalas,
+.vagalumes,
+.aurora {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    image-rendering: pixelated;
+}
+
+.confete {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' shape-rendering='crispEdges'%3E%3Crect x='4' y='6' width='2' height='1' fill='%23ff6b5e'/%3E%3Crect x='20' y='14' width='1' height='2' fill='%23ffd45e'/%3E%3Crect x='36' y='4' width='2' height='1' fill='%235ec4d6'/%3E%3Crect x='10' y='30' width='1' height='2' fill='%235fe0a0'/%3E%3Crect x='28' y='38' width='2' height='1' fill='%23c88bff'/%3E%3Crect x='42' y='26' width='1' height='2' fill='%23ff6b5e'/%3E%3C/svg%3E");
+    background-size: calc(48px * var(--s)) calc(48px * var(--s));
+    animation: cair 9s steps(90, end) infinite;
+}
+
+.folhas {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96' shape-rendering='crispEdges'%3E%3Cg fill='%23d9822b'%3E%3Crect x='10' y='12' width='3' height='2'/%3E%3Crect x='11' y='14' width='1' height='1'/%3E%3C/g%3E%3Cg fill='%23b5551a'%3E%3Crect x='58' y='30' width='3' height='2'/%3E%3Crect x='59' y='32' width='1' height='1'/%3E%3C/g%3E%3Cg fill='%23e8b04a'%3E%3Crect x='30' y='66' width='2' height='2'/%3E%3Crect x='80' y='78' width='3' height='2'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: calc(96px * var(--s)) calc(96px * var(--s));
+    opacity: 0.9;
+    animation: cairDiagonal 16s steps(160, end) infinite;
+}
+
+.petalas {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96' shape-rendering='crispEdges'%3E%3Cg fill='%23f6b7c8'%3E%3Crect x='14' y='10' width='2' height='1'/%3E%3Crect x='62' y='40' width='2' height='1'/%3E%3Crect x='36' y='70' width='1' height='2'/%3E%3C/g%3E%3Cg fill='%23fbe1e8'%3E%3Crect x='84' y='20' width='1' height='1'/%3E%3Crect x='20' y='52' width='2' height='1'/%3E%3Crect x='70' y='86' width='1' height='1'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: calc(96px * var(--s)) calc(96px * var(--s));
+    animation: cairDiagonal 22s steps(220, end) infinite;
+}
+
+@keyframes cair {
+    to { background-position: calc(12px * var(--s)) calc(144px * var(--s)); }
+}
+
+@keyframes cairDiagonal {
+    to { background-position: calc(-96px * var(--s)) calc(192px * var(--s)); }
+}
+
+/* Vaga-lumes: pontinhos que acendem e apagam devagar, em duas camadas desencontradas */
+.vagalumes {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' shape-rendering='crispEdges'%3E%3Cg fill='%23e8ff8a'%3E%3Crect x='18' y='70' width='1' height='1'/%3E%3Crect x='76' y='96' width='1' height='1'/%3E%3Crect x='102' y='58' width='1' height='1'/%3E%3C/g%3E%3Cg fill='%23e8ff8a' fill-opacity='.35'%3E%3Crect x='17' y='69' width='3' height='3'/%3E%3Crect x='75' y='95' width='3' height='3'/%3E%3Crect x='101' y='57' width='3' height='3'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: calc(120px * var(--s)) calc(120px * var(--s));
+    mask-image: linear-gradient(transparent 35%, #000 70%);
+    animation: piscarVagalume 3.2s steps(4, end) infinite, vagar 30s steps(60, end) infinite alternate;
+}
+
+.vagalumes2 {
+    background-position: calc(50px * var(--s)) calc(30px * var(--s));
+    animation-delay: -1.6s, -12s;
+}
+
+.vagalumesDia {
+    opacity: 0.6;
+}
+
+@keyframes piscarVagalume {
+    0%, 100% { opacity: 0.2; }
+    50% { opacity: 1; }
+}
+
+@keyframes vagar {
+    to { background-position: calc(24px * var(--s)) calc(-18px * var(--s)); }
+}
+
+/* Aurora: faixas verdes e lilases em degraus, dançando devagar no alto do céu */
+.aurora {
+    bottom: auto;
+    height: 55%;
+    background:
+        repeating-linear-gradient(100deg,
+            rgba(95, 224, 160, 0) 0 calc(18px * var(--s)),
+            rgba(95, 224, 160, 0.22) calc(18px * var(--s)) calc(30px * var(--s)),
+            rgba(94, 196, 214, 0.16) calc(30px * var(--s)) calc(42px * var(--s)),
+            rgba(200, 139, 255, 0.14) calc(42px * var(--s)) calc(52px * var(--s)),
+            rgba(95, 224, 160, 0) calc(52px * var(--s)) calc(80px * var(--s)));
+    mask-image: linear-gradient(180deg, transparent 0, #000 25%, #000 55%, transparent 100%);
+    animation: dancarAurora 18s steps(36, end) infinite alternate;
+}
+
+.auroraDia {
+    opacity: 0.55;
+}
+
+@keyframes dancarAurora {
+    to { background-position: calc(160px * var(--s)) 0; }
+}

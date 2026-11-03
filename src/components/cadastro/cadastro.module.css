@@ -27,8 +27,8 @@
 }
 
 .painelLateral h1 {
-    font-family: var(--font-display);
-    font-size: clamp(2rem, 4vw, 2.75rem);
+    font-family: var(--font-titulo);
+    font-size: clamp(3.25rem, 6.5vw, 4.47rem);
     line-height: 1.15;
 }
 
@@ -37,7 +37,7 @@
 }
 
 .tagline {
-    color: #d8cfe6;
+    color: var(--color-text-soft);
     max-width: 360px;
 }
 
@@ -54,7 +54,7 @@
     align-items: center;
     gap: 0.75rem;
     padding: 0.85rem 1rem;
-    border-radius: 14px;
+    border-radius: var(--radius-md);
     background: rgba(255, 255, 255, 0.08);
     color: rgba(255, 255, 255, 0.7);
     font-size: 0.95rem;
@@ -73,14 +73,14 @@
 }
 
 .etapaAtiva {
-    background: #fff;
-    color: #322258;
+    background: var(--color-surface);
+    color: var(--color-titulo);
     font-weight: 700;
 }
 
 .etapaAtiva .numeroEtapa {
     background: var(--color-accent);
-    color: #1f1c34;
+    color: var(--color-tinta);
 }
 
 .etapaConcluida {
@@ -89,7 +89,7 @@
 
 .etapaConcluida .numeroEtapa {
     background: var(--color-accent);
-    color: #1f1c34;
+    color: var(--color-tinta);
 }
 
 .painelFormulario {
@@ -111,12 +111,12 @@
 }
 
 .etapa h2, .formulario h2 {
-    font-family: var(--font-display);
-    font-size: 1.6rem;
+    font-family: var(--font-titulo);
+    font-size: 2.6rem;
 }
 
 .subtitulo {
-    color: #d8cfe6;
+    color: var(--color-text-soft);
     font-size: 0.9rem;
     margin-top: -0.6rem;
 }
@@ -130,7 +130,7 @@
     flex: 1;
     background: rgba(255, 255, 255, 0.06);
     border: 2px solid rgba(255, 255, 255, 0.15);
-    border-radius: 16px;
+    border-radius: var(--radius-md);
     padding: 1.5rem 1rem;
     color: #fff;
     display: flex;
@@ -144,7 +144,7 @@
 }
 
 .cartaoPerfil p {
-    color: #d8cfe6;
+    color: var(--color-text-soft);
     font-size: 0.85rem;
 }
 
@@ -153,7 +153,7 @@
 }
 
 .cartaoAtivo {
-    background: rgba(255, 192, 20, 0.15);
+    background: rgba(242, 211, 171, 0.15);
     border-color: var(--color-accent);
 }
 
@@ -174,9 +174,9 @@
 
 .btnPrimario {
     background: var(--color-accent);
-    color: #1f1c34;
+    color: var(--color-tinta);
     border: none;
-    border-radius: 999px;
+    border-radius: var(--radius-pill);
     padding: 0.85rem 1.5rem;
     font-weight: 700;
     font-size: 1rem;
@@ -186,7 +186,7 @@
 }
 
 .btnPrimario:hover {
-    background: #fff;
+    background: var(--color-surface);
 }
 
 .btnVoltar {
@@ -196,7 +196,7 @@
     gap: 0.4rem;
     background: none;
     border: none;
-    color: #d8cfe6;
+    color: var(--color-text-soft);
     cursor: pointer;
     font-size: 0.9rem;
     padding: 0;
@@ -211,10 +211,10 @@
 }
 
 .btnSocial {
-    background: #fff;
-    color: #1f1c34;
+    background: var(--color-surface);
+    color: var(--color-text);
     border: none;
-    border-radius: 999px;
+    border-radius: var(--radius-pill);
     padding: 0.7rem 1rem;
     font-weight: 600;
     cursor: pointer;
@@ -241,8 +241,7 @@
     gap: 0.9rem;
 }
 
-/* min-width:auto (padrão do flex) impedia os campos de encolher abaixo da
-   largura intrínseca do <input>, então "Sobrenome" vazava para fora do card. */
+/* Campos encolhem */
 .linhaForm label {
     flex: 1;
     min-width: 0;
@@ -253,15 +252,15 @@
     flex-direction: column;
     gap: 0.35rem;
     font-size: 0.85rem;
-    color: #d8cfe6;
+    color: var(--color-text-soft);
 }
 
 .formulario input,
 .formulario select {
-    background: #30302E;
+    background: var(--color-campo);
     color: #fff;
     border: none;
-    border-radius: 10px;
+    border-radius: var(--radius-sm);
     padding: 0.65rem 0.9rem;
     font-size: 0.95rem;
     font-family: var(--font-sans);
@@ -270,8 +269,8 @@
 .campoSenha {
     display: flex;
     align-items: center;
-    background: #30302E;
-    border-radius: 10px;
+    background: var(--color-campo);
+    border-radius: var(--radius-sm);
     padding-right: 0.5rem;
 }
 
@@ -284,7 +283,7 @@
     background: none;
     border: none;
     cursor: pointer;
-    color: #d8cfe6;
+    color: var(--color-text-soft);
     display: flex;
     align-items: center;
 }
@@ -296,7 +295,7 @@
 
 .linkLogin {
     text-align: center;
-    color: #d8cfe6;
+    color: var(--color-text-soft);
     font-size: 0.9rem;
 }
 
@@ -317,8 +316,7 @@
     .listaEtapas {
         flex-direction: row;
     }
-    /* Mesma causa do campo Sobrenome: com min-width:auto os três passos não
-       encolhiam e o terceiro vazava para fora da tela. */
+    /* Etapas encolhem */
     .listaEtapas li {
         flex: 1;
         min-width: 0;
@@ -338,10 +336,10 @@
 
 .avisoGoogle {
     background: rgba(255, 255, 255, 0.08);
-    border-radius: 10px;
+    border-radius: var(--radius-sm);
     padding: 0.8rem 1rem;
     font-size: 0.85rem;
-    color: #d8cfe6;
+    color: var(--color-text-soft);
     line-height: 1.5;
 }
 
@@ -358,4 +356,155 @@
     cursor: pointer;
     font-family: var(--font-sans);
     font-size: inherit;
+}
+
+/* Bruxa */
+.pagina {
+    background: var(--estrelas), var(--gradient-dark);
+}
+
+.logo img {
+    filter: drop-shadow(0 0 18px rgba(139, 109, 156, 0.55));
+    animation: flutuar 6s ease-in-out infinite;
+}
+
+.painelLateral h1 span {
+    font-family: var(--font-magica);
+}
+
+.btnPrimario:hover {
+    box-shadow: 0 0 0 4px var(--color-ouro-brilho);
+}
+
+/* Termos */
+.termos {
+    flex-direction: row !important;
+    align-items: flex-start;
+    gap: 0.6rem !important;
+    font-weight: 500 !important;
+    font-size: 0.86rem !important;
+    color: var(--color-text-soft);
+    line-height: 1.45;
+}
+
+.termos input {
+    width: 18px !important;
+    height: 18px;
+    margin-top: 2px;
+    flex-shrink: 0;
+    accent-color: var(--color-feitico);
+}
+
+.termos a {
+    color: var(--color-feitico);
+    font-weight: 700;
+    text-decoration: underline;
+}
+
+/* Avisos embaixo de cada campo */
+.formulario .msgErro {
+    color: var(--color-danger);
+    font-weight: 600;
+}
+
+.formulario .msgOk {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    color: var(--color-sucesso);
+    font-weight: 600;
+}
+
+.formulario small {
+    color: rgba(255, 255, 255, 0.72);
+}
+
+.formulario input[aria-invalid='true'],
+.formulario select[aria-invalid='true'] {
+    box-shadow: inset 0 0 0 2px var(--color-danger);
+}
+
+.formulario input:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* O estado vem antes da cidade (a lista de cidades depende dele) */
+.linhaForm .campoUf {
+    flex: 0 0 42%;
+}
+
+/* Força da senha: 4 tracinhos que enchem */
+.forca {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.78rem;
+    color: var(--color-text-soft);
+}
+
+.forcaBarra {
+    width: 96px;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.15);
+    display: block;
+}
+
+.forcaBarra span {
+    display: block;
+    height: 100%;
+    width: 0;
+    background: var(--color-danger);
+}
+
+.forca[data-nivel='1'] .forcaBarra span { width: 25%; background: var(--color-danger); }
+.forca[data-nivel='2'] .forcaBarra span { width: 50%; background: var(--color-accent); }
+.forca[data-nivel='3'] .forcaBarra span { width: 75%; background: var(--color-sucesso); }
+.forca[data-nivel='4'] .forcaBarra span { width: 100%; background: var(--color-sucesso); }
+
+@media (max-width: 560px) {
+    .linhaForm {
+        flex-direction: column;
+    }
+    .linhaForm .campoUf {
+        flex: 1;
+    }
+}
+
+/* Campo: rótulo, controle e aviso (o aviso fica fora do rótulo, para não entrar no nome do campo) */
+.campo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    min-width: 0;
+}
+
+.linhaForm .campo {
+    flex: 1;
+}
+
+/* O rótulo não estica dentro do campo (os controles lado a lado ficam alinhados) */
+.linhaForm .campo label {
+    flex: none;
+}
+
+/* "ContrateJá" na fonte mágica é largo: cabe na coluna lateral sem invadir o formulário */
+.painelLateral h1 span {
+    display: inline-block;
+    max-width: 100%;
+    font-size: min(3.4vw, 1em);
+}
+
+@media (max-width: 900px) {
+    .painelLateral h1 span {
+        font-size: min(9vw, 1em);
+    }
+}
+
+.convite {
+    padding: 0.8rem 1rem;
+    border: 2px dashed var(--color-accent);
+    color: var(--color-text-soft);
+    font-size: 0.9rem;
+    max-width: 380px;
 }

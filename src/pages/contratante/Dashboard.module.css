@@ -9,12 +9,12 @@
     padding: 0.7rem 1.3rem;
     font-weight: 700;
     font-size: 0.92rem;
-    box-shadow: 0 6px 18px rgba(255, 192, 20, 0.35);
+    box-shadow: var(--shadow-md);
 }
 
 .criar:hover {
     background: var(--color-accent-hover);
-    box-shadow: 0 8px 22px rgba(255, 192, 20, 0.45);
+    box-shadow: var(--shadow-md);
 }
 
 .criar svg {
