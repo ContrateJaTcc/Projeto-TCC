@@ -6,6 +6,7 @@ import QuadroPortfolio from '../../components/portfolio/quadroportfolio'
 import QuadroInsignias from '../../components/gamificacao/insignias'
 import ListaAvaliacoes from '../../components/gamificacao/listaavaliacoes'
 import Estrelas from '../../components/gamificacao/estrelas'
+import InsigniaBadge from '../../components/gamificacao/InsigniaBadge'
 import type { PerfilFreelancer } from '../../components/gamificacao/tipos'
 import secoes from '../../components/gamificacao/gamificacao.module.css'
 import type { ItemPortfolio } from '../../components/portfolio/quadroportfolio'
@@ -141,6 +142,7 @@ export default function PortfolioFreelancer() {
         </div>
 
         <div className={styles.lateral}>
+          {gamificacao?.free_id && <InsigniaBadge freeId={gamificacao.free_id} />}
           <span className={styles.nivel}>Nível {gamificacao?.resumo.nivel ?? perfil.free_nivel}</span>
           {gamificacao && gamificacao.resumo.totalAvaliacoes > 0 && (
             <span className={styles.notaMedia}>

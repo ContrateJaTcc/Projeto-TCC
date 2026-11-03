@@ -31,6 +31,7 @@ export interface Avaliacao {
 }
 
 export interface PerfilFreelancer {
+  free_id: number
   resumo: ResumoFreelancer
   insignias: Insignia[]
   avaliacoes: Avaliacao[]
