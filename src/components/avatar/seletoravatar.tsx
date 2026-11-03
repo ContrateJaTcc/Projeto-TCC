@@ -9,20 +9,13 @@ interface SeletorAvatarProps {
   onMudar: (foto: string | null) => void
 }
 
-/* Lado do quadrado final. 256 cobre com folga o maior avatar exibido no site
-   e mantem o arquivo pequeno o bastante para caber no banco. */
+/* Tamanho do avatar */
 const LADO = 256
 
-/* Arquivos acima disso nem chegam a ser lidos: nao faz sentido carregar 40 MB
-   na memoria do navegador para depois reduzir tudo a 256 pixels. */
+/* Limite do arquivo */
 const LIMITE_ARQUIVO = 10 * 1024 * 1024
 
-/*
- * Recorta o centro da imagem num quadrado e devolve um JPEG reduzido.
- *
- * O recorte central evita a distorcao que apareceria ao simplesmente esticar
- * uma foto retangular para um quadrado.
- */
+/* Recorte e redução */
 function reduzir(arquivo: File): Promise<string> {
   return new Promise((resolve, reject) => {
     const leitor = new FileReader()
@@ -47,8 +40,7 @@ function reduzir(arquivo: File): Promise<string> {
           return
         }
 
-        /* JPEG não tem transparência: sem este fundo, um PNG transparente
-           sairia com as áreas vazias pretas. */
+        /* Fundo branco */
         ctx.fillStyle = '#ffffff'
         ctx.fillRect(0, 0, LADO, LADO)
 
@@ -97,7 +89,7 @@ export default function SeletorAvatar({ nome, foto, onMudar }: SeletorAvatarProp
       setErro(problema instanceof Error ? problema.message : 'Não foi possível usar esta imagem.')
     } finally {
       setProcessando(false)
-      /* Limpar o input permite reescolher o mesmo arquivo depois de remover. */
+      /* Limpa input */
       if (inputRef.current) inputRef.current.value = ''
     }
   }

@@ -1,0 +1,319 @@
+/* Linha do tempo: Publicado → Contratado → Entregue → Concluído */
+.linha {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    margin: 0.1rem 0 0;
+    padding: 0;
+}
+
+.passo {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+    text-align: center;
+    color: var(--color-text-muted);
+}
+
+/* Trilho até a próxima etapa */
+.passo:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: calc(50% + 14px);
+    right: calc(-50% + 14px);
+    height: 3px;
+    background: repeating-linear-gradient(90deg, var(--color-borda-pixel) 0 6px, transparent 6px 10px);
+}
+
+.passoFeito:not(:last-child)::after {
+    background: var(--color-accent);
+}
+
+.marca {
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--color-borda-pixel);
+    border-radius: 4px;
+    background: var(--color-surface);
+    color: var(--color-tinta);
+}
+
+.passoFeito .marca {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+}
+
+.passoAtual .marca {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px var(--color-accent-tint);
+    animation: pulsarPasso 1.8s ease-in-out infinite;
+}
+
+.passoCancelado .marca {
+    background: var(--color-danger);
+    border-color: var(--color-danger);
+    color: #fff;
+}
+
+.rotuloPasso {
+    font-size: 0.76rem;
+    font-weight: 700;
+    color: var(--color-titulo);
+}
+
+.passo:not(.passoFeito):not(.passoAtual) .rotuloPasso {
+    color: var(--color-text-muted);
+    font-weight: 600;
+}
+
+.passoCancelado .rotuloPasso {
+    color: var(--color-danger);
+}
+
+.dataPasso {
+    font-size: 0.7rem;
+    min-height: 1em;
+}
+
+@keyframes pulsarPasso {
+    50% { box-shadow: 0 0 0 6px transparent; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .passoAtual .marca { animation: none; }
+}
+
+/* Etapas */
+/* Pagamento por etapa */
+.etapasPagamento {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.4rem;
+    font-size: 0.8rem;
+    line-height: 1.45;
+    color: var(--color-text-muted);
+}
+
+.etapasPagamento svg {
+    flex-shrink: 0;
+    margin-top: 0.15rem;
+    color: var(--color-ouro-texto);
+}
+
+.etapaPaga {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.1rem 0.45rem;
+    font-size: 0.72rem;
+    font-weight: 800;
+    color: var(--color-sucesso);
+    border: 2px solid currentColor;
+    white-space: nowrap;
+}
+
+.pagarEtapa {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.25rem 0.6rem;
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 800;
+    cursor: pointer;
+    white-space: nowrap;
+    background: var(--color-accent);
+    color: var(--color-tinta);
+    border: 2px solid var(--color-tinta);
+    box-shadow: 2px 2px 0 0 var(--color-tinta);
+}
+
+.pagarEtapa:hover {
+    background: var(--color-accent-hover);
+}
+
+.pagarEtapa:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.etapas {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    padding: 0.85rem 1rem;
+    background: var(--color-bg-alt);
+    border-radius: var(--radius-md);
+}
+
+.etapasTopo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.6rem;
+}
+
+.etapasTitulo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--color-titulo);
+}
+
+.etapasConta {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--color-ouro-texto);
+}
+
+.barra {
+    height: 10px;
+    background: var(--color-surface);
+    border: 2px solid var(--color-borda-pixel);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.barra span {
+    display: block;
+    height: 100%;
+    background: repeating-linear-gradient(90deg, var(--color-accent) 0 8px, var(--color-accent-hover) 8px 10px);
+    transition: width 0.4s ease;
+}
+
+.listaEtapas {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.listaEtapas li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.55rem;
+    font-size: 0.86rem;
+    color: var(--color-text);
+    min-height: 30px;
+}
+
+.caixa {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 2px solid var(--color-borda-pixel);
+    border-radius: 4px;
+    background: var(--color-surface);
+    color: var(--color-tinta);
+}
+
+button.caixa {
+    cursor: pointer;
+}
+
+button.caixa:hover:not(:disabled) {
+    border-color: var(--color-accent);
+}
+
+.etapaFeita .caixa {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+}
+
+.etapaFeita .nomeEtapa {
+    color: var(--color-text-muted);
+    text-decoration: line-through;
+    text-decoration-thickness: 2px;
+}
+
+.nomeEtapa {
+    flex: 1;
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.quandoEtapa {
+    font-size: 0.72rem;
+    color: var(--color-text-muted);
+}
+
+.removerEtapa {
+    display: inline-flex;
+    padding: 0.25rem;
+    border: none;
+    background: none;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.removerEtapa:hover {
+    color: var(--color-danger);
+}
+
+.novaEtapa {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.novaEtapa input {
+    flex: 1;
+    min-width: 0;
+    border: 2px solid var(--color-borda-pixel);
+    border-radius: var(--radius-sm);
+    padding: 0.45rem 0.7rem;
+    background: var(--color-campo, var(--color-surface));
+    color: var(--color-text);
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+}
+
+.novaEtapa input:focus {
+    outline: none;
+    border-color: var(--color-accent);
+}
+
+.novaEtapa button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    border: none;
+    border-radius: var(--radius-pill);
+    background: var(--color-primary);
+    color: #fff;
+    padding: 0.45rem 0.9rem;
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 0.82rem;
+    cursor: pointer;
+}
+
+.novaEtapa button:disabled {
+    opacity: 0.55;
+    cursor: default;
+}
+
+@media (max-width: 640px) {
+    .rotuloPasso {
+        font-size: 0.68rem;
+    }
+
+    .dataPasso {
+        font-size: 0.62rem;
+    }
+}

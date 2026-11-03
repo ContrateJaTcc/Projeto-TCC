@@ -1,0 +1,261 @@
+/* Acordo, pagamento, ajustes e disputa dentro do cartão do histórico */
+.painel {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    padding: 0.85rem 1rem;
+    background: var(--color-bg-alt);
+    border-left: 3px solid var(--color-accent);
+}
+
+.linhas {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+}
+
+.linhas li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    font-size: 0.84rem;
+    line-height: 1.45;
+    color: var(--color-text-soft);
+}
+
+.linhas li > svg {
+    flex-shrink: 0;
+    margin-top: 0.15rem;
+}
+
+.linhas li > span {
+    flex: 1;
+    min-width: 0;
+}
+
+.linhas strong {
+    color: var(--color-titulo);
+}
+
+.ok > svg {
+    color: var(--color-sucesso);
+}
+
+.pendente > svg {
+    color: var(--color-ouro-texto);
+}
+
+.aviso > svg {
+    color: var(--color-feitico);
+}
+
+.perigo {
+    color: var(--color-danger) !important;
+}
+
+.perigo strong {
+    color: var(--color-danger);
+}
+
+/* Etiqueta "simulação" ao lado do pagamento */
+.simulacao {
+    display: inline-block;
+    margin-left: 0.4rem;
+    padding: 0 0.4rem;
+    font-style: normal;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--color-tinta);
+    background: var(--color-accent);
+    vertical-align: 1px;
+}
+
+.link {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    color: var(--color-ouro-texto);
+    font-weight: 700;
+    font-size: 0.8rem;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    white-space: nowrap;
+}
+
+.link:hover {
+    color: var(--color-titulo);
+}
+
+.acoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.acoes:empty {
+    display: none;
+}
+
+.botao,
+.botaoOuro,
+.botaoDiscreto,
+.botaoPerigo {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    padding: 0.42rem 0.85rem;
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    border: 2px solid var(--color-borda-pixel);
+    background: var(--color-surface);
+    color: var(--color-titulo);
+}
+
+.botao:hover,
+.botaoDiscreto:hover {
+    border-color: var(--color-primary-light);
+    background: var(--color-surface-muted);
+}
+
+.botaoOuro {
+    background: var(--color-accent);
+    border-color: var(--color-tinta);
+    color: var(--color-tinta);
+    box-shadow: 2px 2px 0 0 var(--color-tinta);
+}
+
+.botaoOuro:hover {
+    background: var(--color-accent-hover);
+}
+
+.botaoDiscreto {
+    background: transparent;
+    color: var(--color-text-soft);
+}
+
+.botaoPerigo {
+    background: var(--color-danger);
+    border-color: var(--color-danger);
+    color: #fff;
+}
+
+:global(:root[data-theme='light']) .botaoPerigo {
+    color: #fff;
+}
+
+.botao:disabled,
+.botaoOuro:disabled,
+.botaoPerigo:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.feito {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.42rem 0.2rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--color-sucesso);
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    padding-top: 0.7rem;
+    border-top: 2px dashed var(--color-borda-pixel);
+    animation: entrar var(--dur-media) steps(4, end) both;
+}
+
+.form label {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--color-titulo);
+}
+
+.form input,
+.form textarea,
+.form select {
+    border: 2px solid var(--color-borda-pixel);
+    background: var(--color-campo);
+    color: var(--color-text);
+    padding: 0.5rem 0.7rem;
+    font-family: var(--font-sans);
+    font-size: 0.88rem;
+    outline: none;
+}
+
+.form textarea {
+    resize: vertical;
+}
+
+.form input:focus,
+.form textarea:focus,
+.form select:focus {
+    border-color: var(--color-feitico);
+}
+
+.linhaForm {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.linhaForm input {
+    flex: 1 1 140px;
+    min-width: 0;
+}
+
+.rodapeForm {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.contador {
+    margin-right: auto;
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+}
+
+.explica {
+    display: flex;
+    gap: 0.45rem;
+    font-size: 0.8rem;
+    line-height: 1.45;
+    color: var(--color-text-muted);
+}
+
+.explica svg {
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+    color: var(--color-ouro-texto);
+}
+
+@media (max-width: 640px) {
+    .linhas li {
+        flex-wrap: wrap;
+    }
+
+    .link {
+        margin-left: 1.5rem;
+    }
+
+    .acoes > * {
+        flex: 1 1 auto;
+    }
+}

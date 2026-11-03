@@ -1,0 +1,114 @@
+.moldura {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.topo {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 12px clamp(1rem, 3.5vw, 2.5rem);
+    background: var(--color-surface);
+    border-bottom: 2px solid var(--color-borda-pixel);
+    box-shadow: var(--shadow-sm);
+}
+
+:global(:root[data-theme='light']) .topo {
+    background: linear-gradient(100deg, #f8f6fc, #ece8f7 60%, #dcd6ef);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    text-decoration: none;
+}
+
+.logo img {
+    height: 36px;
+    width: auto;
+}
+
+.logo span {
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--color-titulo);
+    white-space: nowrap;
+}
+
+.acoes {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.link {
+    color: var(--color-titulo);
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-decoration: none;
+    padding: 0.4rem 0.6rem;
+}
+
+.link:hover {
+    color: var(--color-accent);
+}
+
+.tema {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-surface-muted);
+    color: var(--color-titulo);
+    border: 2px solid var(--color-borda-pixel);
+    box-shadow: 3px 3px 0 0 var(--color-borda-pixel);
+    cursor: pointer;
+}
+
+.tema:hover:not(:disabled) {
+    background: var(--color-accent);
+    color: var(--color-tinta);
+}
+
+.entrar {
+    background: var(--color-accent);
+    color: var(--color-tinta);
+    font-weight: 800;
+    font-size: 0.88rem;
+    text-decoration: none;
+    padding: 0.55rem 1rem;
+    border: 2px solid var(--color-tinta);
+    box-shadow: 3px 3px 0 0 var(--color-tinta);
+    white-space: nowrap;
+}
+
+.entrar:hover {
+    background: var(--color-accent-hover);
+}
+
+.conteudo {
+    flex: 1;
+}
+
+@media (max-width: 560px) {
+    .logo span {
+        display: none;
+    }
+
+    .acoes {
+        gap: 0.35rem;
+    }
+
+    .link {
+        padding: 0.4rem 0.35rem;
+        font-size: 0.84rem;
+    }
+}

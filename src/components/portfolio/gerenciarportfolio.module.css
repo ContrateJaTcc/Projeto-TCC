@@ -13,10 +13,10 @@
 }
 
 .topo h2 {
-    font-family: var(--font-display);
+    font-family: var(--font-titulo);
     font-weight: 700;
-    color: var(--color-primary);
-    font-size: 1.2rem;
+    color: var(--color-titulo);
+    font-size: 1.95rem;
 }
 
 .subtitulo {
@@ -53,9 +53,9 @@
 }
 
 .form {
-    background: #fff;
-    border: 1px solid var(--color-surface-muted);
-    border-radius: 18px;
+    background: var(--color-surface);
+    border: 2px solid var(--color-borda-pixel);
+    border-radius: var(--radius-lg);
     padding: 1.4rem 1.6rem;
     margin-bottom: 1.8rem;
     box-shadow: var(--shadow-sm);
@@ -73,7 +73,7 @@
 .formTopo strong {
     font-family: var(--font-display);
     font-weight: 700;
-    color: var(--color-primary);
+    color: var(--color-titulo);
 }
 
 .formTopo button {
@@ -91,7 +91,7 @@
     font-size: 0.85rem;
     font-weight: 600;
     color: var(--color-text);
-    /* Sem isso os dois campos lado a lado estouram a largura do form. */
+    /* Evita estouro */
     min-width: 0;
 }
 
@@ -106,7 +106,7 @@
     font-size: 0.9rem;
     font-weight: 400;
     color: var(--color-text);
-    border: 1px solid var(--color-border);
+    border: 2px solid var(--color-borda-pixel);
     border-radius: var(--radius-sm);
     padding: 0.6rem 0.8rem;
     background: var(--color-bg);
@@ -150,8 +150,8 @@
 }
 
 .cancelar {
-    background: #fff;
-    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    border: 2px solid var(--color-borda-pixel);
     color: var(--color-text);
 }
 
@@ -172,8 +172,8 @@
 
 .vazio {
     background: var(--color-bg-alt);
-    border: 1px dashed var(--color-border);
-    border-radius: 18px;
+    border: 2px dashed var(--color-borda-pixel);
+    border-radius: var(--radius-lg);
     padding: 2.5rem 1.5rem;
     text-align: center;
 }
@@ -182,7 +182,7 @@
     display: block;
     font-family: var(--font-display);
     font-weight: 700;
-    color: var(--color-primary);
+    color: var(--color-titulo);
     margin-bottom: 0.4rem;
 }
 
@@ -212,7 +212,7 @@
 
 .previaImagem span {
   font-size: 0.875rem;
-  color: #625b70;
+  color: var(--color-text-soft);
 }
 
 .previaImagem img {
@@ -221,6 +221,6 @@
   max-width: 320px;
   max-height: 220px;
   object-fit: contain;
-  border: 1px solid #e5dced;
-  border-radius: 10px;
+  border: 1px solid var(--color-borda-pixel);
+  border-radius: var(--radius-sm);
 }

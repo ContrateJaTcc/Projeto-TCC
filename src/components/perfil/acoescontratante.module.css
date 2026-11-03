@@ -1,0 +1,113 @@
+.caixa {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem 1.1rem;
+    background: var(--color-surface);
+    border: 2px solid var(--color-borda-pixel);
+    box-shadow: var(--shadow-sm);
+    min-width: 0;
+}
+
+.caixa h2 {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--color-titulo);
+}
+
+.dica {
+    font-size: 0.82rem;
+    color: var(--color-text-muted);
+}
+
+.caixa textarea,
+.form input,
+.form textarea {
+    width: 100%;
+    padding: 0.5rem 0.65rem;
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    color: var(--color-titulo);
+    background: var(--color-campo);
+    border: 2px solid var(--color-borda-pixel);
+    resize: vertical;
+    min-width: 0;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--color-titulo);
+    flex: 1;
+    min-width: 0;
+}
+
+.linha {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.botao,
+.botaoForte,
+.botaoPerigo {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.45rem 0.85rem;
+    font-family: var(--font-sans);
+    font-size: 0.84rem;
+    font-weight: 700;
+    color: var(--color-titulo);
+    background: var(--color-surface);
+    border: 2px solid var(--color-borda-pixel);
+    cursor: pointer;
+}
+
+.botaoForte {
+    color: var(--color-tinta);
+    background: var(--color-accent);
+    border-color: var(--color-tinta);
+}
+
+.botaoPerigo {
+    color: #fff;
+    background: var(--color-danger);
+    border-color: var(--color-tinta);
+}
+
+.botao:disabled,
+.botaoForte:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.atalhos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+}
+
+.confirmar {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--color-titulo);
+}

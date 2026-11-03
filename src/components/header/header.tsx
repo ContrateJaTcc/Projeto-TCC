@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Menu } from 'lucide-react'
 import logo from '../imgs/logo.png'
+import { useRole } from '../../context/useRole'
+import BotaoTema from '../botaotema/botaotema'
 import styles from './header.module.css'
 
 interface HeaderProps {
@@ -14,9 +16,9 @@ export default function Header({ perfil, setPerfil }: HeaderProps) {
   const [dropdownAberto, setDropdownAberto] = useState(false)
   const [rolou, setRolou] = useState(false)
   const navigate = useNavigate()
+  const { role } = useRole()
 
-  // Header fixo sem sombra "flutua" sobre o conteúdo sem separação visível.
-  // A sombra só aparece depois que a página rola.
+  // Sombra ao rolar
   useEffect(() => {
     const aoRolar = () => setRolou(window.scrollY > 8)
     aoRolar()
@@ -53,10 +55,18 @@ export default function Header({ perfil, setPerfil }: HeaderProps) {
         onMouseEnter={() => perfil === 'cont' && setDropdownAberto(true)}
         onMouseLeave={() => setDropdownAberto(false)}
       >
-        <button className={styles.btnEnt} onClick={() => navigate('/login')}>Entrar</button>
-        <button className={styles.btnCad} onClick={() => navigate('/cadastro')}>Cadastrar</button>
+        <BotaoTema className={styles.tema} />
+        {/* Logado */}
+        {role ? (
+          <button className={styles.btnCad} onClick={() => navigate(`/${role}`)}>Minha área</button>
+        ) : (
+          <>
+            <button className={styles.btnEnt} onClick={() => navigate('/login')}>Entrar</button>
+            <button className={styles.btnCad} onClick={() => navigate('/cadastro')}>Cadastrar</button>
+          </>
+        )}
 
-        {dropdownAberto && (
+        {!role && dropdownAberto && (
           <div className={styles.dropdown}>
             <Link to="/cadastro" onClick={() => setDropdownAberto(false)}>Postar projetos</Link>
             <Link to="/cadastro" onClick={() => setDropdownAberto(false)}>Contratar freelancers</Link>

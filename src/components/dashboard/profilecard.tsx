@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { ChevronRight, Star } from 'lucide-react'
 import Avatar from '../avatar/avatar'
 import { api } from '../../services/api'
+import { conferirNivel } from '../../utils/xp'
 import type { PerfilFreelancer } from '../gamificacao/tipos'
 import type { PerfilContratante } from '../gamificacao/painelcontratante'
 import styles from './profilecard.module.css'
@@ -11,16 +12,14 @@ interface Resumo {
   nome: string
   foto: string | null
   linha: string
-  /* 0 a 100; só o freelancer tem barra (XP até o próximo nível). */
+  /* Só o freelancer tem nível (vira a moldura do avatar) */
+  nivel?: number
+  /* Progresso */
   progresso: number | null
   rotuloProgresso?: string
 }
 
-/*
- * Cartão do canto do painel. Antes mostrava "Você" / "Usuário" e uma barra
- * de progresso com número fixo no código. Agora carrega o nome, a foto e,
- * para o freelancer, o progresso real até o próximo nível.
- */
+/* Cartão de perfil */
 export default function ProfileCard({ papel }: { papel: 'freelancer' | 'contratante' }) {
   const [resumo, setResumo] = useState<Resumo | null>(null)
   const [falhou, setFalhou] = useState(false)
@@ -30,17 +29,20 @@ export default function ProfileCard({ papel }: { papel: 'freelancer' | 'contrata
 
     async function carregar() {
       try {
-        const eu = await api<{ usu_nome: string; usu_foto: string | null }>('/usuarios/eu')
+        const eu = await api<{ usu_id: number; usu_nome: string; usu_foto: string | null }>('/usuarios/eu')
 
         if (papel === 'freelancer') {
           const { resumo: r } = await api<PerfilFreelancer>('/perfil/freelancer/eu')
           const faixa = r.xpProximoNivel - r.xpNivelAtual
 
           if (ativo) {
+            /* Subiu de nível desde a última visita: a tela de nível novo aparece com fogos no fundo */
+            conferirNivel(eu.usu_id, r.nivel)
             setResumo({
               nome: eu.usu_nome,
               foto: eu.usu_foto,
               linha: `Nível ${r.nivel} · ${r.xp} XP`,
+              nivel: r.nivel,
               progresso: faixa > 0 ? ((r.xp - r.xpNivelAtual) / faixa) * 100 : 100,
               rotuloProgresso: `${r.xpProximoNivel - r.xp} XP para o nível ${r.nivel + 1}`,
             })
@@ -61,8 +63,7 @@ export default function ProfileCard({ papel }: { papel: 'freelancer' | 'contrata
           }
         }
       } catch {
-        /* Antes, se esta carga falhasse, o esqueleto ficava piscando para
-           sempre. Agora o cartão some e o painel segue sem ele. */
+        /* Falha */
         if (ativo) setFalhou(true)
       }
     }
@@ -89,7 +90,7 @@ export default function ProfileCard({ papel }: { papel: 'freelancer' | 'contrata
 
   return (
     <Link to={`/${papel}/perfil`} className={`${styles.card} ${styles.carregado} elevavel`}>
-      <Avatar nome={resumo.nome} size={55} foto={resumo.foto} />
+      <Avatar nome={resumo.nome} size={55} foto={resumo.foto} nivel={resumo.nivel} />
       <div className={styles.texto}>
         <strong>{resumo.nome}</strong>
         <span>

@@ -1,12 +1,12 @@
 .card {
-    background: #fff;
-    border: 1px solid #ece6f3;
-    border-radius: 18px;
+    background: var(--color-surface);
+    border: 2px solid var(--color-borda-pixel);
+    border-radius: var(--radius-lg);
     padding: 1.4rem;
     display: flex;
     flex-direction: column;
     gap: 0.6rem;
-    box-shadow: 0 4px 14px rgba(50, 34, 88, 0.06);
+    box-shadow: var(--shadow-md);
     transition: transform 0.2s;
 }
 
@@ -26,26 +26,30 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #F4F1F8;
+    background: var(--color-bg-alt);
     border-radius: 50%;
-    color: var(--color-primary);
+    color: var(--color-titulo);
     flex-shrink: 0;
 }
 
 .categoria {
-    color: var(--color-accent-hover);
+    color: var(--color-ouro-texto);
     font-weight: 700;
     font-size: 0.8rem;
 }
 
 .card h3 {
-    font-family: var(--font-display);
-    color: #322258;
-    font-size: 1.1rem;
+    font-family: var(--font-titulo);
+    color: var(--color-titulo);
+    font-size: 1.79rem;
 }
 
 .card p {
-    color: #555;
+    color: var(--color-text-muted);
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
     font-size: 0.9rem;
     line-height: 1.35;
     flex: 1;
@@ -56,12 +60,12 @@
     flex-wrap: wrap;
     gap: 0.5rem;
     font-size: 0.8rem;
-    color: #6b6b6b;
+    color: var(--color-text-muted);
 }
 
 .infos span {
-    background: #F4F1F8;
-    border-radius: 999px;
+    background: var(--color-bg-alt);
+    border-radius: var(--radius-pill);
     padding: 0.25rem 0.7rem;
 }
 
@@ -69,23 +73,62 @@
     display: inline-flex;
     align-items: center;
     gap: 0.3rem;
-    color: var(--color-accent-hover);
+    color: var(--color-ouro-texto);
 }
 
 .botao {
     margin-top: 0.4rem;
-    background: #322258;
+    background: var(--color-primary);
     color: #fff;
     border: none;
-    border-radius: 999px;
+    border-radius: var(--radius-pill);
     padding: 0.6rem 1rem;
     font-weight: 600;
     cursor: pointer;
     transition: background 0.2s;
     font-family: var(--font-sans);
+    text-align: center;
+    text-decoration: none;
 }
 
 .botao:hover {
     background: var(--color-accent);
-    color: #1f1c34;
+    color: var(--color-tinta);
+}
+
+/* Publicado há pouco */
+.novo {
+    margin-left: auto;
+    padding: 0.15rem 0.55rem;
+    background: var(--color-accent);
+    color: var(--color-tinta);
+    border: 2px solid var(--color-tinta);
+    box-shadow: 2px 2px 0 0 var(--color-tinta);
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    animation: brilhoNovo 2.4s ease-in-out infinite;
+}
+
+@keyframes brilhoNovo {
+    50% { filter: brightness(1.18); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .novo { animation: none; }
+}
+
+/* Por que o projeto combina com o freelancer */
+.motivo {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.12rem 0.5rem;
+    font-size: 0.74rem;
+    font-weight: 700;
+    color: var(--color-feitico);
+    background: var(--color-surface);
+    border: 2px solid currentColor;
 }

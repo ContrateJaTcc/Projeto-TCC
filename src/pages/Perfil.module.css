@@ -4,10 +4,10 @@
 }
 
 .pagina h1 {
-    font-family: var(--font-display);
+    font-family: var(--font-titulo);
     font-weight: 700;
-    color: var(--color-primary);
-    font-size: 1.7rem;
+    color: var(--color-titulo);
+    font-size: 2.77rem;
     margin-bottom: 1.4rem;
 }
 
@@ -18,27 +18,27 @@
 }
 
 .aviso {
-    color: #1d7a4c;
+    color: var(--color-sucesso);
     font-size: 0.88rem;
     margin-bottom: 1rem;
 }
 
-/* ---------- cartao de visualizacao ---------- */
+/* Cartão */
 
 .cartao {
     display: flex;
     align-items: flex-start;
     gap: 1.3rem;
-    background: #fff;
-    border: 1px solid var(--color-surface-muted);
-    border-radius: 18px;
+    background: var(--color-surface);
+    border: 2px solid var(--color-borda-pixel);
+    border-radius: var(--radius-lg);
     padding: 1.6rem;
     box-shadow: var(--shadow-sm);
 }
 
 .dados {
     flex: 1;
-    /* Impede que uma bio longa empurre os botoes para fora do cartao. */
+    /* Evita estouro */
     min-width: 0;
 }
 
@@ -46,7 +46,7 @@
     display: block;
     font-family: var(--font-display);
     font-weight: 700;
-    color: var(--color-primary);
+    color: var(--color-titulo);
     font-size: 1.3rem;
     overflow-wrap: anywhere;
 }
@@ -93,9 +93,9 @@
     font-weight: 600;
     cursor: pointer;
     white-space: nowrap;
-    border: 1px solid var(--color-border);
-    background: #fff;
-    color: var(--color-primary);
+    border: 2px solid var(--color-borda-pixel);
+    background: var(--color-surface);
+    color: var(--color-titulo);
 }
 
 .editar {
@@ -114,7 +114,7 @@
     background: var(--color-bg-alt);
 }
 
-/* ---------- areas de atuacao ---------- */
+/* Áreas de atuação */
 
 .areas {
     display: flex;
@@ -124,7 +124,7 @@
 
 .area {
     background: var(--color-accent-tint);
-    color: var(--color-primary-dark);
+    color: var(--color-titulo);
     border-radius: var(--radius-pill);
     padding: 0.28rem 0.8rem;
     font-size: 0.78rem;
@@ -140,30 +140,30 @@
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
-    border: 1px solid var(--color-border);
+    border: 2px solid var(--color-borda-pixel);
     border-radius: var(--radius-pill);
     padding: 0.4rem 0.9rem;
     font-size: 0.82rem;
     font-weight: 600;
     color: var(--color-text);
     cursor: pointer;
-    background: #fff;
-    /* O chip inteiro e clicavel por ser um label do checkbox. */
+    background: var(--color-surface);
+    /* Chip */
     user-select: none;
 }
 
 .chipAtivo {
     background: var(--color-accent-tint);
     border-color: var(--color-accent);
-    color: var(--color-primary-dark);
+    color: var(--color-titulo);
 }
 
-/* ---------- formularios ---------- */
+/* Formulários */
 
 .form {
-    background: #fff;
-    border: 1px solid var(--color-surface-muted);
-    border-radius: 18px;
+    background: var(--color-surface);
+    border: 2px solid var(--color-borda-pixel);
+    border-radius: var(--radius-lg);
     padding: 1.5rem 1.6rem;
     margin-top: 1.2rem;
     box-shadow: var(--shadow-sm);
@@ -173,18 +173,12 @@
 }
 
 .tituloForm {
-    font-family: var(--font-display);
+    font-family: var(--font-titulo);
     font-weight: 700;
-    color: var(--color-primary);
+    color: var(--color-titulo);
 }
 
-/*
- * So os labels de campo do proprio formulario, nao qualquer um aninhado.
- *
- * Com ".form label" a regra alcancava tambem o botao "Escolher foto" dentro
- * do seletor de avatar e os chips de area de atuacao, empilhando icone e
- * texto em coluna — os dois sao labels, mas nenhum e campo de texto.
- */
+/* Labels */
 .form > label,
 .linha > label {
     display: flex;
@@ -193,7 +187,7 @@
     font-size: 0.85rem;
     font-weight: 600;
     color: var(--color-text);
-    /* Sem isto os campos lado a lado estouram a largura do formulario. */
+    /* Evita estouro */
     min-width: 0;
 }
 
@@ -206,7 +200,7 @@
     font-size: 0.9rem;
     font-weight: 400;
     color: var(--color-text);
-    border: 1px solid var(--color-border);
+    border: 2px solid var(--color-borda-pixel);
     border-radius: var(--radius-sm);
     padding: 0.6rem 0.8rem;
     background: var(--color-bg);
@@ -227,13 +221,13 @@
     gap: 0.9rem;
 }
 
-/* O formulario de senha tem dois campos, nao tres. */
+/* Senha */
 .linhaDupla {
     grid-template-columns: 1fr 1fr;
 }
 
 .uf select {
-    /* Sem isto o select de UF fica mais alto que os inputs vizinhos. */
+    /* Altura */
     height: 100%;
 }
 
@@ -252,7 +246,7 @@
     margin-bottom: 0.4rem;
 }
 
-/* O checkbox some: quem mostra o estado e o proprio chip. */
+/* Chip */
 .chip input {
     position: absolute;
     opacity: 0;
@@ -282,8 +276,8 @@
 }
 
 .cancelar {
-    background: #fff;
-    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    border: 2px solid var(--color-borda-pixel);
     color: var(--color-text);
 }
 
@@ -317,8 +311,37 @@
     }
 }
 
-/* Abrir "Editar perfil" ou "Alterar senha" desliza o formulário em vez de trocá-lo no seco. */
+/* Animação */
 .form,
 .cartao {
     animation: entrar var(--dur-lenta) var(--ease-out) both;
+}
+
+/* Perfil público do freelancer */
+.linkPublico {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3rem;
+    color: var(--color-text-muted);
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.linkPublico:hover {
+    color: var(--color-titulo);
+}
+
+/* "Esqueci minha senha" dentro da dica do campo */
+.form small {
+    font-size: 0.78rem;
+    color: var(--color-text-muted);
+}
+
+.form small a {
+    color: inherit;
+    font-weight: 700;
+    text-decoration: underline;
 }

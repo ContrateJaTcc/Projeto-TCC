@@ -1,0 +1,40 @@
+/* Coração dos favoritos: mesmo jeito do botão de salvar projeto */
+.favorito {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    min-width: 38px;
+    height: 38px;
+    border: 2px solid var(--color-borda-pixel);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface);
+    color: var(--color-text-muted);
+    font-family: var(--font-sans);
+    font-size: 0.84rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.comTexto {
+    padding: 0 0.8rem;
+}
+
+.favorito:hover {
+    color: var(--color-titulo);
+    border-color: var(--color-accent);
+    transform: translateY(-1px);
+}
+
+.ativo {
+    color: #fff;
+    background: #c4506d;
+    border-color: #8f2f47;
+}
+
+.ativo:hover {
+    color: #fff;
+    border-color: #8f2f47;
+}

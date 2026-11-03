@@ -6,12 +6,12 @@ interface EstrelasProps {
   tamanho?: number
 }
 
-/* Exibe a nota arredondada para a estrela inteira mais próxima. */
+/* Estrelas */
 export default function Estrelas({ nota, tamanho = 15 }: EstrelasProps) {
   const cheias = Math.round(nota)
 
   return (
-    <span className={styles.estrelas} aria-label={`Nota ${nota.toLocaleString('pt-BR')} de 5`}>
+    <span className={styles.estrelas} role="img" aria-label={`Nota ${nota.toLocaleString('pt-BR')} de 5`}>
       {[1, 2, 3, 4, 5].map((n) => (
         <Star
           key={n}

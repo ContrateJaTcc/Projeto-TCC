@@ -1,0 +1,198 @@
+/* Currículo: uma folha branca na tela; na impressão, só ela */
+.pagina {
+    width: min(92%, 820px);
+    margin: 2rem auto 3.5rem auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.barra {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.6rem;
+}
+
+.barra p {
+    color: var(--color-titulo);
+    font-weight: 700;
+}
+
+.imprimir {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.6rem 1.1rem;
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--color-tinta);
+    background: var(--color-accent);
+    border: 2px solid var(--color-tinta);
+    box-shadow: 3px 3px 0 0 var(--color-tinta);
+    cursor: pointer;
+}
+
+.folha {
+    display: flex;
+    flex-direction: column;
+    gap: 1.3rem;
+    padding: clamp(1.2rem, 5vw, 2.8rem);
+    background: #fff;
+    color: #1f2033;
+    border: 1px solid #d4cce8;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    font-family: var(--font-sans);
+    line-height: 1.5;
+}
+
+.cabecalho {
+    border-bottom: 3px solid #1b1b30;
+    padding-bottom: 0.9rem;
+}
+
+.cabecalho h1 {
+    font-family: var(--font-titulo);
+    font-size: clamp(2.4rem, 7vw, 3.2rem);
+    line-height: 1;
+    color: #1b1b30;
+}
+
+.cargo {
+    font-weight: 700;
+    color: #6a2fd6;
+}
+
+.contato {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem 1rem;
+    margin-top: 0.4rem;
+    font-size: 0.84rem;
+    color: #444663;
+    overflow-wrap: anywhere;
+}
+
+.contato span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.folha h2 {
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #6a2fd6;
+    margin-bottom: 0.4rem;
+}
+
+.numeros {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 0.6rem;
+    font-size: 0.85rem;
+}
+
+.numeros strong {
+    display: block;
+    font-size: 1.15rem;
+    color: #1b1b30;
+}
+
+.projetos {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.projetos li {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.2rem 0.8rem;
+    padding-bottom: 0.35rem;
+    border-bottom: 1px solid #ece8f5;
+    font-size: 0.88rem;
+}
+
+.projetos span {
+    color: #555470;
+}
+
+.nota {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
+    color: #8a5a00 !important;
+    font-weight: 700;
+}
+
+.etiquetas {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+}
+
+.etiquetas li {
+    padding: 0.15rem 0.55rem;
+    font-size: 0.8rem;
+    border: 1px solid #c9bfe3;
+    background: #f5f1fc;
+}
+
+.citacao {
+    margin: 0 0 0.6rem 0;
+    padding-left: 0.8rem;
+    border-left: 3px solid #ffc23d;
+    font-style: italic;
+    font-size: 0.9rem;
+}
+
+.citacao cite {
+    display: block;
+    font-style: normal;
+    font-size: 0.78rem;
+    color: #555470;
+}
+
+.rodape {
+    font-size: 0.72rem;
+    color: #6a6c85;
+    border-top: 1px solid #ece8f5;
+    padding-top: 0.6rem;
+}
+
+@media print {
+    :global(body):has(.folha) :global(header):not(.cabecalho),
+    :global(body):has(.folha) :global(footer):not(.rodape),
+    :global(body):has(.folha) [aria-hidden='true']:not(svg),
+    :global(body):has(.folha) [role='status'],
+    :global(body):has(.folha) button[aria-label='Ver só o fundo'],
+    .barra {
+        display: none !important;
+    }
+
+    :global(body):has(.folha) {
+        background: #fff !important;
+    }
+
+    .pagina {
+        width: 100%;
+        margin: 0;
+    }
+
+    .folha {
+        border: none;
+        box-shadow: none;
+        padding: 0;
+    }
+}

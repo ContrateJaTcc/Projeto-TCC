@@ -1,0 +1,46 @@
+.caixa {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    width: 100%;
+    max-width: 280px;
+}
+
+.lista {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.lista li {
+    display: grid;
+    grid-template-columns: 6.5rem 1fr 2rem;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.8rem;
+    color: var(--color-text);
+}
+
+.lista strong {
+    text-align: right;
+    color: var(--color-titulo);
+}
+
+.barra {
+    height: 8px;
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-borda-pixel);
+}
+
+.barra span {
+    display: block;
+    height: 100%;
+    background: var(--color-accent);
+}
+
+.caixa small {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+}

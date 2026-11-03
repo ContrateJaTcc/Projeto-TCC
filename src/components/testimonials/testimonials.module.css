@@ -5,9 +5,9 @@
 }
 
 .depoimentos > h2 {
-    font-family: var(--font-display);
-    font-size: clamp(1.5rem, 5vw, 3.8rem);
-    color: #322258;
+    font-family: var(--font-titulo);
+    font-size: clamp(2.44rem, 8.13vw, 6.17rem);
+    color: var(--color-titulo);
     margin-bottom: 2.5rem;
 }
 
@@ -18,8 +18,8 @@
 }
 
 .card {
-    background: #fff;
-    border: 1px solid #ece6f3;
+    background: var(--color-surface);
+    border: 2px solid var(--color-borda-pixel);
     border-radius: var(--radius-md);
     padding: 1.5rem;
     text-align: left;
@@ -30,7 +30,7 @@
 }
 
 .card strong {
-    color: #322258;
+    color: var(--color-titulo);
 }
 
 .area {
@@ -40,7 +40,7 @@
 }
 
 .card p {
-    color: #555;
+    color: var(--color-text-muted);
     font-size: 0.9rem;
     line-height: 1.4;
     margin-top: 0.4rem;
@@ -56,4 +56,66 @@
     .grid {
         grid-template-columns: 1fr;
     }
+}
+
+/* Avaliações de verdade */
+.resumo {
+    margin: -1.4rem auto 2rem;
+    color: var(--color-text-muted);
+}
+
+.resumo strong {
+    color: var(--color-ouro-texto);
+}
+
+.autor {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+}
+
+.autor > div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+}
+
+.area {
+    color: var(--color-ouro-texto);
+}
+
+.estrelas {
+    display: inline-flex;
+    gap: 2px;
+    margin-top: 0.4rem;
+    color: var(--color-ouro-texto);
+}
+
+.apagada {
+    opacity: 0.35;
+}
+
+.card p {
+    flex: 1;
+    color: var(--color-text-soft);
+}
+
+.sobre {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    margin-top: 0.4rem;
+}
+
+.esqueleto {
+    min-height: 220px;
+}
+
+/* O resumo fica sobre o cenário (inclusive em cima da lua, à noite): fundo próprio nos dois temas */
+.resumo {
+    width: fit-content;
+    max-width: 100%;
+    padding: 0.3em 0.8em;
+    background: var(--color-surface);
+    border: 2px solid var(--color-borda-pixel);
+    box-shadow: var(--shadow-sm);
 }

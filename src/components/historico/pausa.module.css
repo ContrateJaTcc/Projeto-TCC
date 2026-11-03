@@ -1,0 +1,110 @@
+.pausa {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6rem 0.8rem;
+    padding: 0.75rem 0.9rem;
+    border: 2px solid var(--color-accent);
+    background: var(--color-accent-tint);
+    color: var(--color-titulo);
+}
+
+.parado {
+    border-style: dashed;
+}
+
+.pausa > svg {
+    color: var(--color-ouro-texto);
+    flex-shrink: 0;
+}
+
+.pausa > div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    flex: 1 1 14rem;
+    min-width: 0;
+}
+
+.pausa span {
+    font-size: 0.84rem;
+    color: var(--color-text);
+}
+
+.pausa button,
+.form button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.45rem 0.85rem;
+    font-family: var(--font-sans);
+    font-size: 0.84rem;
+    font-weight: 700;
+    border: 2px solid var(--color-borda-pixel);
+    background: var(--color-surface);
+    color: var(--color-titulo);
+    cursor: pointer;
+}
+
+.pausa button:disabled,
+.form button:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.botoes {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+}
+
+.pedir {
+    display: flex;
+}
+
+.link {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0;
+    border: none;
+    background: none;
+    font-family: var(--font-sans);
+    font-size: 0.84rem;
+    font-weight: 700;
+    color: var(--color-titulo);
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.link span {
+    font-weight: 500;
+    color: var(--color-text-muted);
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+.form label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    font-size: 0.84rem;
+    font-weight: 700;
+    color: var(--color-titulo);
+}
+
+.form input {
+    padding: 0.5rem 0.65rem;
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    color: var(--color-titulo);
+    background: var(--color-campo);
+    border: 2px solid var(--color-borda-pixel);
+    min-width: 0;
+}

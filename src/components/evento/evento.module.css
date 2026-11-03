@@ -1,0 +1,133 @@
+/* Item escondido: flutua num canto da página, por cima do cenário */
+.item {
+    position: fixed;
+    z-index: 40;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    filter: drop-shadow(0 0 6px rgba(255, 196, 90, 0.7)) drop-shadow(2px 2px 0 rgba(0, 0, 0, 0.45));
+    animation: flutuarItem 2.4s steps(6, end) infinite;
+}
+
+.item:hover,
+.item:focus-visible {
+    filter: drop-shadow(0 0 10px rgba(255, 212, 94, 0.95)) drop-shadow(2px 2px 0 rgba(0, 0, 0, 0.45));
+}
+
+.item svg {
+    image-rendering: pixelated;
+}
+
+@keyframes flutuarItem {
+    0%, 100% { translate: 0 0; }
+    50% { translate: 0 -6px; }
+}
+
+:global([data-movimento='reduzido']) .item {
+    animation: none;
+}
+
+/* Faixa do evento no painel */
+.faixa {
+    width: min(94%, 1200px);
+    margin: 1.4rem auto 0;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    padding: 0.9rem 1.2rem;
+    background: linear-gradient(var(--color-accent-tint), var(--color-accent-tint)), var(--color-surface);
+    border: 2px solid var(--color-accent);
+    box-shadow: var(--shadow-sm);
+}
+
+.icone {
+    flex-shrink: 0;
+    width: 54px;
+    height: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-bg-alt);
+    border: 2px solid var(--color-borda-pixel);
+}
+
+.texto {
+    flex: 1 1 280px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.texto strong {
+    font-family: var(--font-titulo);
+    font-weight: 400;
+    font-size: 1.6rem;
+    line-height: 1.05;
+    color: var(--color-titulo);
+}
+
+.texto > span {
+    font-size: 0.86rem;
+    color: var(--color-text-soft);
+}
+
+.contas {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    margin-top: 0.2rem;
+}
+
+.contas > span {
+    display: flex;
+    opacity: 0.25;
+    filter: grayscale(1);
+}
+
+.contas > span.achado {
+    opacity: 1;
+    filter: none;
+}
+
+.contas b {
+    margin-left: 0.4rem;
+    font-size: 0.82rem;
+    color: var(--color-titulo);
+}
+
+.resgatar {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.5rem 1rem;
+    font-family: var(--font-sans);
+    font-weight: 800;
+    font-size: 0.85rem;
+    background: var(--color-accent);
+    color: var(--color-tinta);
+    border: 2px solid var(--color-tinta);
+    box-shadow: 3px 3px 0 0 var(--color-tinta);
+    cursor: pointer;
+}
+
+.resgatar:hover {
+    background: var(--color-accent-hover);
+}
+
+.feito {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-weight: 800;
+    font-size: 0.85rem;
+    color: var(--color-sucesso);
+}

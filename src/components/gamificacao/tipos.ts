@@ -1,4 +1,4 @@
-/* Formatos devolvidos por /perfil/* e /avaliacoes/*. */
+/* Tipos */
 
 export interface ResumoFreelancer {
   xp: number
@@ -32,6 +32,8 @@ export interface Avaliacao {
 
 export interface PerfilFreelancer {
   free_id: number
+  /* O que falta para o selo de verificado (só no próprio perfil) */
+  verificacao?: { verificado: boolean; criterios: { codigo: string; rotulo: string; ok: boolean }[] }
   resumo: ResumoFreelancer
   insignias: Insignia[]
   avaliacoes: Avaliacao[]
@@ -43,4 +45,6 @@ export interface AvaliacaoPendente {
   usu_id: number
   usu_nome: string
   usu_foto: string | null
+  /* A outra pessoa já avaliou você neste projeto (a nota fica às cegas até você avaliar) */
+  outro_ja_avaliou?: boolean
 }

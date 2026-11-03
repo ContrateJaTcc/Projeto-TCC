@@ -7,16 +7,23 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "contraste": "node scripts/conferir-contraste.cjs",
+    "test:e2e": "npm run build && playwright test"
   },
   "dependencies": {
+    "leaflet": "^1.9.4",
     "lucide-react": "^1.28.0",
+    "qrcode-generator": "^2.0.4",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
     "react-router-dom": "^7.11.0"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.11.0",
     "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.56.1",
+    "@types/leaflet": "^1.9.20",
     "@types/node": "^24.12.3",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",

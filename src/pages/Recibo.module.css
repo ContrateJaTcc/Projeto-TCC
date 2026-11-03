@@ -1,0 +1,98 @@
+/* Recibo: usa a folha de pergaminho do termo de acordo (Acordo.module.css) e só acrescenta a tabela */
+.partes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.8rem;
+    margin: 0;
+}
+
+.partes > div {
+    padding: 0.7rem 0.9rem;
+    border: 2px solid #d4cce8;
+    background: #ffffff;
+}
+
+.partes dt {
+    font-size: 0.72rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #555470;
+}
+
+.partes dd {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    font-family: var(--font-titulo);
+    font-size: 1.45rem;
+    line-height: 1.15;
+}
+
+.partes small {
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    color: #555470;
+}
+
+.datas {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.2rem;
+    margin: 0.4rem 0 0.2rem;
+    padding: 0;
+    font-size: 0.86rem;
+    color: #3a3a58;
+}
+
+.tabela {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+}
+
+.tabela th,
+.tabela td {
+    padding: 0.45rem 0.5rem;
+    border-bottom: 1px solid #d4cce8;
+    text-align: left;
+    vertical-align: top;
+}
+
+.tabela thead th {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #555470;
+    border-bottom: 2px solid #8b6d9c;
+}
+
+.tabela tfoot th,
+.tabela tfoot td {
+    font-weight: 800;
+    border-bottom: none;
+    border-top: 2px solid #8b6d9c;
+}
+
+.valor {
+    text-align: right !important;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+
+.tipo {
+    display: inline-block;
+    margin-right: 0.3rem;
+    padding: 0 0.35rem;
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: #5b349a;
+    border: 1px solid #b9a6c9;
+}
+
+@media (max-width: 640px) {
+    .partes {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,0 +1,43 @@
+.tabela {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+    color: var(--color-titulo);
+}
+
+.tabela th,
+.tabela td {
+    padding: 0.5rem 0.4rem;
+    border-bottom: 2px dashed var(--color-borda-pixel);
+    text-align: center;
+}
+
+.tabela thead th {
+    font-size: 0.78rem;
+    font-weight: 800;
+    color: var(--color-text-muted);
+    white-space: nowrap;
+}
+
+.tabela thead th svg {
+    vertical-align: -2px;
+}
+
+.tabela tbody th {
+    text-align: left;
+    font-weight: 700;
+}
+
+.tabela tbody th small {
+    display: block;
+    font-weight: 500;
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+}
+
+.tabela input {
+    width: 22px;
+    height: 22px;
+    accent-color: var(--color-feitico);
+    cursor: pointer;
+}

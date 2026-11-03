@@ -5,11 +5,24 @@ import { useRole } from '../context/useRole'
 import type { Role } from '../context/role-context-def'
 import { api, ErroApi, salvarSessao } from '../services/api'
 import { pedirTokenGoogle } from '../services/google'
+
+import CampoSenha from '../components/camposenha/camposenha'
+import { caminhoInicial } from '../utils/preferencias'
+import { comecarDemo } from '../services/demo'
+import { t, useIdioma } from '../utils/idioma'
+import ConfirmarEmail, { type PedidoConfirmacao } from '../components/cadastro/confirmaremail'
 import styles from '../components/login/login.module.css'
 
 interface RespostaLogin {
   token: string
   tipo?: Role
+}
+
+/* Supremo ou verificação em 2 etapas: a senha foi aceita, mas falta o código que chegou por e-mail */
+interface PedidoCodigo {
+  codigoNecessario: true
+  desafio: string
+  email: string
 }
 
 interface RespostaGoogle extends Partial<RespostaLogin> {
@@ -20,10 +33,12 @@ interface RespostaGoogle extends Partial<RespostaLogin> {
 export default function Login() {
   const navigate = useNavigate()
   const { setRole } = useRole()
+  useIdioma()
 
-  /* Vindo do cadastro ou da redefinição de senha: mostra a confirmação e já preenche o e-mail. */
+  /* Confirmação */
   const location = useLocation()
-  const vindoDe = location.state as { cadastrado?: boolean; senhaRedefinida?: boolean; email?: string } | null
+  /* destino: para onde voltar depois de entrar (ex.: a busca feita na home) */
+  const vindoDe = location.state as { cadastrado?: boolean; senhaRedefinida?: boolean; email?: string; destino?: string } | null
   const aviso = vindoDe?.cadastrado
     ? 'Conta criada com sucesso! Entre com seu e-mail e senha.'
     : vindoDe?.senhaRedefinida
@@ -34,11 +49,14 @@ export default function Login() {
   const [senha, setSenha] = useState('')
   const [erro, setErro] = useState('')
   const [carregando, setCarregando] = useState(false)
+  /* Manter conectado: a sessão dura 30 dias em vez de 1 hora */
+  const [lembrar, setLembrar] = useState(false)
+  const [pedido, setPedido] = useState<PedidoCodigo | null>(null)
+  const [codigo, setCodigo] = useState('')
+  /* E-mail ainda não confirmado: o servidor mandou um código */
+  const [confirmacao, setConfirmacao] = useState<PedidoConfirmacao | null>(null)
 
-  /*
-   * O destino vem do tipo que o servidor le do banco, nao do botao acima:
-   * antes um contratante que clicasse em "Freelancer" entrava na area errada.
-   */
+  /* Entrar */
   const entrar = (dados: RespostaLogin) => {
     const tipoReal = salvarSessao(dados.token, dados.tipo)
 
@@ -48,8 +66,15 @@ export default function Login() {
     }
 
     setRole(tipoReal)
-    navigate(`/${tipoReal}`)
+    /* Só volta para o destino se ele for da área da própria conta */
+    const destino = vindoDe?.destino
+    /* Sem destino: a página inicial escolhida nas Configurações */
+    navigate(destino?.startsWith(`/${tipoReal}`) ? destino : caminhoInicial(tipoReal))
   }
+
+  /* Modo demonstração: entra com dados de exemplo, sem servidor (só freelancer ou contratante: admin não se escolhe) */
+  /* (A página de login já é um pacote à parte: importar a demonstração aqui não pesa o resto do site) */
+  const entrarNaDemo = (papel: Role) => entrar({ token: comecarDemo(papel), tipo: papel })
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -58,11 +83,28 @@ export default function Login() {
     setCarregando(true)
 
     try {
-      const dados = await api<RespostaLogin>('/auth/login', {
+      /* Segundo passo do supremo: confere o código */
+      if (pedido) {
+        entrar(await api<RespostaLogin>('/auth/codigo', { metodo: 'POST', corpo: { desafio: pedido.desafio, codigo }, publico: true }))
+        return
+      }
+
+      const dados = await api<RespostaLogin | PedidoCodigo | PedidoConfirmacao>('/auth/login', {
         metodo: 'POST',
-        corpo: { email, senha },
+        corpo: { email: email.trim(), senha, lembrar },
         publico: true,
       })
+
+      if ('confirmarEmail' in dados) {
+        setConfirmacao(dados)
+        return
+      }
+
+      if ('codigoNecessario' in dados) {
+        setPedido(dados)
+        setCodigo('')
+        return
+      }
 
       entrar(dados)
     } catch (e) {
@@ -81,7 +123,7 @@ export default function Login() {
 
       const dados = await api<RespostaGoogle>('/auth/google', {
         metodo: 'POST',
-        corpo: { accessToken },
+        corpo: { accessToken, lembrar },
         publico: true,
       })
 
@@ -90,8 +132,7 @@ export default function Login() {
         return
       }
 
-      /* Conta Google sem cadastro: completa os dados que o Google não dá
-         (CPF, telefone...) na tela de cadastro, já preenchida. */
+      /* Google sem cadastro */
       if (dados.cadastroNecessario && dados.google) {
         navigate('/cadastro', {
   state: { google: { token: accessToken, ...dados.google } },
@@ -106,6 +147,16 @@ export default function Login() {
     }
   }
 
+  if (confirmacao) {
+    return (
+      <div className={styles.pagina}>
+        <div className={styles.cartao}>
+          <ConfirmarEmail pedido={confirmacao} aoConfirmar={(d) => entrar({ token: d.token, tipo: d.tipo })} aoVoltar={() => setConfirmacao(null)} />
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className={styles.pagina}>
       <form className={styles.cartao} onSubmit={handleSubmit}>
@@ -114,7 +165,7 @@ export default function Login() {
         </Link>
 
         <h1>
-          Bem-vindo de volta ao <span>ContrateJá</span>
+          {t('Bem-vindo de volta ao')} <span>ContrateJá</span>
         </h1>
 
         <button
@@ -123,16 +174,42 @@ export default function Login() {
           onClick={handleGoogle}
           disabled={carregando}
         >
-          Continuar com Google
+          {t('Continuar com Google')}
         </button>
 
         <div className={styles.divisor}>
-          <span>ou entre com e-mail</span>
+          <span>{t('ou entre com e-mail')}</span>
         </div>
 
+        {pedido ? (
+          /* Segundo passo do supremo: o código que chegou por e-mail */
+          <div className={styles.formulario}>
+            <p className={styles.textoCodigo}>
+              Enviamos um código de 6 números para <strong>{pedido.email}</strong>. Ele vale por 10 minutos.
+            </p>
+            <label>
+              Código
+              <input
+                required
+                autoFocus
+                inputMode="numeric"
+                autoComplete="one-time-code"
+                pattern="[0-9]{6}"
+                maxLength={6}
+                placeholder="000000"
+                className={styles.campoCodigo}
+                value={codigo}
+                onChange={(e) => setCodigo(e.target.value.replace(/\D/g, ''))}
+              />
+            </label>
+            <button type="button" className={styles.linkEsqueci} onClick={() => setPedido(null)}>
+              Voltar e entrar de novo
+            </button>
+          </div>
+        ) : (
         <div className={styles.formulario}>
           <label>
-            E-mail
+            {t('E-mail')}
             <input
               type="email"
               required
@@ -143,21 +220,27 @@ export default function Login() {
           </label>
 
           <label>
-            Senha
-            <input
-            type="password"
-            required
-            minLength={5}
-            placeholder="Sua senha"
-            value={senha}
-            onChange={(e) => setSenha(e.target.value)}
-           />
+            {t('Senha')}
+            <CampoSenha
+              required
+              placeholder={t('Sua senha')}
+              autoComplete="current-password"
+              value={senha}
+              onChange={(e) => setSenha(e.target.value)}
+            />
           </label>
 
-          <Link to="/esqueci-senha" state={{ email }} className={styles.linkEsqueci}>
-            Esqueci minha senha
-          </Link>
+          <div className={styles.linhaOpcoes}>
+            <label className={styles.lembrar}>
+              <input type="checkbox" checked={lembrar} onChange={(e) => setLembrar(e.target.checked)} />
+              {t('Manter conectado')}
+            </label>
+            <Link to="/esqueci-senha" state={{ email }} className={styles.linkEsqueci}>
+              {t('Esqueci minha senha')}
+            </Link>
+          </div>
         </div>
+        )}
 
         {aviso && !erro && (
           <p className="msg-ok">
@@ -176,12 +259,24 @@ export default function Login() {
           className={styles.btnPrimario}
           disabled={carregando}
         >
-          {carregando ? 'Entrando...' : 'Entrar'}
+          {carregando ? t('Entrando...') : pedido ? 'Confirmar código' : t('Entrar')}
         </button>
 
         <p className={styles.linkCadastro}>
-          Ainda não tem conta? <Link to="/cadastro">Cadastre-se</Link>
+          {t('Ainda não tem conta?')} <Link to="/cadastro">{t('Cadastre-se')}</Link>
         </p>
+
+        <div className={styles.divisor}>
+          <span>{t('ou experimente sem conta')}</span>
+        </div>
+
+        <div className={styles.demo}>
+          <p>{t('Modo demonstração: o site inteiro com dados de exemplo, sem precisar de internet nem de servidor.')}</p>
+          <div className={styles.demoBotoes}>
+            <button type="button" onClick={() => entrarNaDemo('freelancer')}>{t('Freelancer')}</button>
+            <button type="button" onClick={() => entrarNaDemo('contratante')}>{t('Contratante')}</button>
+          </div>
+        </div>
       </form>
     </div>
   )

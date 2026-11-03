@@ -4,43 +4,94 @@
 }
 
 html {
+    color-scheme: dark;
+    min-height: 100%;
+    background-color: var(--color-bg);
+    background-image: var(--gradient-pagina);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
     scroll-behavior: smooth;
-    /* Na raiz, e não só no body, para nada cair no serifado padrão do browser. */
+    /* Fonte base */
     font-family: var(--font-sans);
+    -webkit-text-size-adjust: 100%;
 }
 
+:root[data-theme='light']:has([data-area='privada'], [data-area='home']) {
+    color-scheme: light;
+}
+
+/* Animações desligadas nas configurações */
+:root[data-movimento='reduzido'] {
+    scroll-behavior: auto;
+}
+
+/* O portal de transição fica de fora quando a pessoa liga ele de propósito (data-movimento-livre) */
+:root[data-movimento='reduzido'] :not([data-movimento-livre], [data-movimento-livre] *),
+:root[data-movimento='reduzido'] :not([data-movimento-livre] *)::before,
+:root[data-movimento='reduzido'] :not([data-movimento-livre] *)::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+}
+
+/* Céu noturno: clareia ao descer */
 body {
-    background-color: var(--color-bg);
+    min-height: 100vh;
+    background: transparent;
     color: var(--color-text);
     font-family: var(--font-sans);
     font-weight: 400;
     line-height: 1.55;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
 }
 
-/* Sem a serifada para contrastar, o peso é o que separa título de texto.
-   Inter em corpo grande também pede tracking mais fechado. */
+/* Títulos em pixel */
 h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-display);
-    font-weight: 700;
+    font-family: var(--font-titulo);
+    font-weight: 400;
+    /* Fonte pixel: sem negrito falso */
+    font-synthesis: none;
     line-height: 1.15;
-    letter-spacing: -0.022em;
+    letter-spacing: 0;
 }
 
 h1, h2 {
-    font-weight: 800;
+    font-weight: 400;
+    text-shadow: 3px 3px 0 var(--color-sombra-titulo);
 }
 
-/* Sem isso os controles de formulário caem na fonte padrão do sistema
-   e destoam do resto da interface. */
+/*
+ * Plaquinha atrás de texto que fica direto sobre o cenário (títulos, subtítulos, datas).
+ * Só no tema claro: o pôr do sol mistura céu rosa e castelo escuro e o texto some; à noite ele já lê bem.
+ */
+:root[data-theme='light'] .placa {
+    width: fit-content;
+    max-width: 100%;
+    padding: 0.2em 0.6em;
+    background: var(--color-surface);
+    border: 2px solid var(--color-borda-pixel);
+    box-shadow: var(--shadow-sm);
+}
+
+/* A Pixelify troca "fi" por um glifo quebrado ("perAl") */
+:root {
+    font-variant-ligatures: no-common-ligatures;
+    /* Fontes pixel sem negrito falso */
+    font-synthesis: none;
+}
+
+/* Formulários */
 button, input, textarea, select {
     font-family: inherit;
     font-size: inherit;
 }
 
 button {
+    font-family: var(--font-display);
     font-weight: 600;
+    letter-spacing: 0.02em;
 }
 
 img {
@@ -51,29 +102,23 @@ a {
     text-decoration: none;
 }
 
+/* Foco pixelado */
 :focus-visible {
-    outline: 3px solid var(--color-primary-light);
-    outline-offset: 2px;
-    border-radius: 4px;
+    outline: 3px dashed var(--color-accent);
+    outline-offset: 3px;
 }
 
-@media (prefers-reduced-motion: reduce) {
-    html {
-        scroll-behavior: auto;
-    }
-    *, *::before, *::after {
-        animation-duration: 0.01ms !important;
-        transition-duration: 0.01ms !important;
-    }
-}
-
-/* ================= movimento e resposta ao toque =================
- *
- * Antes quase metade dos CSS nao tinha nenhuma transition: hover e troca de
- * estado aconteciam "no seco", o que dava a sensacao de site duro. Estas
- * regras dao uma resposta suave a todo elemento clicavel de uma vez.
+/*
+ * O "reduzir movimento" do sistema não entra direto aqui: ele vira o padrão da opção Animações
+ * (utils/preferencias.ts), que marca data-movimento na raiz. Assim quem ligar as animações no site vê tudo se mexer.
  */
+:root[data-movimento='reduzido']::view-transition-group(*),
+:root[data-movimento='reduzido']::view-transition-old(*),
+:root[data-movimento='reduzido']::view-transition-new(*) {
+    animation: none !important;
+}
 
+/* Transições */
 a,
 button,
 input,
@@ -84,15 +129,15 @@ textarea,
         background-color var(--dur-media) var(--ease-out),
         color var(--dur-media) var(--ease-out),
         border-color var(--dur-media) var(--ease-out),
-        box-shadow var(--dur-media) var(--ease-out),
+        box-shadow var(--dur-rapida) var(--ease-out),
         transform var(--dur-rapida) var(--ease-out),
         opacity var(--dur-media) var(--ease-out);
 }
 
-/* "Afunda" levemente ao clicar: o retorno fisico que faltava nos botoes. */
+/* Clique: botão afunda */
 button:not(:disabled):active,
 a[class]:active {
-    transform: scale(0.97);
+    transform: translate(2px, 2px);
 }
 
 button:disabled {
@@ -102,14 +147,14 @@ button:disabled {
 input:focus,
 select:focus,
 textarea:focus {
-    box-shadow: 0 0 0 4px rgba(111, 63, 168, 0.14);
+    box-shadow: 3px 3px 0 0 var(--color-feitico);
 }
 
-/* Entrada de pagina e de conteudo carregado. */
+/* Animações */
 @keyframes entrar {
     from {
         opacity: 0;
-        transform: translateY(10px);
+        transform: translateY(8px);
     }
     to {
         opacity: 1;
@@ -131,22 +176,14 @@ textarea:focus {
     to { transform: rotate(360deg); }
 }
 
-/*
- * fill-mode "backwards", e não "both": com "both" a animação fica ativa para
- * sempre, o que transforma o elemento em contêiner de tudo que é position:fixed
- * dentro dele (o fundo do chat parava no cabeçalho) e bloqueia o transform do
- * hover (.elevavel não levantava).
- */
+/* Entrada em passos */
 .entrada {
-    animation: entrar var(--dur-lenta) var(--ease-out) backwards;
+    animation: entrar var(--dur-lenta) steps(6, end) backwards;
 }
 
-/*
- * Listas entram em cascata: cada item espera um pouco mais que o anterior.
- * Limitado a 8 itens para listas longas nao demorarem a aparecer.
- */
+/* Cascata */
 .cascata > * {
-    animation: entrar var(--dur-lenta) var(--ease-out) backwards;
+    animation: entrar var(--dur-lenta) steps(6, end) backwards;
 }
 .cascata > *:nth-child(2) { animation-delay: 40ms; }
 .cascata > *:nth-child(3) { animation-delay: 80ms; }
@@ -156,66 +193,189 @@ textarea:focus {
 .cascata > *:nth-child(7) { animation-delay: 240ms; }
 .cascata > *:nth-child(n + 8) { animation-delay: 280ms; }
 
-/* Cartao que "levanta" no hover. */
+/* Elevação pixel */
 .elevavel {
     transition:
-        transform var(--dur-media) var(--ease-out),
-        box-shadow var(--dur-media) var(--ease-out),
+        transform var(--dur-rapida) var(--ease-out),
+        box-shadow var(--dur-rapida) var(--ease-out),
         border-color var(--dur-media) var(--ease-out);
 }
 
 .elevavel:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-md);
-    border-color: var(--color-border);
+    transform: translate(-3px, -3px);
+    box-shadow: 7px 7px 0 0 var(--color-feitico);
+    border-color: var(--color-borda-pixel);
 }
 
-/* Bloco de carregamento (skeleton) com brilho passando. */
+/*
+ * Skeleton: um brilho em faixas duras de pixel (com fiapos dos dois lados, como pontilhado)
+ * passando em passos pelo bloco
+ */
 .skeleton {
+    --brilho-esqueleto: color-mix(in srgb, var(--color-surface-muted), var(--color-feitico) 22%);
     background: linear-gradient(
         90deg,
-        var(--color-surface-muted) 25%,
-        #f7f3fb 50%,
-        var(--color-surface-muted) 75%
+        var(--color-surface-muted) 0 40%,
+        var(--brilho-esqueleto) 40% 42%,
+        var(--color-surface-muted) 42% 44%,
+        var(--brilho-esqueleto) 44% 56%,
+        var(--color-surface-muted) 56% 58%,
+        var(--brilho-esqueleto) 58% 60%,
+        var(--color-surface-muted) 60%
     );
-    background-size: 200% 100%;
-    animation: brilho 1.3s linear infinite;
-    border-radius: 10px;
+    background-size: 250% 100%;
+    animation: brilho 1.4s steps(14, end) infinite;
 }
 
-/* Spinner pequeno para botoes em andamento: <span class="spinner" />. */
+/* Spinner em passos */
 .spinner {
     display: inline-block;
     width: 1em;
     height: 1em;
-    border: 2px solid currentColor;
+    border: 3px solid var(--color-accent);
     border-right-color: transparent;
-    border-radius: 50%;
-    animation: girar 0.7s linear infinite;
+    animation: girar 0.8s steps(8, end) infinite;
     vertical-align: -0.15em;
 }
 
-/* Mensagens junto ao formulário. Antes eram <p style={{ color: 'red' }}>:
-   texto vermelho puro, sem fundo, que surgia de repente e empurrava o layout. */
+/* Mensagens */
 .msg-erro,
 .msg-ok {
     display: block;
-    border-radius: 12px;
     padding: 0.7rem 0.95rem;
     font-size: 0.86rem;
     font-weight: 500;
     line-height: 1.45;
-    animation: entrar var(--dur-media) var(--ease-out) both;
+    border: 2px solid;
+    box-shadow: var(--shadow-sm);
+    animation: entrar var(--dur-media) steps(4, end) both;
 }
 
 .msg-erro {
-    background: #fdecea;
-    color: #9b2c22;
-    border: 1px solid #f5c2bc;
+    background: var(--color-perigo-tint);
+    color: var(--color-danger);
+    border-color: var(--color-danger);
 }
 
 .msg-ok {
-    background: #e3f5ec;
-    color: #1d6b42;
-    border: 1px solid #a8dcb8;
+    background: var(--color-sucesso-tint);
+    color: var(--color-sucesso);
+    border-color: var(--color-sucesso);
+}
+
+::selection {
+    background: var(--color-accent);
+    color: var(--color-primary-dark);
+}
+
+/* Scrollbar pixel */
+html {
+    scrollbar-color: var(--color-feitico) var(--color-bg-alt);
+}
+
+::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--color-bg-alt);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--color-feitico);
+    border: 3px solid var(--color-bg-alt);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--color-accent);
+}
+
+/* Título com ornamento */
+.titulo-magico::after {
+    content: '';
+    display: block;
+    width: 160px;
+    height: 16px;
+    margin: 0.85rem auto 0;
+    background: var(--ornamento) center / contain no-repeat;
+    image-rendering: pixelated;
+}
+
+.titulo-magico.esquerda::after {
+    margin-left: 0;
+}
+
+/* Brilho */
+@keyframes cintilar {
+    0%, 100% { opacity: 0.3; transform: scale(0.75); }
+    50% { opacity: 1; transform: scale(1.1); }
+}
+
+@keyframes flutuar {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+/* Faísca pixel */
+.faisca {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    background: var(--color-accent);
+    clip-path: polygon(33% 0, 67% 0, 67% 33%, 100% 33%, 100% 67%, 67% 67%, 67% 100%, 33% 100%, 33% 67%, 0 67%, 0 33%, 33% 33%);
+    animation: cintilar 2.4s steps(4, end) infinite;
+    pointer-events: none;
+}
+
+.faisca.lilas {
+    background: #c49bff;
+}
+
+/* Etiqueta pixel */
+.pixel-tag {
+    font-family: var(--font-magica);
+    font-size: 0.55rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+/* Transição de página */
+@keyframes vt-sair {
+    to { opacity: 0; transform: translateY(-6px); }
+}
+
+@keyframes vt-entrar {
+    from { opacity: 0; transform: translateY(8px); }
+}
+
+::view-transition-old(root) {
+    animation: vt-sair 0.16s steps(4, end) both;
+}
+
+::view-transition-new(root) {
+    animation: vt-entrar 0.24s steps(5, end) both;
+}
+
+/* Títulos centralizados com plaquinha (home no pôr do sol): a placa também fica no centro */
+:root[data-theme='light'] .titulo-magico.placa:not(.esquerda) {
+    margin-inline: auto;
+}
+
+/* Nos títulos grandes a plaquinha fica mais justa (o respiro em "em" crescia junto com a letra) */
+:root[data-theme='light'] .titulo-magico.placa {
+    padding: 0.1em 0.4em 0.25em;
+}
+
+/* Texto só para leitores de tela */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
 }

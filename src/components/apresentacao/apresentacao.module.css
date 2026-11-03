@@ -1,0 +1,121 @@
+/* Painel do roteiro: canto de baixo, por cima do site, sem cobrir o meio da tela */
+.painel {
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    z-index: 150;
+    width: min(360px, calc(100vw - 32px));
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.9rem 1rem 1rem;
+    background: var(--color-surface);
+    border: 3px solid var(--color-accent);
+    box-shadow: 5px 5px 0 0 var(--color-sombra-pixel);
+    color: var(--color-text);
+    animation: entrar var(--dur-media) steps(4, end) both;
+}
+
+.topo {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.selo {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.72rem;
+    font-weight: 800;
+    color: var(--color-ouro-texto);
+}
+
+.icone {
+    display: grid;
+    place-items: center;
+    padding: 0.2rem;
+    background: none;
+    border: none;
+    color: var(--color-text-muted);
+    cursor: pointer;
+}
+
+.painel h2 {
+    font-family: var(--font-titulo);
+    font-size: 1.7rem;
+    line-height: 1;
+    color: var(--color-titulo);
+    text-shadow: none;
+}
+
+.painel p {
+    font-size: 0.86rem;
+    line-height: 1.5;
+    color: var(--color-text-soft);
+}
+
+.barra {
+    height: 6px;
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border);
+}
+
+.barra span {
+    display: block;
+    height: 100%;
+    background: var(--color-accent);
+}
+
+.acoes {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+.botao,
+.botaoOuro {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.45rem 0.85rem;
+    font-family: var(--font-sans);
+    font-weight: 800;
+    font-size: 0.82rem;
+    cursor: pointer;
+    border: 2px solid var(--color-borda-pixel);
+    background: var(--color-surface);
+    color: var(--color-titulo);
+}
+
+.botao:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+.botaoOuro {
+    background: var(--color-accent);
+    color: var(--color-tinta);
+    border-color: var(--color-tinta);
+    box-shadow: 2px 2px 0 0 var(--color-tinta);
+}
+
+.minimo {
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    z-index: 150;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 0.8rem;
+    font-family: var(--font-sans);
+    font-weight: 800;
+    font-size: 0.82rem;
+    background: var(--color-accent);
+    color: var(--color-tinta);
+    border: 2px solid var(--color-tinta);
+    box-shadow: 3px 3px 0 0 var(--color-tinta);
+    cursor: pointer;
+}

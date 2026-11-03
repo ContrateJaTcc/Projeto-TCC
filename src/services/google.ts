@@ -1,11 +1,4 @@
-/*
- * Login com Google via Google Identity Services (fluxo "token client").
- *
- * Usamos este fluxo, e nao o botao pronto do Google, para manter o botao
- * "Continuar com Google" com o visual do site. O frontend so obtem o access
- * token; quem decide se ele vale e o backend (rota /auth/google), que confere
- * com o Google se o token foi emitido para este Client ID.
- */
+/* Login Google */
 const CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID as string | undefined
 const SCRIPT_URL = 'https://accounts.google.com/gsi/client'
 
@@ -56,7 +49,7 @@ function carregarScript(): Promise<void> {
   return carregandoScript
 }
 
-/* Abre o popup do Google e resolve com o access token. */
+/* Popup Google */
 export async function pedirTokenGoogle(): Promise<string> {
   if (!CLIENT_ID) {
     throw new Error('Login com Google não configurado (falta VITE_GOOGLE_CLIENT_ID).')

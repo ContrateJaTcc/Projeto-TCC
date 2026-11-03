@@ -1,18 +1,18 @@
-/* ---------- comuns ---------- */
+/* Comuns */
 
 .secao {
-    background: #fff;
-    border: 1px solid var(--color-surface-muted);
-    border-radius: 18px;
+    background: var(--color-surface);
+    border: 2px solid var(--color-borda-pixel);
+    border-radius: var(--radius-lg);
     padding: 1.4rem 1.6rem;
     margin-top: 1.2rem;
     box-shadow: var(--shadow-sm);
 }
 
 .secao h2 {
-    font-family: var(--font-display);
-    color: var(--color-primary);
-    font-size: 1.1rem;
+    font-family: var(--font-titulo);
+    color: var(--color-titulo);
+    font-size: 1.79rem;
     margin-bottom: 1rem;
 }
 
@@ -33,7 +33,7 @@
 }
 
 .vazioTexto a {
-    color: var(--color-primary-light);
+    color: var(--color-feitico);
     font-weight: 700;
 }
 
@@ -42,7 +42,7 @@
     font-size: 0.84rem;
 }
 
-/* ---------- estrelas ---------- */
+/* Estrelas */
 
 .estrelas {
     display: inline-flex;
@@ -55,10 +55,10 @@
 }
 
 .estrelaVazia {
-    color: var(--color-border);
+    color: var(--color-text-soft);
 }
 
-/* ---------- painel de nivel ---------- */
+/* Painel de nível */
 
 .painelNivel {
     display: flex;
@@ -66,7 +66,7 @@
     gap: 1.4rem;
     margin-top: 1.2rem;
     padding: 1.4rem 1.6rem;
-    border-radius: 18px;
+    border-radius: var(--radius-lg);
     background: var(--gradient-hero);
     color: #fff;
     box-shadow: var(--shadow-md);
@@ -84,7 +84,7 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    box-shadow: 0 0 0 5px rgba(255, 192, 20, 0.25);
+    box-shadow: 0 0 0 5px rgba(242, 211, 171, 0.25);
 }
 
 .seloRotulo {
@@ -161,7 +161,7 @@
     color: rgba(255, 255, 255, 0.72);
 }
 
-/* ---------- insignias ---------- */
+/* Insígnias */
 
 .contador {
     color: var(--color-text-muted);
@@ -182,13 +182,13 @@
     text-align: center;
     gap: 0.35rem;
     padding: 1rem 0.8rem;
-    border-radius: 14px;
-    border: 1px solid var(--color-surface-muted);
+    border-radius: var(--radius-md);
+    border: 2px solid var(--color-borda-pixel);
     font-size: 0.85rem;
 }
 
 .insignia strong {
-    color: var(--color-primary);
+    color: var(--color-titulo);
 }
 
 .insigniaIcone {
@@ -230,7 +230,7 @@
 }
 
 .insigniaData {
-    color: var(--color-primary-light);
+    color: var(--color-feitico);
     font-size: 0.72rem;
     font-weight: 700;
 }
@@ -252,7 +252,7 @@
     background: linear-gradient(90deg, var(--color-primary-light) var(--p), var(--color-surface-muted) var(--p));
 }
 
-/* ---------- avaliacoes ---------- */
+/* Avaliações */
 
 .avaliacoes {
     list-style: none;
@@ -270,7 +270,7 @@
 }
 
 .avaliacao + .avaliacao {
-    border-top: 1px solid var(--color-surface-muted);
+    border-top: 2px solid var(--color-borda-pixel);
     padding-top: 1rem;
 }
 
@@ -287,7 +287,7 @@
 }
 
 .avaliacaoTopo strong {
-    color: var(--color-primary);
+    color: var(--color-titulo);
     font-size: 0.9rem;
 }
 
@@ -299,27 +299,42 @@
     overflow-wrap: anywhere;
 }
 
-/* ---------- formulario de avaliacao ---------- */
+/* Formulário de avaliação */
 
 .formAvaliacao {
     display: flex;
     flex-direction: column;
-    gap: 0.7rem;
+    gap: 0.6rem;
     width: 100%;
-    border-top: 1px dashed var(--color-border);
-    padding-top: 1rem;
 }
 
-.formAvaliacaoTopo {
+.rotuloComentario {
+    font-size: 0.84rem;
+    font-weight: 700;
+    color: var(--color-titulo);
+    margin-top: 0.3rem;
+}
+
+.rotuloComentario span {
+    font-weight: 400;
+    color: var(--color-text-muted);
+}
+
+.formAvaliacaoRodape {
     display: flex;
     align-items: center;
-    gap: 0.6rem;
-    font-size: 0.88rem;
-    color: var(--color-text);
+    justify-content: space-between;
+    gap: 0.8rem;
+}
+
+.formAvaliacaoRodape .contadorTexto {
+    margin-top: 0;
+    align-self: center;
 }
 
 .seletorEstrelas {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: 0.15rem;
 }
@@ -332,17 +347,20 @@
     line-height: 0;
 }
 
+/* Nome da nota embaixo das estrelas: não estoura o cartão */
 .rotuloNota {
-    margin-left: 0.5rem;
+    flex-basis: 100%;
+    margin-left: 0.2rem;
     font-size: 0.84rem;
     font-weight: 700;
-    color: var(--color-primary);
+    color: var(--color-titulo);
+    min-width: 7.5rem;
 }
 
 .formAvaliacao textarea {
     font-family: var(--font-sans);
     font-size: 0.88rem;
-    border: 1px solid var(--color-border);
+    border: 2px solid var(--color-borda-pixel);
     border-radius: var(--radius-sm);
     padding: 0.6rem 0.8rem;
     background: var(--color-bg);
@@ -350,7 +368,9 @@
 }
 
 .btnEnviar {
-    align-self: flex-end;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
     background: var(--color-primary);
     color: #fff;
     border: none;
@@ -371,7 +391,7 @@
     cursor: default;
 }
 
-/* ---------- painel do contratante ---------- */
+/* Painel do contratante */
 
 .gradeNumeros {
     display: grid;
@@ -381,20 +401,20 @@
 }
 
 .cartaoNumero {
-    background: #fff;
-    border: 1px solid var(--color-surface-muted);
-    border-radius: 16px;
+    background: var(--color-surface);
+    border: 2px solid var(--color-borda-pixel);
+    border-radius: var(--radius-md);
     padding: 1rem 1.1rem;
     display: flex;
     flex-direction: column;
     gap: 0.2rem;
     box-shadow: var(--shadow-sm);
-    color: var(--color-primary-light);
+    color: var(--color-feitico);
 }
 
 .cartaoNumero strong {
     font-size: 1.6rem;
-    color: var(--color-primary);
+    color: var(--color-titulo);
 }
 
 .cartaoNumero span {
@@ -417,7 +437,7 @@
 .reputacaoNota {
     font-size: 2.6rem;
     line-height: 1;
-    color: var(--color-primary);
+    color: var(--color-titulo);
 }
 
 .gradeContratados {
@@ -433,14 +453,14 @@
     text-align: center;
     gap: 0.3rem;
     padding: 1rem 0.8rem;
-    border-radius: 14px;
-    border: 1px solid var(--color-surface-muted);
+    border-radius: var(--radius-md);
+    border: 2px solid var(--color-borda-pixel);
     text-decoration: none;
     transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .contratado strong {
-    color: var(--color-primary);
+    color: var(--color-titulo);
     font-size: 0.9rem;
     overflow-wrap: anywhere;
 }
@@ -459,4 +479,267 @@
         width: 100%;
         justify-content: space-around;
     }
+}
+
+/* Bruxa */
+.painelNivel {
+    background: var(--estrelas), var(--gradient-hero);
+}
+
+.selo {
+    font-family: var(--font-magica);
+    animation: aura 3s ease-in-out infinite;
+}
+
+.barraPreenchida {
+    background: linear-gradient(90deg, var(--color-feitico), var(--color-accent));
+    box-shadow: 0 0 10px var(--color-ouro-brilho);
+}
+
+@keyframes aura {
+    0%, 100% { box-shadow: 0 0 0 5px rgba(242, 211, 171, 0.25); }
+    50% { box-shadow: 0 0 0 9px rgba(242, 211, 171, 0.12), 0 0 26px rgba(242, 211, 171, 0.35); }
+}
+
+/* Raridade das insígnias */
+.contadorInsignias {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--color-titulo);
+    margin-bottom: 1rem;
+    max-width: 360px;
+}
+
+.insignia {
+    position: relative;
+    overflow: hidden;
+    transition: transform var(--dur-media) var(--ease-out), box-shadow var(--dur-media) var(--ease-out);
+}
+
+.insignia.conquistada:hover {
+    transform: translateY(-3px) rotate(-1deg);
+    box-shadow: var(--shadow-md);
+}
+
+.insigniaRaridade {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-size: 0.6rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.12rem 0.45rem;
+    border-radius: var(--radius-pill);
+    background: var(--color-surface);
+    color: var(--color-text-muted);
+}
+
+.conquistada.bronze {
+    background: linear-gradient(160deg, #fff4ea, #fde3cc);
+    border-color: #d9935a;
+}
+
+.conquistada.bronze .insigniaIcone {
+    background: linear-gradient(145deg, #e9a46b, #b0682f);
+    color: #fff;
+}
+
+.conquistada.prata {
+    background: linear-gradient(160deg, #f6f5fb, #e4e2ef);
+    border-color: #a7a3bf;
+}
+
+.conquistada.prata .insigniaIcone {
+    background: linear-gradient(145deg, #d9d6e8, #8d88a8);
+    color: #fff;
+}
+
+.conquistada.ouro {
+    background: linear-gradient(160deg, #fff9e3, var(--color-accent-tint));
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px var(--color-ouro-brilho);
+}
+
+.conquistada.ouro .insigniaIcone {
+    background: var(--gradient-ouro);
+    color: var(--color-primary-dark);
+    box-shadow: 0 0 14px var(--color-ouro-brilho);
+}
+
+/* Brilho na conquistada */
+.conquistada::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(115deg, transparent 35%, rgba(255, 255, 255, 0.55) 50%, transparent 65%);
+    transform: translateX(-120%);
+    transition: transform 0.8s var(--ease-out);
+    pointer-events: none;
+}
+
+.conquistada:hover::after {
+    transform: translateX(120%);
+}
+
+.conquistada.bronze .insigniaRaridade { color: #8a4f22; }
+.conquistada.prata .insigniaRaridade { color: #5d5878; }
+.conquistada.ouro .insigniaRaridade { color: var(--color-ouro-texto); }
+
+/* Selos compactos */
+.miniInsignias {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    flex-wrap: wrap;
+    margin: 0.35rem 0;
+}
+
+.mini {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    box-shadow: var(--shadow-sm);
+}
+
+.mini.bronze { background: linear-gradient(145deg, #e9a46b, #b0682f); }
+.mini.prata { background: linear-gradient(145deg, #d9d6e8, #8d88a8); }
+.mini.ouro { background: var(--gradient-ouro); color: var(--color-primary-dark); }
+
+.miniResto {
+    font-size: 0.74rem;
+    font-weight: 700;
+    color: var(--color-text-muted);
+}
+
+/* Comentário curto */
+.contadorTexto {
+    align-self: flex-end;
+    margin-top: -0.3rem;
+    font-size: 0.72rem;
+    color: var(--color-text-muted);
+}
+
+.contadorPerto {
+    color: var(--color-danger);
+    font-weight: 700;
+}
+
+.comentarioCurto {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Raridade no modo escuro (tom por cima da superfície: o cartão nunca fica transparente sobre o cenário) */
+.conquistada.bronze {
+    background: linear-gradient(180deg, rgba(233, 164, 107, 0.16), rgba(233, 164, 107, 0.06)), var(--color-surface);
+    border-color: #d9935a;
+}
+
+.conquistada.prata {
+    background: linear-gradient(180deg, rgba(217, 214, 232, 0.14), rgba(217, 214, 232, 0.05)), var(--color-surface);
+    border-color: #b9b5d4;
+}
+
+.conquistada.ouro {
+    background: linear-gradient(180deg, rgba(242, 211, 171, 0.2), rgba(242, 211, 171, 0.06)), var(--color-surface);
+    border-color: var(--color-accent);
+}
+
+.conquistada strong {
+    color: var(--color-titulo);
+}
+
+.conquistada .insigniaDesc {
+    color: var(--color-text-soft);
+}
+
+.conquistada .insigniaData {
+    color: var(--color-ouro-texto);
+}
+
+.insigniaRaridade {
+    background: rgba(0, 0, 0, 0.35);
+}
+
+.conquistada.bronze .insigniaRaridade { color: #f0b383; }
+.conquistada.prata .insigniaRaridade { color: #dcd8f0; }
+.conquistada.ouro .insigniaRaridade { color: var(--color-ouro-texto); }
+
+/* Tema claro: o selo escuro translúcido virava cinza sobre o creme; fica marinho sólido, com texto claro */
+:global(:root[data-theme='light']) .insigniaRaridade {
+    background: #272744;
+    color: #fbf5ef;
+}
+
+:global(:root[data-theme='light']) .conquistada.ouro .insigniaRaridade {
+    color: #fbf5ef;
+}
+
+.conquistada::after {
+    background: linear-gradient(115deg, transparent 35%, rgba(255, 255, 255, 0.12) 50%, transparent 65%);
+}
+
+.estrelaVazia {
+    color: var(--color-text-muted);
+}
+
+/* Álbum: quantos por cento dos freelancers têm a insígnia */
+.insigniaRara {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--color-feitico);
+}
+
+/* Notas por critério na avaliação */
+.criterios {
+    border: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.criterios legend {
+    font-size: 0.86rem;
+    font-weight: 700;
+    color: var(--color-titulo);
+    margin-bottom: 0.2rem;
+}
+
+.criterios legend span {
+    font-weight: 500;
+    color: var(--color-text-muted);
+}
+
+.criterio {
+    display: flex;
+    align-items: center;
+    gap: 0.1rem;
+}
+
+.criterio > span {
+    width: 7.5rem;
+    font-size: 0.84rem;
+    color: var(--color-text);
+}
+
+.criterio button {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
 }

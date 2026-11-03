@@ -1,0 +1,253 @@
+.grade {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.1rem;
+    align-items: start;
+}
+
+.topoGuilda {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.nomeGuilda {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+.nomeGuilda h2 {
+    overflow-wrap: anywhere;
+}
+
+.nomeGuilda em {
+    color: var(--color-text-soft);
+    font-size: 0.88rem;
+}
+
+.placar {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+    margin: 0;
+}
+
+.placar > div {
+    padding: 0.55rem 0.7rem;
+    background: var(--color-bg-alt);
+    border: 2px solid var(--color-border);
+}
+
+.placar dt {
+    font-size: 0.72rem;
+    color: var(--color-text-muted);
+}
+
+.placar dd {
+    margin: 0;
+    font-family: var(--font-titulo);
+    font-size: 1.8rem;
+    line-height: 1;
+    color: var(--color-titulo);
+}
+
+.membros,
+.ranking {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.membros li,
+.ranking li {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.55rem 0.7rem;
+    background: var(--color-surface-muted);
+    border: 2px solid transparent;
+}
+
+.membroNome,
+.itemNome {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+}
+
+.membroNome strong,
+.itemNome strong {
+    color: var(--color-titulo);
+    font-size: 0.95rem;
+    overflow-wrap: anywhere;
+}
+
+.membroNome small,
+.itemNome small {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.2rem;
+    font-size: 0.76rem;
+    color: var(--color-text-muted);
+}
+
+.lider {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
+    font-weight: 800;
+    color: var(--color-ouro-texto);
+}
+
+.remover {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    background: var(--color-surface);
+    border: 2px solid var(--color-borda-pixel);
+    color: var(--color-danger);
+    cursor: pointer;
+}
+
+.remover:hover {
+    border-color: var(--color-danger);
+}
+
+.posicao {
+    flex-shrink: 0;
+    width: 2.2rem;
+    font-family: var(--font-titulo);
+    font-size: 1.5rem;
+    line-height: 1;
+    color: var(--color-titulo);
+    text-align: center;
+}
+
+.daMinha {
+    border-color: var(--color-accent) !important;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+}
+
+.form label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--color-text-soft);
+}
+
+.form input {
+    border: 2px solid var(--color-borda-pixel);
+    background: var(--color-campo);
+    color: var(--color-text);
+    padding: 0.55rem 0.7rem;
+    font-size: 0.92rem;
+    outline: none;
+    min-width: 0;
+}
+
+.form input:focus {
+    border-color: var(--color-feitico);
+}
+
+.escolha {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.9rem 1.4rem;
+}
+
+.grupo {
+    border: none;
+    margin: 0;
+    padding: 0;
+    min-width: 0;
+}
+
+.grupo legend {
+    margin-bottom: 0.35rem;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--color-text-soft);
+}
+
+.opcoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+}
+
+.opcao {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 46px;
+    padding: 0;
+    background: var(--color-bg-alt);
+    border: 2px solid var(--color-border);
+    cursor: pointer;
+}
+
+.cor {
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border: 2px solid var(--color-tinta);
+    cursor: pointer;
+}
+
+.opcao:hover,
+.cor:hover {
+    border-color: var(--color-accent);
+}
+
+.escolhida {
+    outline: 3px solid var(--color-accent);
+    outline-offset: 1px;
+}
+
+.acoes {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
+.dica {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.4rem;
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+}
+
+.dica svg {
+    flex-shrink: 0;
+    margin-top: 0.15rem;
+}
+
+@media (max-width: 860px) {
+    .grade {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 420px) {
+    .placar dd {
+        font-size: 1.45rem;
+    }
+}

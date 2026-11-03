@@ -1,0 +1,110 @@
+.numeros {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.1rem;
+    margin-bottom: 1rem;
+}
+
+.numero {
+    gap: 0.4rem;
+}
+
+.numero strong {
+    font-family: var(--font-titulo);
+    font-weight: 400;
+    font-size: 2.8rem;
+    line-height: 1;
+    color: var(--color-titulo);
+}
+
+.rotulo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 700;
+    font-size: 0.86rem;
+    color: var(--color-text-muted);
+}
+
+.alternar {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 0.8rem;
+}
+
+.grade {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: 1.1rem;
+    margin-bottom: 1rem;
+}
+
+/* Eixo com dinheiro precisa de mais espaço que o de contagem */
+div.eixoLargo {
+    min-width: 3.2rem;
+}
+
+div.seisColunas {
+    grid-template-columns: repeat(6, 1fr);
+}
+
+/* Valor em cima da coluna do melhor mês */
+.rotuloTopo {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--color-titulo);
+    white-space: nowrap;
+    pointer-events: none;
+}
+
+.valorBarra {
+    white-space: nowrap;
+}
+
+.obs {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.45rem;
+    margin-bottom: 1rem;
+    padding: 0.6rem 0.9rem;
+    background: var(--color-surface);
+    border: 2px solid var(--color-borda-pixel);
+    font-size: 0.84rem;
+    color: var(--color-text-muted);
+}
+
+.obs svg {
+    flex-shrink: 0;
+    margin-top: 0.15rem;
+}
+
+@media (max-width: 860px) {
+    .numeros,
+    .grade {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Mesma cor de série do painel do admin (validada para os dois temas) */
+.cores {
+    --serie-1: #2aa3bb;
+}
+
+:global(:root[data-theme='light']) .cores {
+    --serie-1: #1a8fa6;
+}
+
+/* Planilha e tabela lado a lado */
+.alternar {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.alternar > button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}

@@ -1,5 +1,16 @@
 import { useCallback, useEffect, useState } from 'react'
-import { MapPin, Phone, Mail, Pencil, KeyRound } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { MapPin, Phone, Mail, Pencil, KeyRound, Share2, ExternalLink, Wand2, IdCard, Wallet, ChartColumn, Store, Map as IconeMapa, Shield, GraduationCap, Award, Heart, CalendarDays, PartyPopper, Gift, LifeBuoy, Swords, ReceiptText, TreePine, FileUser } from 'lucide-react'
+import EditarDisponibilidade from '../components/perfil/disponibilidade'
+import EditorHorarios from '../components/perfil/horarios'
+import EditorAvatar from '../components/perfil/editoravatar'
+import CartaoVisita from '../components/perfil/cartaovisita'
+import IconeEvento from '../components/evento/iconeevento'
+import { NomeColorido } from '../components/aparencia/aparencia'
+import { useSituacaoEvento } from '../utils/eventoprogresso'
+import type { CodigoEvento } from '../utils/eventos'
+import type { Disponibilidade } from '../utils/aparencia'
+import perfilCss from '../components/perfil/perfil.module.css'
 import SeletorAvatar from '../components/avatar/seletoravatar'
 import Avatar from '../components/avatar/avatar'
 import GerenciarPortfolio from '../components/portfolio/gerenciarportfolio'
@@ -15,8 +26,14 @@ import Carregando from '../components/carregando/carregando'
 import EstadoErro from '../components/carregando/estadoerro'
 import { mascararTelefone, somenteDigitos } from '../utils/mascaras'
 import styles from './Perfil.module.css'
+import CampoSenha from '../components/camposenha/camposenha'
+import { ESTADOS, analisarTelefone, erroNome, erroSenha } from '../utils/validacao'
+import { nomeOficial, useNomesCidades } from '../utils/cidades'
+import { ChecklistVerificado } from '../components/confianca/selos'
+import ConquistasSecretas from '../components/gamificacao/conquistassecretas'
+import { compartilharPerfil, linkPerfilPublico } from '../utils/perfilpublico'
 
-/* GET /usuarios/eu devolve o cadastro completo, só para o dono da conta. */
+/* Perfil */
 interface PerfilCompleto {
   usu_id: number
   usu_nome: string
@@ -28,6 +45,10 @@ interface PerfilCompleto {
   usu_desc: string | null
   usu_foto: string | null
   data_criacao: string
+  /* Aparência (servidor novo) */
+  moldura?: string | null
+  cor_nome?: string | null
+  disponibilidade?: Disponibilidade
 }
 
 interface Tipo {
@@ -35,10 +56,6 @@ interface Tipo {
   tipo_nome: string
 }
 
-const UFS = [
-  'AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS', 'MG',
-  'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO',
-]
 
 
 export default function Perfil({ papel }: { papel: 'freelancer' | 'contratante' }) {
@@ -63,13 +80,16 @@ export default function Perfil({ papel }: { papel: 'freelancer' | 'contratante' 
     usu_est: '',
     usu_desc: '',
   })
-  /* A foto fica fora de "campos" porque é um data URI grande e pode ser
-     removida (null), enquanto os demais campos são sempre texto. */
+  const nomesCidades = useNomesCidades(campos.usu_est)
+  /* Foto */
   const [foto, setFoto] = useState<string | null>(null)
   const [selecionadas, setSelecionadas] = useState<number[]>([])
 
   const [senhaAberta, setSenhaAberta] = useState(false)
-  const [senha, setSenha] = useState({ nova: '', confirma: '' })
+  const [montandoAvatar, setMontandoAvatar] = useState(false)
+  const [cartaoAberto, setCartaoAberto] = useState(false)
+  const situacaoEvento = useSituacaoEvento(true)
+  const [senha, setSenha] = useState({ atual: '', nova: '', confirma: '' })
   const [salvandoSenha, setSalvandoSenha] = useState(false)
 
   
@@ -79,7 +99,7 @@ const carregar = useCallback(async () => {
 
   try {
     if (ehFreelancer) {
-      // Dados essenciais do perfil são carregados separadamente das conquistas.
+      // Perfil
       const [dadosPerfil, dadosAreas, dadosTipos] = await Promise.all([
         api<PerfilCompleto>('/usuarios/eu'),
         api<{ areas: Tipo[] }>('/usuarios/eu/areas'),
@@ -158,12 +178,27 @@ const carregar = useCallback(async () => {
     if (!perfil) return
 
     setErro('')
+
+    /* As mesmas regras do cadastro (o servidor confere de novo) */
+    const cidade = campos.usu_cid.trim()
+    const oficial = nomesCidades && cidade ? nomeOficial(nomesCidades, cidade) : null
+    const problema =
+      erroNome(campos.usu_nome, 'nome') ||
+      analisarTelefone(campos.usu_tel).erro ||
+      (!campos.usu_est ? 'Escolha o estado.' : '') ||
+      (!cidade ? 'Informe a cidade.' : '') ||
+      (cidade && nomesCidades && !oficial ? `Não achamos "${cidade}" em ${campos.usu_est}. Escolha uma cidade da lista.` : '')
+    if (problema) {
+      setErro(problema)
+      return
+    }
+
     setSalvando(true)
 
     try {
       await api(`/usuarios/${perfil.usu_id}`, {
         metodo: 'PUT',
-        corpo: { ...campos, usu_foto: foto },
+        corpo: { ...campos, usu_nome: campos.usu_nome.trim(), usu_cid: oficial ?? cidade, usu_foto: foto },
       })
 
       if (ehFreelancer) {
@@ -189,8 +224,8 @@ const carregar = useCallback(async () => {
 
     setErro('')
 
-    if (senha.nova.length < 6) {
-      setErro('A nova senha precisa ter pelo menos 6 caracteres.')
+    if (erroSenha(senha.nova)) {
+      setErro(erroSenha(senha.nova))
       return
     }
 
@@ -204,10 +239,10 @@ const carregar = useCallback(async () => {
     try {
       await api(`/usuarios/${perfil.usu_id}`, {
         metodo: 'PUT',
-        corpo: { usu_senha: senha.nova },
+        corpo: { usu_senha: senha.nova, senha_atual: senha.atual },
       })
 
-      setSenha({ nova: '', confirma: '' })
+      setSenha({ atual: '', nova: '', confirma: '' })
       setSenhaAberta(false)
       toast.mostrar('Senha alterada!')
     } catch (err) {
@@ -227,18 +262,26 @@ const carregar = useCallback(async () => {
 
   const local = [perfil.usu_cid, perfil.usu_est].filter(Boolean).join(' - ')
 
+  /* Link do perfil público: no celular abre o menu de compartilhar; no computador, copia */
+  async function compartilhar() {
+    if (!perfil) return
+    const resultado = await compartilharPerfil(perfil.usu_id, perfil.usu_nome)
+    if (resultado === 'copiado') toast.mostrar('Link do seu perfil público copiado!')
+    else if (resultado === 'erro') toast.mostrar('Não deu para copiar o link.', 'erro')
+  }
+
   return (
     <div className={styles.pagina}>
-      <h1>Meu perfil</h1>
+      <h1 className="placa">Meu perfil</h1>
 
       {erro && <p className="msg-erro">{erro}</p>}
 
       {!editando ? (
         <section className={styles.cartao}>
-          <Avatar nome={perfil.usu_nome} size={96} foto={perfil.usu_foto} />
+          <Avatar nome={perfil.usu_nome} size={96} foto={perfil.usu_foto} nivel={gamificacao?.resumo.nivel} especial={perfil.moldura} />
 
           <div className={styles.dados}>
-            <strong className={styles.nome}>{perfil.usu_nome}</strong>
+            <strong className={styles.nome}><NomeColorido nome={perfil.usu_nome} cor={perfil.cor_nome} /></strong>
 
             <div className={styles.contatos}>
               {local && (
@@ -283,11 +326,40 @@ const carregar = useCallback(async () => {
               <KeyRound size={15} strokeWidth={2.2} />
               Alterar senha
             </button>
+            {ehFreelancer && (
+              <>
+                <button type="button" className={styles.senhaBtn} onClick={compartilhar}>
+                  <Share2 size={15} strokeWidth={2.2} />
+                  Compartilhar perfil
+                </button>
+                <button type="button" className={styles.senhaBtn} onClick={() => setCartaoAberto(true)}>
+                  <IdCard size={15} strokeWidth={2.2} />
+                  Cartão de visita
+                </button>
+                <a
+                  className={styles.linkPublico}
+                  href={linkPerfilPublico(perfil.usu_id, perfil.usu_nome)}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <ExternalLink size={13} strokeWidth={2.2} />
+                  Ver como os outros veem
+                </a>
+              </>
+            )}
           </div>
         </section>
       ) : (
         <form className={styles.form} onSubmit={salvar}>
           <SeletorAvatar nome={campos.usu_nome || perfil.usu_nome} foto={foto} onMudar={setFoto} />
+          {montandoAvatar ? (
+            <EditorAvatar aoFechar={() => setMontandoAvatar(false)} aoUsar={(f) => { setFoto(f); setMontandoAvatar(false) }} />
+          ) : (
+            <button type="button" className={styles.senhaBtn} onClick={() => setMontandoAvatar(true)}>
+              <Wand2 size={15} strokeWidth={2.2} />
+              Montar avatar em pixel
+            </button>
+          )}
 
           <label>
             Nome completo
@@ -319,16 +391,28 @@ const carregar = useCallback(async () => {
                 type="text"
                 value={campos.usu_cid}
                 onChange={(e) => alterar('usu_cid', e.target.value)}
+                onBlur={() => {
+                  const oficial = nomesCidades && nomeOficial(nomesCidades, campos.usu_cid)
+                  if (oficial) alterar('usu_cid', oficial)
+                }}
+                list={nomesCidades ? 'perfil-lista-cidades' : undefined}
+                placeholder={campos.usu_est ? 'Comece a digitar' : 'Escolha o estado'}
+                autoComplete="address-level2"
                 maxLength={100}
               />
+              {nomesCidades && (
+                <datalist id="perfil-lista-cidades">
+                  {nomesCidades.map((n) => <option key={n} value={n} />)}
+                </datalist>
+              )}
             </label>
 
             <label className={styles.uf}>
               Estado
               <select value={campos.usu_est} onChange={(e) => alterar('usu_est', e.target.value)}>
                 <option value="">--</option>
-                {UFS.map((uf) => (
-                  <option key={uf} value={uf}>{uf}</option>
+                {ESTADOS.map(([uf, nome]) => (
+                  <option key={uf} value={uf} title={nome}>{uf}</option>
                 ))}
               </select>
             </label>
@@ -369,8 +453,7 @@ const carregar = useCallback(async () => {
           </fieldset>
           )}
 
-          {/* E-mail e CPF identificam a conta e têm restrição de unicidade no
-              banco; alterá-los exigiria um fluxo de confirmação próprio. */}
+          {/* Campos fixos */}
           <p className={styles.fixos}>
             E-mail e CPF não podem ser alterados por aqui.
           </p>
@@ -390,11 +473,21 @@ const carregar = useCallback(async () => {
         <form className={styles.form} onSubmit={trocarSenha}>
           <strong className={styles.tituloForm}>Alterar senha</strong>
 
+          <label>
+            Senha atual
+            <CampoSenha
+              autoComplete="current-password"
+              required
+              value={senha.atual}
+              onChange={(e) => setSenha((s) => ({ ...s, atual: e.target.value }))}
+            />
+            <small>Entrou com o Google e nunca criou senha? Use <Link to="/esqueci-senha">Esqueci minha senha</Link>.</small>
+          </label>
+
           <div className={`${styles.linha} ${styles.linhaDupla}`}>
             <label>
               Nova senha
-              <input
-                type="password"
+              <CampoSenha
                 value={senha.nova}
                 onChange={(e) => setSenha((s) => ({ ...s, nova: e.target.value }))}
                 minLength={6}
@@ -404,8 +497,7 @@ const carregar = useCallback(async () => {
 
             <label>
               Confirmar nova senha
-              <input
-                type="password"
+              <CampoSenha
                 value={senha.confirma}
                 onChange={(e) => setSenha((s) => ({ ...s, confirma: e.target.value }))}
                 minLength={6}
@@ -418,7 +510,7 @@ const carregar = useCallback(async () => {
             <button
               type="button"
               className={styles.cancelar}
-              onClick={() => { setSenhaAberta(false); setSenha({ nova: '', confirma: '' }) }}
+              onClick={() => { setSenhaAberta(false); setSenha({ atual: '', nova: '', confirma: '' }) }}
             >
               Cancelar
             </button>
@@ -446,9 +538,111 @@ const carregar = useCallback(async () => {
   </section>
 )}
 
+      {!editando && ehFreelancer && (
+        <EditarDisponibilidade
+          key={`${perfil.disponibilidade?.status}:${perfil.disponibilidade?.ate}`}
+          atual={perfil.disponibilidade}
+          aoMudar={(d) => setPerfil((p) => (p ? { ...p, disponibilidade: d } : p))}
+        />
+      )}
+
+      {!editando && ehFreelancer && <EditorHorarios />}
+
+      {!editando && (
+        <nav className={perfilCss.atalhos} aria-label="Atalhos">
+          <Link to={`/${papel}/carteira`} className={perfilCss.atalho} viewTransition>
+            <Wallet size={22} strokeWidth={2.2} />
+            <span><strong>Carteira</strong>Pagamentos com garantia (simulação)</span>
+          </Link>
+          {ehFreelancer && (
+            <>
+              <Link to="/freelancer/ganhos" className={perfilCss.atalho} viewTransition>
+                <ChartColumn size={22} strokeWidth={2.2} />
+                <span><strong>Meus ganhos</strong>Quanto você recebeu por mês</span>
+              </Link>
+              <Link to="/freelancer/loja" className={perfilCss.atalho} viewTransition>
+                <Store size={22} strokeWidth={2.2} />
+                <span><strong>Loja do castelo</strong>Molduras, cores e cenários com XP</span>
+              </Link>
+              <Link to="/freelancer/reino" className={perfilCss.atalho} viewTransition>
+                <IconeMapa size={22} strokeWidth={2.2} />
+                <span><strong>Mapa do reino</strong>Sua jornada por regiões e o mascote</span>
+              </Link>
+              <Link to="/freelancer/guildas" className={perfilCss.atalho} viewTransition>
+                <Shield size={22} strokeWidth={2.2} />
+                <span><strong>Guildas</strong>Times de até 6 freelancers</span>
+              </Link>
+              <Link to="/freelancer/testes" className={perfilCss.atalho} viewTransition>
+                <GraduationCap size={22} strokeWidth={2.2} />
+                <span><strong>Testes de habilidade</strong>Ganhe o selo da sua área</span>
+              </Link>
+              <Link to="/freelancer/insignias" className={perfilCss.atalho} viewTransition>
+                <Award size={22} strokeWidth={2.2} />
+                <span><strong>Álbum de insígnias</strong>Todas as insígnias e as mais raras</span>
+              </Link>
+            </>
+          )}
+          {!ehFreelancer && (
+            <Link to="/contratante/freelancers?favoritos=1" className={perfilCss.atalho} viewTransition>
+              <Heart size={22} strokeWidth={2.2} />
+              <span><strong>Freelancers favoritos</strong>Quem você guardou para chamar de novo</span>
+            </Link>
+          )}
+          <Link to={`/${papel}/agenda`} className={perfilCss.atalho} viewTransition>
+            <CalendarDays size={22} strokeWidth={2.2} />
+            <span><strong>Agenda</strong>Prazos, reuniões e etapas do mês</span>
+          </Link>
+          <Link to={`/${papel}/retrospectiva`} className={perfilCss.atalho} viewTransition>
+            <PartyPopper size={22} strokeWidth={2.2} />
+            <span><strong>Retrospectiva</strong>Seu ano no castelo e os marcos da conta</span>
+          </Link>
+          <Link to={`/${papel}/convidar`} className={perfilCss.atalho} viewTransition>
+            <Gift size={22} strokeWidth={2.2} />
+            <span><strong>Convide um amigo</strong>Os dois ganham XP no primeiro projeto</span>
+          </Link>
+          <Link to="/ajuda" className={perfilCss.atalho} viewTransition>
+            <LifeBuoy size={22} strokeWidth={2.2} />
+            <span><strong>Central de ajuda</strong>Dúvidas frequentes com busca</span>
+          </Link>
+          <Link to={`/${papel}/arena`} className={perfilCss.atalho} viewTransition>
+            <Swords size={22} strokeWidth={2.2} />
+            <span><strong>Arena</strong>Chefão do mês e desafio da semana</span>
+          </Link>
+          <Link to={`/${papel}/orcamentos`} className={perfilCss.atalho} viewTransition>
+            <ReceiptText size={22} strokeWidth={2.2} />
+            <span><strong>Orçamentos</strong>{ehFreelancer ? 'Contratantes perguntando seu preço' : 'Pergunte o preço a até 3 freelancers'}</span>
+          </Link>
+          {ehFreelancer && (
+            <>
+              <Link to="/freelancer/habilidades" className={perfilCss.atalho} viewTransition>
+                <TreePine size={22} strokeWidth={2.2} />
+                <span><strong>Árvore de habilidades</strong>Galhos que acendem por área</span>
+              </Link>
+              <Link to="/freelancer/curriculo" className={perfilCss.atalho} viewTransition>
+                <FileUser size={22} strokeWidth={2.2} />
+                <span><strong>Meu currículo</strong>Gerado sozinho, para baixar em PDF</span>
+              </Link>
+            </>
+          )}
+        </nav>
+      )}
+
+      {cartaoAberto && (
+        <CartaoVisita
+          usuId={perfil.usu_id}
+          nome={perfil.usu_nome}
+          foto={perfil.usu_foto}
+          nivel={gamificacao?.resumo.nivel}
+          nota={gamificacao?.resumo.totalAvaliacoes ? gamificacao.resumo.media : undefined}
+          areas={areas.map((a) => a.tipo_nome)}
+          aoFechar={() => setCartaoAberto(false)}
+        />
+      )}
+
       {ehFreelancer && gamificacao && (
         <>
           <PainelNivel resumo={gamificacao.resumo} />
+          {gamificacao.verificacao && <ChecklistVerificado verificacao={gamificacao.verificacao} />}
 
           <section className={secoes.secao}>
             <h2>Insígnias</h2>
@@ -468,6 +662,22 @@ const carregar = useCallback(async () => {
       {ehFreelancer && <GerenciarPortfolio />}
 
       {!ehFreelancer && painel && <PainelContratante dados={painel} />}
+
+      {situacaoEvento && situacaoEvento.insignias.length > 0 && (
+        <section className={secoes.secao}>
+          <h2>Insígnias de eventos</h2>
+          <ul className={perfilCss.eventos}>
+            {situacaoEvento.insignias.map((i) => (
+              <li key={`${i.codigo}-${i.ano}`}>
+                <IconeEvento codigo={i.codigo as CodigoEvento} tamanho={26} />
+                <span><strong>{i.nome}</strong>{i.ano}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      <ConquistasSecretas />
     </div>
   )
 }

@@ -11,21 +11,21 @@
 
 .cabecalho h1 {
   margin: 0 0 8px;
-  font-size: clamp(24px, 3vw, 32px);
-  color: #29213d;
+  font-size: clamp(39px, 4.88vw, 52px);
+  color: var(--color-text);
 }
 
 .cabecalho p {
   margin: 0;
-  color: #716b7c;
+  color: var(--color-text-muted);
 }
 
 .painelFiltros {
   margin-bottom: 28px;
   padding: 22px;
-  border: 1px solid #e8e4ef;
-  border-radius: 14px;
-  background: #fff;
+  border: 1px solid var(--color-borda-pixel);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
 }
 
 .busca {
@@ -34,9 +34,9 @@
   gap: 12px;
   margin-bottom: 24px;
   padding: 12px 14px;
-  border: 1px solid #ded9e8;
-  border-radius: 10px;
-  color: #716b7c;
+  border: 1px solid var(--color-borda-pixel);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-muted);
 }
 
 .busca:focus-within {
@@ -50,7 +50,7 @@
   border: none;
   outline: none;
   background: transparent;
-  color: #29213d;
+  color: var(--color-text);
   font: inherit;
 }
 
@@ -59,7 +59,7 @@
   padding: 4px;
   border: 0;
   background: transparent;
-  color: #716b7c;
+  color: var(--color-text-muted);
   cursor: pointer;
 }
 
@@ -68,12 +68,12 @@
   align-items: center;
   gap: 9px;
   margin-bottom: 16px;
-  color: #4d376e;
+  color: var(--color-text);
 }
 
 .tituloFiltros h2 {
   margin: 0;
-  font-size: 16px;
+  font-size: 26px;
 }
 
 .filtros {
@@ -90,7 +90,7 @@
 }
 
 .campo span {
-  color: #4d4658;
+  color: var(--color-text-soft);
   font-size: 13px;
   font-weight: 600;
 }
@@ -101,10 +101,10 @@
   width: 100%;
   min-height: 43px;
   padding: 10px 12px;
-  border: 1px solid #ded9e8;
-  border-radius: 8px;
-  background: #fff;
-  color: #29213d;
+  border: 1px solid var(--color-borda-pixel);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text);
   font: inherit;
 }
 
@@ -121,8 +121,8 @@
   gap: 12px;
   margin-top: 20px;
   padding-top: 16px;
-  border-top: 1px solid #eeeaf4;
-  color: #716b7c;
+  border-top: 1px solid var(--color-borda-pixel);
+  color: var(--color-text-muted);
   font-size: 14px;
 }
 
@@ -133,10 +133,10 @@
   justify-content: center;
   gap: 7px;
   padding: 9px 12px;
-  border: 1px solid #ded9e8;
-  border-radius: 8px;
-  background: #fff;
-  color: #4d376e;
+  border: 1px solid var(--color-borda-pixel);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text);
   font: inherit;
   cursor: pointer;
 }
@@ -154,10 +154,10 @@
   gap: 16px;
   min-width: 0;
   padding: 22px;
-  border: 1px solid #e8e4ef;
-  border-radius: 14px;
-  background: #fff;
-  box-shadow: 0 3px 12px rgb(38 22 61 / 4%);
+  border: 1px solid var(--color-borda-pixel);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-md);
 }
 
 .informacoes {
@@ -168,8 +168,8 @@
 .informacoes h2 {
   margin: 0 0 8px;
   overflow-wrap: anywhere;
-  color: #29213d;
-  font-size: 18px;
+  color: var(--color-text);
+  font-size: 29.25px;
 }
 
 .local {
@@ -177,14 +177,14 @@
   align-items: center;
   gap: 6px;
   margin: 0 0 12px;
-  color: #716b7c;
+  color: var(--color-text-muted);
   font-size: 13px;
 }
 
 .descricao {
   margin: 0 0 14px;
   overflow-wrap: anywhere;
-  color: #514b5b;
+  color: var(--color-text-soft);
   font-size: 14px;
   line-height: 1.6;
   white-space: pre-line;
@@ -199,10 +199,10 @@
 
 .areas span {
   padding: 5px 9px;
-  border: 1px solid #e5dbf4;
-  border-radius: 20px;
-  background: #f7f2ff;
-  color: #5b3d85;
+  border: 1px solid var(--color-borda-pixel);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-muted);
+  color: var(--color-text-soft);
   font-size: 12px;
 }
 
@@ -214,7 +214,7 @@
   margin-top: 2px;
   padding: 10px 13px;
   border: 0;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   background: #382458;
   color: #fff;
   font-size: 14px;
@@ -232,16 +232,17 @@
   flex-direction: column;
   align-items: center;
   padding: 48px 20px;
-  border: 1px dashed #ded9e8;
-  border-radius: 14px;
-  color: #716b7c;
+  border: 1px dashed var(--color-borda-pixel);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
   text-align: center;
 }
 
 .vazio h2 {
   margin: 14px 0 6px;
-  color: #29213d;
-  font-size: 18px;
+  color: var(--color-text);
+  font-size: 29.25px;
 }
 
 .vazio p {
@@ -277,4 +278,157 @@
     align-items: flex-start;
     flex-direction: column;
   }
+}
+
+/* Nível e insígnias */
+.nomeLinha {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+}
+
+.nivel {
+    font-size: 0.72rem;
+    font-weight: 800;
+    padding: 0.2rem 0.6rem;
+    border-radius: var(--radius-pill);
+    background: var(--gradient-ouro);
+    color: var(--color-primary-dark);
+    white-space: nowrap;
+}
+
+.destaques {
+  margin-bottom: 28px;
+}
+
+/* Coração dos favoritos no canto da linha do nome */
+.favorito {
+    margin-left: auto;
+}
+
+/* Disponibilidade, guilda e testes de habilidade */
+.selos {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+/* Lista ou mapa */
+.visoes {
+    display: inline-flex;
+    margin-left: auto;
+    border: 2px solid var(--color-borda-pixel);
+}
+
+.visoes button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.4rem 0.8rem;
+    font-family: var(--font-sans);
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--color-titulo);
+    background: var(--color-surface);
+    border: none;
+    cursor: pointer;
+}
+
+.visoes button + button {
+    border-left: 2px solid var(--color-borda-pixel);
+}
+
+.visoes .visaoAtiva {
+    background: var(--color-accent);
+    color: var(--color-tinta);
+}
+
+.mapa {
+    margin-bottom: 1.4rem;
+}
+
+.esperaMapa {
+    display: grid;
+    place-items: center;
+    height: 380px;
+    background: var(--color-surface);
+    border: 3px solid var(--color-tinta);
+    color: var(--color-text-muted);
+}
+
+.notaMapa {
+    width: fit-content;
+    max-width: 100%;
+    margin-top: 0.5rem;
+    padding: 0.3rem 0.6rem;
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    background: var(--color-surface);
+}
+
+/* Comparar freelancers: caixinha no cartão e barra fixa embaixo */
+.acoesCard {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 14px;
+}
+
+.comparar {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 40px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-titulo);
+  cursor: pointer;
+}
+
+.comparar input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--color-feitico);
+}
+
+.barraComparar {
+  position: sticky;
+  bottom: 12px;
+  z-index: 5;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 14px;
+  margin-top: 18px;
+  padding: 10px 14px;
+  background: var(--color-surface);
+  border: 3px solid var(--color-tinta);
+  box-shadow: 4px 4px 0 0 var(--color-tinta);
+  color: var(--color-titulo);
+  font-weight: 700;
+}
+
+.barraComparar > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1 1 14rem;
+}
+
+.limparComparar {
+  background: none;
+  border: none;
+  padding: 6px;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  color: var(--color-titulo);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.desligado {
+  opacity: 0.55;
+  cursor: not-allowed;
 }

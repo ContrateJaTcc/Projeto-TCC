@@ -1,0 +1,216 @@
+.pagina {
+    width: min(92%, 900px);
+    margin: 2rem auto 3rem;
+}
+
+.barra {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-bottom: 1.2rem;
+}
+
+.voltar,
+.imprimir {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 1rem;
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 0.88rem;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.voltar {
+    background: var(--color-surface);
+    color: var(--color-titulo);
+    border: 2px solid var(--color-borda-pixel);
+    border-radius: var(--radius-pill);
+}
+
+.imprimir {
+    background: var(--color-accent);
+    color: var(--color-tinta);
+    border: 2px solid var(--color-tinta);
+    box-shadow: 3px 3px 0 0 var(--color-tinta);
+}
+
+/* A folha é sempre "papel": clara nos dois temas, como sai impressa */
+.folha {
+    background: #ffffff;
+    color: #1b1b30;
+    border: 2px solid #8b6d9c;
+    box-shadow: 6px 6px 0 0 #272744;
+    padding: 2.4rem 2.6rem;
+    font-family: var(--font-sans);
+}
+
+.cabecalho {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    padding-bottom: 1rem;
+    border-bottom: 3px solid #1b1b30;
+}
+
+.marca {
+    font-family: var(--font-titulo);
+    font-size: 1.4rem;
+    color: #5b349a;
+}
+
+.cabecalho h1,
+.folha h2,
+.numeros strong {
+    text-shadow: none;
+}
+
+.cabecalho h1 {
+    font-family: var(--font-titulo);
+    font-size: 2.6rem;
+    line-height: 1;
+    color: #1b1b30;
+}
+
+.cabecalho p,
+.nota {
+    color: #555470;
+    font-size: 0.85rem;
+}
+
+.folha section {
+    margin-top: 1.6rem;
+    break-inside: avoid;
+}
+
+.folha h2 {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #1b1b30;
+    margin-bottom: 0.6rem;
+}
+
+.numeros {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.6rem;
+}
+
+.numeros div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    padding: 0.7rem 0.8rem;
+    border: 1.5px solid #d4cce8;
+    background: #f8f6fc;
+}
+
+.numeros strong {
+    font-family: var(--font-titulo);
+    font-size: 2rem;
+    line-height: 1;
+}
+
+.numeros span {
+    font-size: 0.78rem;
+    color: #555470;
+}
+
+.folha table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.86rem;
+}
+
+.folha th,
+.folha td {
+    text-align: left;
+    padding: 0.4rem 0.6rem;
+    border-bottom: 1px solid #d4cce8;
+}
+
+.folha th {
+    background: #efebf8;
+    font-weight: 800;
+}
+
+.barraTabela {
+    display: inline-block;
+    width: 90px;
+    height: 8px;
+    margin-right: 0.5rem;
+    background: #efebf8;
+    vertical-align: middle;
+}
+
+.barraTabela span {
+    display: block;
+    height: 100%;
+    background: #1a8fa6;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+}
+
+.rodape {
+    margin-top: 2rem;
+    padding-top: 0.8rem;
+    border-top: 1px solid #d4cce8;
+    color: #555470;
+    font-size: 0.75rem;
+    text-align: center;
+}
+
+@media (max-width: 640px) {
+    .folha {
+        padding: 1.3rem;
+    }
+
+    .numeros {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* Impressão: só a folha, sem cabeçalho, rodapé, cenário nem botões */
+@media print {
+    :global(body):has(.folha) :global(header):not(.cabecalho),
+    :global(body):has(.folha) :global(footer):not(.rodape),
+    :global(body):has(.folha) [aria-hidden='true'],
+    :global(body):has(.folha) [role='status'],
+    :global(body):has(.folha) button[aria-label='Ver só o fundo'],
+    .barra {
+        display: none !important;
+    }
+
+    :global(body):has(.folha) {
+        background: #fff !important;
+    }
+
+    .pagina {
+        width: 100%;
+        margin: 0;
+    }
+
+    .folha {
+        border: none;
+        box-shadow: none;
+        padding: 0;
+    }
+}
+
+/* Na tela do celular, a tabela rola de lado dentro da folha (no papel ela cabe) */
+@media screen and (max-width: 640px) {
+    .folha {
+        overflow-x: auto;
+    }
+    .folha th,
+    .folha td {
+        padding: 0.35rem 0.4rem;
+        white-space: nowrap;
+    }
+}

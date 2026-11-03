@@ -1,0 +1,56 @@
+.link {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.link input {
+    flex: 1 1 16rem;
+    min-width: 0;
+    padding: 0.6rem 0.8rem;
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    color: var(--color-titulo);
+    background: var(--color-campo);
+    border: 2px solid var(--color-borda-pixel);
+}
+
+.codigo {
+    font-family: var(--font-magica);
+    font-size: 0.8rem;
+    color: var(--color-titulo);
+}
+
+.lista {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.lista li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.3rem 0.8rem;
+    padding: 0.6rem 0.8rem;
+    border: 2px solid var(--color-borda-pixel);
+    background: var(--color-bg-alt);
+}
+
+.lista strong {
+    color: var(--color-titulo);
+}
+
+.lista li > span:last-child {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+/* O texto fica na cor normal (contraste); o verde vai no ícone */
+.ok svg {
+    color: var(--color-sucesso);
+}

@@ -1,0 +1,39 @@
+/* Cores de nome da loja: claras na noite, mais escuras no pôr do sol (contraste de texto nos dois) */
+.cor_ouro { color: #f2c66d; }
+.cor_rosa { color: #f0a6b4; }
+.cor_ciano { color: #7fd8e8; }
+.cor_lilas { color: #c9a8f0; }
+
+:global(:root[data-theme='light']) .cor_ouro { color: #855800; }
+:global(:root[data-theme='light']) .cor_rosa { color: #a2324d; }
+:global(:root[data-theme='light']) .cor_ciano { color: #136b7c; }
+:global(:root[data-theme='light']) .cor_lilas { color: #6a3fa8; }
+
+/* Selo de disponibilidade */
+.disponibilidade {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.2rem 0.6rem;
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 700;
+    white-space: nowrap;
+    border: 2px solid currentColor;
+    background: var(--color-surface);
+    text-shadow: none;
+    letter-spacing: 0;
+    vertical-align: middle;
+}
+
+.disponivel {
+    color: var(--color-sucesso);
+}
+
+.ocupado {
+    color: var(--color-ouro-texto);
+}
+
+.ferias {
+    color: var(--color-feitico);
+}

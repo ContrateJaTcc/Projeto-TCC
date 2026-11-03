@@ -1,0 +1,142 @@
+.controles {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 0.8rem 1.1rem;
+    margin-bottom: 1.1rem;
+}
+
+.controles label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--color-text-soft);
+}
+
+.controles select {
+    min-width: 0;
+    max-width: 100%;
+    border: 2px solid var(--color-borda-pixel);
+    background: var(--color-campo);
+    color: var(--color-text);
+    padding: 0.5rem 0.65rem;
+    font-size: 0.9rem;
+}
+
+.controles a {
+    color: var(--color-titulo);
+    font-weight: 700;
+}
+
+.grade {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+    gap: 1.1rem;
+    align-items: start;
+}
+
+.esperaMapa {
+    display: grid;
+    place-items: center;
+    height: 420px;
+    background: var(--color-surface);
+    border: 3px solid var(--color-tinta);
+    color: var(--color-text-muted);
+}
+
+.lista {
+    max-height: 560px;
+    overflow: auto;
+}
+
+.limpar {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.3rem 0.65rem;
+    font-family: var(--font-sans);
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--color-titulo);
+    background: var(--color-bg-alt);
+    border: 2px solid var(--color-borda-pixel);
+    cursor: pointer;
+}
+
+.itens {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+}
+
+.itens li {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    padding: 0.6rem 0.75rem;
+    background: var(--color-surface-muted);
+    border: 2px solid transparent;
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+}
+
+.itens li:hover {
+    border-color: var(--color-accent);
+}
+
+.itens a {
+    color: var(--color-titulo);
+    font-size: 0.95rem;
+    text-decoration: none;
+}
+
+.itens a:hover {
+    text-decoration: underline;
+}
+
+.ondeFica {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.2rem;
+}
+
+.ondeFica b {
+    color: var(--color-text);
+}
+
+.valor {
+    font-weight: 800;
+    color: var(--color-titulo);
+}
+
+.foraDoMapa {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 0.35rem;
+    font-size: 0.78rem;
+    color: var(--color-text-muted);
+    line-height: 1.45;
+}
+
+.foraDoMapa a {
+    color: var(--color-titulo);
+    font-weight: 700;
+}
+
+@media (max-width: 860px) {
+    .grade {
+        grid-template-columns: 1fr;
+    }
+
+    .lista {
+        max-height: none;
+    }
+}

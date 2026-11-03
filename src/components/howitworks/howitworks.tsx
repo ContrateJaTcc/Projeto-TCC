@@ -25,7 +25,7 @@ export default function HowItWorks({ perfil }: HowItWorksProps) {
 
   return (
     <section className={styles.como} id="como-funciona">
-      <h2>Como Funciona?</h2>
+      <h2 className="titulo-magico placa">Como Funciona?</h2>
 
       <div className={styles.grid}>
         {etapas.map((e) => (

@@ -5,13 +5,13 @@
 }
 
 .diferenciais > h2 {
-    font-family: var(--font-display);
-    font-size: clamp(2rem, 5vw, 3.8rem);
-    color: #322258;
+    font-family: var(--font-titulo);
+    font-size: clamp(3.25rem, 8.13vw, 6.17rem);
+    color: var(--color-titulo);
 }
 
 .chamada {
-    color: #6b6b6b;
+    color: var(--color-text-muted);
     font-style: italic;
     max-width: 640px;
     margin: 0.75rem auto 2.5rem auto;
@@ -25,7 +25,7 @@
 }
 
 .destaque {
-    background: #F4F1F8;
+    background: var(--color-bg-alt);
     border-radius: var(--radius-md);
     padding: 1.75rem;
     text-align: left;
@@ -33,30 +33,30 @@
 
 .tagDestaque {
     display: inline-block;
-    background: #322258;
+    background: var(--color-primary);
     color: #fff;
     font-size: 0.7rem;
     font-weight: 700;
     letter-spacing: 0.04em;
-    border-radius: 999px;
+    border-radius: var(--radius-pill);
     padding: 0.3rem 0.8rem;
     margin-bottom: 0.75rem;
 }
 
 .destaque h3 {
-    font-family: var(--font-display);
-    color: #322258;
+    font-family: var(--font-titulo);
+    color: var(--color-titulo);
     margin-bottom: 0.5rem;
 }
 
 .destaque p {
-    color: #555;
+    color: var(--color-text-muted);
     line-height: 1.45;
     font-size: 0.95rem;
 }
 
 .tabelaWrap {
-    background: #fff;
+    background: var(--color-surface);
     border-radius: var(--radius-md);
     padding: 1.5rem;
     box-shadow: var(--shadow-md);
@@ -65,7 +65,7 @@
 
 .tituloTabela {
     font-family: var(--font-display);
-    color: #322258;
+    color: var(--color-titulo);
     margin-bottom: 1rem;
 }
 
@@ -78,17 +78,17 @@
 .tabela th, .tabela td {
     padding: 0.75rem 1rem;
     text-align: center;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid var(--color-borda-pixel);
 }
 
 .tabela th:first-child, .tabela td:first-child {
     text-align: left;
-    color: #322258;
+    color: var(--color-titulo);
     font-weight: 600;
 }
 
 .tabela thead th {
-    background: #322258;
+    background: var(--color-primary);
     color: #fff;
     font-family: var(--font-display);
 }
@@ -102,10 +102,9 @@
     border-radius: 0 10px 0 0;
 }
 
-/* O verde/vermelho eram as únicas cores fora da paleta da marca. O próprio
-   ícone (check / x) já distingue, então a cor pode ser decorativa. */
+/* Ícones */
 .check {
-    color: var(--color-primary-light);
+    color: var(--color-feitico);
     font-weight: 700;
     font-size: 1.1rem;
 }

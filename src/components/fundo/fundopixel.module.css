@@ -1,0 +1,413 @@
+.fundo {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+    user-select: none;
+}
+
+/* Miniatura nas Configurações: o desenho inteiro, na proporção dele */
+.previa {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 480 / 300;
+    overflow: hidden;
+    border: 3px solid var(--color-borda-pixel);
+    box-shadow: var(--shadow-sm);
+    background: #0b0b13;
+}
+
+.previaPalco {
+    position: absolute;
+    inset: 0;
+}
+
+/* Desenho centralizado; o topo é calculado no componente */
+.palco {
+    position: absolute;
+    left: 50%;
+}
+
+.camada {
+    position: absolute;
+    inset: 0;
+    will-change: transform;
+}
+
+.camada img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    image-rendering: pixelated;
+}
+
+/* Nuvens andando bem devagar, um pixel do desenho por vez, indo e voltando */
+.deriva img {
+    animation: nuvensDeriva 240s steps(12, end) infinite alternate;
+}
+
+@keyframes nuvensDeriva {
+    to { transform: translateX(calc(12px * var(--s))); }
+}
+
+/*
+ * Dragão planando: sobe e desce devagar e balança um pouco para os lados,
+ * sempre em pixels inteiros do desenho (cada passo vale --s pixels da tela)
+ */
+.plana img {
+    animation: planar 7.2s infinite;
+    animation-timing-function: steps(1, end);
+}
+
+@keyframes planar {
+    0%, 100% { transform: translate(0, 0); }
+    12% { transform: translate(0, calc(-1px * var(--s))); }
+    25% { transform: translate(calc(1px * var(--s)), calc(-2px * var(--s))); }
+    38% { transform: translate(calc(1px * var(--s)), calc(-3px * var(--s))); }
+    50% { transform: translate(calc(2px * var(--s)), calc(-3px * var(--s))); }
+    62% { transform: translate(calc(1px * var(--s)), calc(-2px * var(--s))); }
+    75% { transform: translate(calc(1px * var(--s)), calc(-1px * var(--s))); }
+    88% { transform: translate(0, 0); }
+}
+
+/* Tema anterior por cima, sumindo aos poucos na troca entre noite e dia */
+.saindo {
+    animation: desbotar 0.7s ease-in-out forwards;
+}
+
+@keyframes desbotar {
+    to { opacity: 0; }
+}
+
+/* Animações desligadas (nas Configurações ou, sem escolha lá, no sistema): tudo parado e sem relâmpago */
+:global([data-movimento='reduzido']) .deriva img,
+:global([data-movimento='reduzido']) .plana img,
+:global([data-movimento='reduzido']) .chuva,
+:global([data-movimento='reduzido']) .chuvaForte,
+:global([data-movimento='reduzido']) .neve {
+    animation: none;
+}
+
+:global([data-movimento='reduzido']) .saindo {
+    animation-duration: 0.01s;
+}
+
+:global([data-movimento='reduzido']) .raio {
+    display: none;
+}
+
+/* Chuva em pixels caindo na diagonal */
+.chuva {
+    position: absolute;
+    inset: 0;
+    background-image: url('/fundo/chuva.svg');
+    background-size: calc(96px * var(--s)) calc(96px * var(--s));
+    image-rendering: pixelated;
+    animation: chover 0.5s steps(6, end) infinite;
+}
+
+/* Animações desligadas ou aba escondida: o clima fica parado */
+.parada * {
+    animation: none !important;
+}
+
+@keyframes chover {
+    to {
+        background-position: calc(-24px * var(--s)) calc(96px * var(--s));
+    }
+}
+
+/* Tempestade: uma segunda chuva, mais grossa e mais rápida, por cima da primeira */
+.chuvaForte {
+    position: absolute;
+    inset: 0;
+    background-image: url('/fundo/chuva.svg');
+    background-size: calc(144px * var(--s)) calc(144px * var(--s));
+    background-position: calc(40px * var(--s)) calc(30px * var(--s));
+    image-rendering: pixelated;
+    opacity: 0.6;
+    animation: choverForte 0.35s steps(6, end) infinite;
+}
+
+@keyframes choverForte {
+    from { background-position: calc(40px * var(--s)) calc(30px * var(--s)); }
+    to { background-position: calc(4px * var(--s)) calc(174px * var(--s)); }
+}
+
+/*
+ * Relâmpago: a tela clareia em dois lampejos curtos e fica um bom tempo quieta.
+ * Fraco de propósito (no máximo 30%) e nunca mais de 3 por segundo, para não incomodar.
+ */
+.raio {
+    position: absolute;
+    inset: 0;
+    background: #e9e2ff;
+    mix-blend-mode: screen;
+    opacity: 0;
+    animation: relampago 13s linear infinite;
+    animation-delay: -6s;
+}
+
+.raioDia {
+    background: #fff4e6;
+}
+
+@keyframes relampago {
+    0%, 88% { opacity: 0; }
+    88.6% { opacity: 0.3; }
+    89.4% { opacity: 0.04; }
+    91% { opacity: 0.2; }
+    93%, 100% { opacity: 0; }
+}
+
+/* Neve: duas camadas de flocos, a de perto maior e mais rápida, balançando de leve */
+.neve {
+    position: absolute;
+    inset: 0;
+    background-image: url('/fundo/neve.svg'), url('/fundo/neve.svg');
+    background-size: calc(144px * var(--s)) calc(144px * var(--s)), calc(96px * var(--s)) calc(96px * var(--s));
+    background-position: 0 0, calc(30px * var(--s)) calc(50px * var(--s));
+    image-rendering: pixelated;
+    opacity: 0.85;
+    animation: nevar 24s steps(240, end) infinite, balancarNeve 6s steps(4, end) infinite alternate;
+}
+
+@keyframes nevar {
+    to {
+        background-position: 0 calc(288px * var(--s)), calc(30px * var(--s)) calc(242px * var(--s));
+    }
+}
+
+@keyframes balancarNeve {
+    to { transform: translateX(calc(2px * var(--s))); }
+}
+
+/* Neblina andando: imagem do mesmo tamanho do desenho, por cima de todas as camadas */
+.neblina {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    image-rendering: pixelated;
+}
+
+/* Neblina também cobre o que fica fora do desenho; parada quando as animações estão desligadas */
+.veuNeblina {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(73, 77, 126, 0) 25%, rgba(73, 77, 126, 0.28) 60%, rgba(73, 77, 126, 0.42) 100%);
+}
+
+.veuNeblinaDia {
+    background: linear-gradient(180deg, rgba(242, 211, 171, 0) 25%, rgba(242, 211, 171, 0.24) 60%, rgba(242, 211, 171, 0.36) 100%);
+}
+
+/* Fogos sobre o castelo (atrás das torres, na frente do céu) */
+.fogos {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+.faisca {
+    opacity: 0;
+    animation: subirFaisca 0.7s steps(10, end) both;
+}
+
+@keyframes subirFaisca {
+    0% { opacity: 1; transform: translateY(0); }
+    95% { opacity: 1; transform: translateY(var(--sobe)); }
+    100% { opacity: 0; transform: translateY(var(--sobe)); }
+}
+
+.particula {
+    opacity: 0;
+    animation: estourar 1.9s steps(16, end) both;
+}
+
+/* Sai rápido do centro e vai freando; no fim cai alguns pixels, como faísca pesada */
+@keyframes estourar {
+    0%, 36% { opacity: 0; transform: translate(0, 0); }
+    37% { opacity: 1; transform: translate(0, 0); }
+    55% { opacity: 1; transform: translate(calc(var(--dx) * 0.8), calc(var(--dy) * 0.8)); }
+    75% { opacity: 1; }
+    100% { opacity: 0; transform: translate(var(--dx), calc(var(--dy) + 8px)); }
+}
+
+.rastro {
+    fill-opacity: 0.45;
+}
+
+/* Véu leve para o texto continuar legível */
+.veu {
+    position: absolute;
+    inset: 0;
+    background: var(--veu-fundo);
+}
+
+.veuChuva {
+    background: var(--veu-fundo), rgba(8, 10, 30, 0.22);
+}
+
+.veuTempestade {
+    background: var(--veu-fundo), rgba(8, 10, 30, 0.36);
+}
+
+/* Só o fundo: o cenário cobre o site; clicar volta */
+.soFundo {
+    z-index: 300;
+    pointer-events: auto;
+    cursor: pointer;
+    animation: surgir 0.4s ease-out both;
+}
+
+@keyframes surgir {
+    from { opacity: 0; }
+}
+
+.dica {
+    position: absolute;
+    left: 50%;
+    bottom: 24px;
+    transform: translateX(-50%);
+    margin: 0;
+    padding: 8px 14px;
+    font-family: var(--font-display);
+    font-size: 0.8rem;
+    color: #fbf5ef;
+    background: rgba(8, 5, 16, 0.7);
+    border: 2px solid var(--color-borda-pixel);
+    white-space: nowrap;
+    animation: sumirDica 4s ease-in forwards;
+}
+
+@keyframes sumirDica {
+    0%, 70% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+/* Botão discreto no canto para abrir o modo */
+.olho {
+    position: fixed;
+    left: 14px;
+    bottom: 14px;
+    z-index: 40;
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    color: #fbf5ef;
+    background: rgba(8, 5, 16, 0.55);
+    border: 2px solid var(--color-borda-pixel);
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.2s, transform 0.2s;
+}
+
+.olho:hover,
+.olho:focus-visible {
+    opacity: 1;
+    transform: translateY(-2px);
+}
+
+/* No celular o botão ficaria por cima do conteúdo: lá a opção fica só nas Configurações */
+@media (max-width: 640px) {
+    .olho {
+        display: none;
+    }
+}
+
+:global([data-movimento='reduzido']) .soFundo,
+:global([data-movimento='reduzido']) .dica {
+    animation: none;
+}
+
+/* Coisas desenhadas por cima de uma camada (fase da lua, surpresas): mesma posição e escala do desenho */
+.extra {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+/* Surpresas: tudo anda um pixel do desenho por vez */
+.bruxa {
+    animation: voarVassoura 7s steps(37, end) both;
+}
+
+@keyframes voarVassoura {
+    0% { transform: translate(0, 0); opacity: 0; }
+    4% { opacity: 1; }
+    25% { transform: translate(-37px, -2px); }
+    50% { transform: translate(-75px, 0); }
+    75% { transform: translate(-112px, 2px); }
+    96% { opacity: 1; }
+    100% { transform: translate(-150px, 0); opacity: 0; }
+}
+
+.gato {
+    animation: andarGato 12s steps(62, end) both;
+}
+
+@keyframes andarGato {
+    0% { transform: translateX(0); opacity: 0; }
+    4% { opacity: 1; }
+    96% { opacity: 1; }
+    100% { transform: translateX(62px); opacity: 0; }
+}
+
+.patasA,
+.patasB {
+    animation: passoGato 0.4s steps(1, end) infinite;
+}
+
+.patasB {
+    animation-delay: -0.2s;
+}
+
+@keyframes passoGato {
+    0% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+.coruja {
+    animation: corujaAparece 8s steps(4, end) both;
+}
+
+@keyframes corujaAparece {
+    0% { opacity: 0; }
+    6% { opacity: 1; }
+    94% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+.olhosFechados {
+    opacity: 0;
+    animation: corujaPisca 8s steps(1, end) both;
+}
+
+.corujaAtrasada .olhosFechados {
+    animation-delay: 0.6s;
+}
+
+@keyframes corujaPisca {
+    0% { opacity: 0; }
+    30% { opacity: 1; }
+    33% { opacity: 0; }
+    36% { opacity: 1; }
+    39% { opacity: 0; }
+    70% { opacity: 1; }
+    73% { opacity: 0; }
+}
+
+/* Anoitecer no modo Auto: a noite vai aparecendo por cima do pôr do sol */
+.crepusculo {
+    pointer-events: none;
+    transition: opacity 2s linear;
+}

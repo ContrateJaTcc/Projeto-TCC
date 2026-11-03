@@ -1,0 +1,149 @@
+.grade {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr));
+    gap: 1.2rem;
+    align-items: start;
+}
+
+.chefao {
+    align-items: center;
+    text-align: center;
+}
+
+.chefao h2 {
+    align-self: flex-start;
+}
+
+.dragao {
+    width: min(100%, 240px);
+    height: auto;
+    image-rendering: pixelated;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    :root:not([data-movimento='reduzido']) .dragao:not(.caido) {
+        animation: voar 2.4s steps(4) infinite alternate;
+    }
+}
+
+@keyframes voar {
+    from { transform: translateY(0); }
+    to { transform: translateY(-6px); }
+}
+
+.caido {
+    transform: rotate(180deg);
+    opacity: 0.8;
+}
+
+.nome {
+    font-family: var(--font-titulo);
+    font-size: 2rem;
+    line-height: 1;
+    color: var(--color-titulo);
+}
+
+.vida {
+    width: 100%;
+    height: 18px;
+    background: var(--color-bg-alt);
+    border: 3px solid var(--color-tinta);
+}
+
+.vida span {
+    display: block;
+    height: 100%;
+    background: repeating-linear-gradient(90deg, #c2412d 0 10px, #e8663a 10px 20px);
+    transition: width 0.6s steps(10);
+}
+
+.numeros {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--color-titulo);
+}
+
+.tema {
+    font-family: var(--font-titulo);
+    font-size: 1.9rem;
+    line-height: 1.05;
+    color: var(--color-ouro-texto);
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.8rem;
+    border: 2px dashed var(--color-borda-pixel);
+}
+
+.form label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    font-size: 0.84rem;
+    font-weight: 700;
+    color: var(--color-titulo);
+}
+
+.form input {
+    padding: 0.5rem 0.65rem;
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    color: var(--color-titulo);
+    background: var(--color-campo);
+    border: 2px solid var(--color-borda-pixel);
+    min-width: 0;
+}
+
+.form button {
+    align-self: flex-start;
+}
+
+.envios {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.envios li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 0.7rem;
+    padding: 0.6rem 0.7rem;
+    background: var(--color-bg-alt);
+    border: 2px solid var(--color-borda-pixel);
+}
+
+.envios li > div {
+    flex: 1 1 10rem;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.envios strong {
+    color: var(--color-titulo);
+}
+
+.meu {
+    border-color: var(--color-accent) !important;
+}
+
+.posicao {
+    font-family: var(--font-titulo);
+    font-size: 1.6rem;
+    line-height: 1;
+    color: var(--color-ouro-texto);
+    min-width: 2.2rem;
+}
+
+.votado {
+    background: var(--color-accent) !important;
+    color: var(--color-tinta) !important;
+    border-color: var(--color-tinta) !important;
+}

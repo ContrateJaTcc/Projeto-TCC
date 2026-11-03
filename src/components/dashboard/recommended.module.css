@@ -4,11 +4,25 @@
 }
 
 .recomendados h2 {
-    font-family: var(--font-display);
-    color: #322258;
-    font-size: clamp(1.6rem, 3vw, 2.1rem);
+    font-family: var(--font-titulo);
+    color: var(--color-titulo);
+    font-size: clamp(2.6rem, 4.88vw, 3.42rem);
     text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: 0.4rem;
+}
+
+.explica {
+    width: fit-content;
+    max-width: 100%;
+    margin: 0 auto 2rem;
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--color-text);
+    text-shadow: 0 2px 0 rgba(0, 0, 0, 0.75), 0 0 6px rgba(0, 0, 0, 0.6);
+}
+
+:global(:root[data-theme='light']) .explica {
+    text-shadow: none;
 }
 
 .grid {

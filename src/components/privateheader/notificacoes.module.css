@@ -19,7 +19,7 @@
 .sino:hover,
 .sinoAtivo {
     background: var(--color-accent);
-    color: #1f1c34;
+    color: var(--color-tinta);
 }
 
 .contador {
@@ -54,10 +54,10 @@
     max-height: 70vh;
     display: flex;
     flex-direction: column;
-    background: #fff;
-    border-radius: 16px;
+    background: var(--color-surface);
+    border-radius: var(--radius-md);
     box-shadow: var(--shadow-lg);
-    border: 1px solid var(--color-surface-muted);
+    border: 2px solid var(--color-borda-pixel);
     overflow: hidden;
     z-index: 30;
     transform-origin: top right;
@@ -66,8 +66,8 @@
 
 .topo {
     padding: 0.9rem 1.1rem;
-    border-bottom: 1px solid var(--color-surface-muted);
-    color: var(--color-primary);
+    border-bottom: 2px solid var(--color-borda-pixel);
+    color: var(--color-titulo);
 }
 
 .lista {
@@ -79,7 +79,7 @@
 
 .lista li {
     padding: 0.85rem 1.1rem;
-    border-bottom: 1px solid var(--color-surface-muted);
+    border-bottom: 2px solid var(--color-borda-pixel);
     font-size: 0.84rem;
     transition: background-color var(--dur-media);
 }
@@ -89,7 +89,7 @@
 }
 
 .lista li strong {
-    color: var(--color-primary);
+    color: var(--color-titulo);
 }
 
 .lista li p {
@@ -142,4 +142,71 @@
     30% { transform: rotate(-12deg); }
     45% { transform: rotate(8deg); }
     60% { transform: rotate(-4deg); }
+}
+
+/* Cabeçalho claro: sino em tinta marinho */
+:global(:root[data-theme='light']) .sino:not(:hover, .sinoAtivo) {
+    background: rgba(39, 39, 68, 0.06);
+    color: #272744;
+}
+
+/* Ícone do tipo de aviso ao lado do texto */
+.lista li {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.7rem;
+    align-items: start;
+}
+
+.icone {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    margin-top: 2px;
+    background: var(--color-surface-muted);
+    border: 2px solid var(--color-borda-pixel);
+    color: var(--color-text-muted);
+}
+
+.icone svg {
+    display: block;
+}
+
+.icone_mensagem,
+.icone_insignia {
+    color: var(--color-feitico);
+}
+
+.icone_convite,
+.icone_avaliacao {
+    color: var(--color-ouro-texto);
+}
+
+.icone_contratacao,
+.icone_entrega {
+    color: var(--color-sucesso);
+}
+
+.icone_administracao {
+    color: var(--color-danger);
+}
+
+/* "Carregar mais" no fim da lista */
+.maisItem {
+    display: flex !important;
+    justify-content: center;
+    padding: 0.5rem !important;
+}
+
+.mais {
+    padding: 0.4rem 0.9rem;
+    font-family: var(--font-sans);
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--color-titulo);
+    background: var(--color-bg-alt);
+    border: 2px solid var(--color-borda-pixel);
+    cursor: pointer;
 }

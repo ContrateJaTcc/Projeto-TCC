@@ -1,0 +1,76 @@
+.numeros {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.1rem;
+    margin-bottom: 1.6rem;
+}
+
+.numero {
+    gap: 0.4rem;
+}
+
+.numero strong {
+    font-family: var(--font-titulo);
+    font-weight: 400;
+    font-size: 2.6rem;
+    line-height: 1;
+    color: var(--color-titulo);
+}
+
+.numero strong.menor {
+    font-size: 1.9rem;
+}
+
+.rotulo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 700;
+    font-size: 0.86rem;
+    color: var(--color-text-muted);
+}
+
+.secao {
+    margin-bottom: 1.8rem;
+}
+
+.secao > h2 {
+    font-family: var(--font-titulo);
+    color: var(--color-titulo);
+    font-size: 2.1rem;
+    line-height: 1;
+    margin-bottom: 0.8rem;
+}
+
+.porcento {
+    color: var(--color-feitico) !important;
+    font-weight: 700;
+}
+
+.dica {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.45rem;
+    padding: 0.7rem 1rem;
+    background: var(--color-surface);
+    border: 2px solid var(--color-borda-pixel);
+    font-size: 0.86rem;
+    color: var(--color-text);
+}
+
+.dica svg {
+    flex-shrink: 0;
+    margin-top: 0.15rem;
+    color: var(--color-ouro-texto);
+}
+
+.dica a {
+    color: var(--color-titulo);
+    font-weight: 700;
+}
+
+@media (max-width: 860px) {
+    .numeros {
+        grid-template-columns: 1fr;
+    }
+}

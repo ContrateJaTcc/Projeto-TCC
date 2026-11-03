@@ -13,19 +13,13 @@ interface Toast {
 const DURACAO = 4000
 const ICONES = { sucesso: CircleCheck, erro: CircleAlert, info: Info }
 
-/*
- * Avisos que entram pelo canto e somem sozinhos.
- *
- * Substituem os <p style={{ color: 'green' }}> espalhados pelas telas: aquela
- * mensagem aparecia sem transição, empurrava o layout para baixo e ficava lá
- * até a página recarregar.
- */
+/* Toasts */
 export function ToastProvider({ children }: { children: ReactNode }) {
   const [toasts, setToasts] = useState<Toast[]>([])
   const proximoId = useRef(0)
 
   const fechar = useCallback((id: number) => {
-    /* Marca como saindo para tocar a animação de saída antes de remover. */
+    /* Saída */
     setToasts((atuais) => atuais.map((t) => (t.id === id ? { ...t, saindo: true } : t)))
     setTimeout(() => setToasts((atuais) => atuais.filter((t) => t.id !== id)), 250)
   }, [])
@@ -33,7 +27,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   const mostrar = useCallback(
     (mensagem: string, tipo: TipoToast = 'sucesso') => {
       const id = ++proximoId.current
-      /* No máximo 3 na tela: uma rajada de ações não cobre a página. */
+      /* Máximo 3 */
       setToasts((atuais) => [...atuais.slice(-2), { id, mensagem, tipo, saindo: false }])
       setTimeout(() => fechar(id), DURACAO)
     },

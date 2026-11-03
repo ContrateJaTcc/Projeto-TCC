@@ -26,7 +26,7 @@ export default function ListaAvaliacoes({ avaliacoes, vazio }: ListaAvaliacoesPr
             <span className={styles.suave}>
               {a.serv_titulo} · {new Date(a.aval_data).toLocaleDateString('pt-BR')}
             </span>
-            {a.aval_comentario && <p>{a.aval_comentario}</p>}
+            {a.aval_comentario && <p className={styles.comentarioCurto}>{a.aval_comentario}</p>}
           </div>
         </li>
       ))}

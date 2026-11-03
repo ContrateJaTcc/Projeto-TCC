@@ -3,8 +3,9 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import logo from '../components/imgs/logo.png'
 import { api, ErroApi } from '../services/api'
 import styles from '../components/login/login.module.css'
+import CampoSenha from '../components/camposenha/camposenha'
 
-/* Página aberta pelo link do e-mail: /redefinir-senha?token=... */
+/* Redefinir senha */
 export default function RedefinirSenha() {
   const navigate = useNavigate()
   const token = useSearchParams()[0].get('token') ?? ''
@@ -61,8 +62,7 @@ export default function RedefinirSenha() {
             <div className={styles.formulario}>
               <label>
                 Nova senha
-                <input
-                  type="password"
+                <CampoSenha
                   required
                   minLength={6}
                   placeholder="Pelo menos 6 caracteres"
@@ -73,8 +73,7 @@ export default function RedefinirSenha() {
 
               <label>
                 Confirme a nova senha
-                <input
-                  type="password"
+                <CampoSenha
                   required
                   minLength={6}
                   placeholder="Repita a senha"

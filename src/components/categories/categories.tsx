@@ -16,7 +16,7 @@ interface Categoria {
   insignias: string[]
 }
 
-// Quantos cards ficam visíveis antes de precisar expandir.
+// Limite visível
 const LIMITE = 6
 
 const categorias: Categoria[] = [
@@ -108,10 +108,7 @@ export default function Categories({ perfil }: CategoriesProps) {
   const titulo = perfil === 'free' ? 'Encontre projetos' : 'Encontre freelancers'
   const categoria = categorias[selecionada]
 
-  // Recolhido mostra sempre LIMITE cards. Quando a selecionada está fora dessa
-  // faixa ela ocupa o lugar da última, em vez de ser somada à lista: assim o
-  // card ativo continua visível e o botão não é empurrado sozinho para a
-  // linha de baixo.
+  // Índices visíveis
   const indices = categorias.map((_, i) => i)
   const visiveis = expandido
     ? indices
@@ -121,7 +118,7 @@ export default function Categories({ perfil }: CategoriesProps) {
 
   return (
     <section className={styles.categorias} id="categorias">
-      <h2>{titulo}</h2>
+      <h2 className="titulo-magico esquerda placa">{titulo}</h2>
 
       <div className={styles.grid}>
         {visiveis.map((i) => {

@@ -1,0 +1,106 @@
+.selo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.15rem 0.55rem;
+    border-radius: var(--radius-pill);
+    background: var(--color-accent);
+    color: var(--color-tinta);
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    font-weight: 800;
+    white-space: nowrap;
+    vertical-align: middle;
+    /* Ao lado de títulos com sombra, o selo não herda a sombra */
+    text-shadow: none;
+    letter-spacing: 0;
+}
+
+.grande {
+    padding: 0.25rem 0.75rem;
+    font-size: 0.8rem;
+    border: 2px solid var(--color-tinta);
+    box-shadow: 2px 2px 0 0 var(--color-tinta);
+}
+
+.tempo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    color: var(--color-text-muted);
+    font-size: 0.82rem;
+}
+
+/* Checklist do selo no "Meu perfil" */
+.checklist {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    background: var(--color-surface);
+    border: 2px solid var(--color-borda-pixel);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    padding: 1.2rem 1.4rem;
+    margin-top: 1.5rem;
+}
+
+.checklistTopo {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.8rem;
+}
+
+.checklistIcone {
+    width: 38px;
+    height: 38px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-accent);
+    color: var(--color-tinta);
+    border: 2px solid var(--color-tinta);
+    box-shadow: 2px 2px 0 0 var(--color-tinta);
+}
+
+.checklistTopo h2 {
+    font-family: var(--font-titulo);
+    color: var(--color-titulo);
+    font-size: 1.8rem;
+    line-height: 1;
+}
+
+.checklistTopo p {
+    margin-top: 0.25rem;
+    color: var(--color-text-muted);
+    font-size: 0.86rem;
+}
+
+.checklist ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    gap: 0.5rem;
+}
+
+.checklist li {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.5rem 0.75rem;
+    background: var(--color-bg-alt);
+    border-radius: var(--radius-sm);
+    color: var(--color-text-muted);
+    font-size: 0.86rem;
+    font-weight: 600;
+}
+
+.checklist li.ok {
+    color: var(--color-titulo);
+}
+
+.checklist li.ok svg {
+    color: var(--color-ouro-texto);
+}

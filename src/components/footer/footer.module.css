@@ -2,6 +2,9 @@
     position: relative;
     overflow: hidden;
     background: var(--gradient-footer);
+    /* O rodapé é sempre noturno: o texto não segue o tema claro */
+    --color-text: #e3ddf2;
+    --color-text-muted: #b3a9cc;
 }
 
 .footer::before {
@@ -11,7 +14,7 @@
     left: 6%;
     width: 420px;
     height: 420px;
-    background: radial-gradient(circle, rgba(255, 192, 20, 0.14) 0%, rgba(255, 192, 20, 0) 70%);
+    background: radial-gradient(circle, rgba(242, 211, 171, 0.14) 0%, rgba(242, 211, 171, 0) 70%);
     pointer-events: none;
 }
 
@@ -63,14 +66,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #e6e0f0;
+    color: var(--color-text);
     transition: all 0.2s ease;
 }
 
 .social a:hover {
     background: var(--color-accent);
     border-color: var(--color-accent);
-    color: #1f1c34;
+    color: var(--color-tinta);
     transform: translateY(-2px);
 }
 
@@ -82,7 +85,7 @@
 
 .coluna h3 {
     font-family: var(--font-sans);
-    font-size: 0.78rem;
+    font-size: 1.27rem;
     font-weight: 700;
     letter-spacing: 0.12em;
     text-transform: uppercase;
@@ -95,7 +98,7 @@
 }
 
 .coluna a {
-    color: #e6e0f0;
+    color: var(--color-text);
     text-decoration: none;
     font-size: 0.92rem;
     width: fit-content;
@@ -121,7 +124,7 @@
 }
 
 .copyright {
-    color: #a99bc4;
+    color: var(--color-text-muted);
     font-size: 0.8rem;
 }
 
@@ -132,7 +135,7 @@
 }
 
 .rodape a {
-    color: #a99bc4;
+    color: var(--color-text-muted);
     text-decoration: none;
     font-size: 0.8rem;
     transition: color 0.2s ease;
@@ -160,4 +163,41 @@
         grid-template-columns: 1fr;
         padding-top: 3rem;
     }
+}
+
+/* Bruxa */
+.footer {
+    background: var(--estrelas), var(--gradient-footer);
+}
+
+.footer::after {
+    content: '';
+    position: absolute;
+    right: 4%;
+    bottom: 40px;
+    width: 220px;
+    height: 180px;
+    background: var(--chapeu) center / contain no-repeat;
+    opacity: 0.06;
+    transform: rotate(-10deg);
+    pointer-events: none;
+}
+
+.logo {
+    font-family: var(--font-magica);
+    font-weight: 700;
+    letter-spacing: 0;
+}
+
+.logo::after {
+    content: ' ✦';
+    font-size: 0.7em;
+    vertical-align: super;
+}
+
+/* Continua o chão do cenário */
+.footer {
+    background: var(--color-primary-dark);
+    border-top: 3px solid var(--color-borda-pixel);
+    margin-top: 3rem;
 }

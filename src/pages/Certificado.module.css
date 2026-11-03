@@ -1,0 +1,234 @@
+.pagina {
+    width: min(92%, 900px);
+    margin: 2rem auto 3rem;
+}
+
+.barra {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.6rem;
+    margin-bottom: 1.2rem;
+}
+
+.botao {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 1rem;
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 0.86rem;
+    cursor: pointer;
+    text-decoration: none;
+    background: var(--color-surface);
+    color: var(--color-titulo);
+    border: 2px solid var(--color-borda-pixel);
+    box-shadow: var(--shadow-sm);
+}
+
+.botao:hover {
+    border-color: var(--color-accent);
+}
+
+/* O pergaminho é sempre claro (sai igual na impressão) */
+.pergaminho {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.5rem;
+    padding: 3rem 3rem 2.4rem;
+    background:
+        radial-gradient(ellipse at center, #fffaf0 0 55%, #f6e6c8 100%);
+    color: #2a1d12;
+    border: 4px solid #8b6146;
+    outline: 4px solid #f2d3ab;
+    outline-offset: -14px;
+    box-shadow: 8px 8px 0 0 #272744;
+    font-family: var(--font-sans);
+}
+
+/* Cantos em pixel */
+.canto {
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    background:
+        linear-gradient(#8b6d9c, #8b6d9c) 0 0 / 22px 6px no-repeat,
+        linear-gradient(#8b6d9c, #8b6d9c) 0 0 / 6px 22px no-repeat,
+        linear-gradient(#c69fa5, #c69fa5) 9px 9px / 6px 6px no-repeat;
+}
+
+.cantoA { top: 22px; left: 22px; }
+.cantoB { top: 22px; right: 22px; transform: scaleX(-1); }
+.cantoC { bottom: 22px; left: 22px; transform: scaleY(-1); }
+.cantoD { bottom: 22px; right: 22px; transform: scale(-1, -1); }
+
+.marca {
+    font-family: var(--font-magica);
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    color: #5b349a;
+}
+
+.pergaminho h1 {
+    font-family: var(--font-titulo);
+    font-size: clamp(2.4rem, 6vw, 3.6rem);
+    line-height: 1;
+    color: #2a1d12;
+    text-shadow: 3px 3px 0 #f2d3ab;
+}
+
+.texto {
+    max-width: 560px;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #3d2a1e;
+}
+
+.nome {
+    font-family: var(--font-titulo);
+    font-weight: 400;
+    font-size: clamp(2.2rem, 5.5vw, 3.2rem);
+    line-height: 1.05;
+    color: #5b349a;
+    padding: 0 1rem 0.2rem;
+    border-bottom: 3px solid #c69fa5;
+}
+
+.nota {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.15rem;
+    margin-top: 0.3rem;
+}
+
+.nota span {
+    margin-left: 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #3d2a1e;
+}
+
+.cheia {
+    fill: #e0a43a;
+    color: #8a5a10;
+}
+
+.vazia {
+    color: #c9b89c;
+}
+
+.rodape {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: end;
+    gap: 1rem;
+    margin-top: 1.6rem;
+}
+
+.assinatura {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.75rem;
+    color: #5a4636;
+}
+
+.linha {
+    width: 80%;
+    height: 2px;
+    background: #8b6146;
+}
+
+.codigo {
+    font-family: var(--font-magica);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    color: #2a1d12;
+}
+
+.selo {
+    width: 72px;
+    height: 72px;
+    image-rendering: pixelated;
+    filter: drop-shadow(2px 2px 0 rgba(0, 0, 0, 0.35));
+}
+
+.verificar {
+    margin-top: 1rem;
+    text-align: center;
+    font-size: 0.82rem;
+    color: var(--color-text-muted);
+}
+
+.verificar strong {
+    color: var(--color-titulo);
+    overflow-wrap: anywhere;
+}
+
+.erro {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+    text-align: center;
+    margin: 4rem auto;
+    max-width: 420px;
+    padding: 2rem;
+    background: var(--color-surface);
+    border: 2px solid var(--color-borda-pixel);
+    box-shadow: var(--shadow-md);
+    color: var(--color-text-muted);
+}
+
+.erro strong {
+    color: var(--color-titulo);
+}
+
+@media (max-width: 640px) {
+    .pergaminho {
+        padding: 2.4rem 1.4rem 1.8rem;
+    }
+
+    .rodape {
+        grid-template-columns: 1fr;
+        justify-items: center;
+    }
+}
+
+@media print {
+    :global(body):has(.pergaminho) :global(header),
+    :global(body):has(.pergaminho) :global(footer),
+    :global(body):has(.pergaminho) [aria-hidden='true']:not(.pergaminho *),
+    :global(body):has(.pergaminho) [role='status'],
+    :global(body):has(.pergaminho) button[aria-label='Ver só o fundo'],
+    .barra,
+    .verificar {
+        display: none !important;
+    }
+
+    :global(body):has(.pergaminho) {
+        background: #fff !important;
+    }
+
+    .pagina {
+        width: 100%;
+        margin: 0;
+    }
+
+    .pergaminho {
+        box-shadow: none;
+    }
+}
+
+/* Com a plaquinha do tema claro, o aviso fica centralizado como antes */
+.verificar:global(.placa) {
+    margin-inline: auto;
+}

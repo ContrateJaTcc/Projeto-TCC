@@ -1,14 +1,40 @@
 <!doctype html>
-<html lang="en">
+<html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="icon" type="image/png" sizes="256x256" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/icone-192.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="theme-color" content="#1b1b30" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="ContrateJá: freelancers e contratantes numa jornada de níveis, XP e insígnias." />
+    <!-- Prévia do link (WhatsApp, Discord, redes). __SITE__ vira o endereço do site no build (vite.config.ts) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:site_name" content="ContrateJá" />
+    <meta property="og:title" content="ContrateJá: freelancers e contratantes numa jornada de conquistas" />
+    <meta property="og:description" content="Publique projetos, candidate-se e suba de nível. Projetos de verdade, XP, insígnias e ranking." />
+    <meta property="og:url" content="__SITE__/" />
+    <meta property="og:image" content="__SITE__/og-imagem.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Castelo em pixel art ao pôr do sol com o logo do ContrateJá" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="ContrateJá" />
+    <meta name="twitter:description" content="Freelancers e contratantes numa jornada de níveis, XP e insígnias." />
+    <meta name="twitter:image" content="__SITE__/og-imagem.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Pixelify+Sans:wght@400;500;600;700&family=Press+Start+2P&family=Jersey+10&display=swap" rel="stylesheet">
 
     <title>ContrateJá</title>
+    <script>
+      try {
+        var p = JSON.parse(localStorage.getItem('preferencias') || '{}')
+        document.documentElement.dataset.theme = p.tema === 'claro' ? 'light' : 'dark'
+        document.documentElement.dataset.movimento = p.animacoes === false ? 'reduzido' : 'normal'
+      } catch (e) {}
+    </script>
   </head>
   <body>
     <div id="root"></div>

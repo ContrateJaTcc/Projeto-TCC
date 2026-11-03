@@ -6,7 +6,7 @@ interface EstadoErroProps {
   onTentarDeNovo?: () => void
 }
 
-/* Falha ao carregar uma tela: mensagem clara e um jeito de tentar de novo sem recarregar tudo. */
+/* Erro */
 export default function EstadoErro({ mensagem, onTentarDeNovo }: EstadoErroProps) {
   return (
     <div className={`${styles.erro} entrada`} role="alert">

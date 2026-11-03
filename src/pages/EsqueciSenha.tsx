@@ -5,7 +5,7 @@ import { api, ErroApi } from '../services/api'
 import styles from '../components/login/login.module.css'
 
 export default function EsqueciSenha() {
-  /* O login passa o e-mail que já estava digitado. */
+  /* E-mail do login */
   const vindoDoLogin = useLocation().state as { email?: string } | null
 
   const [email, setEmail] = useState(vindoDoLogin?.email ?? '')

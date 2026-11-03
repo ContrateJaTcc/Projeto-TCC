@@ -4,9 +4,9 @@
 }
 
 .pagina h1 {
-    font-family: var(--font-display);
-    color: var(--color-primary);
-    font-size: 1.7rem;
+    font-family: var(--font-titulo);
+    color: var(--color-titulo);
+    font-size: 2.77rem;
     margin-bottom: 1.5rem;
 }
 
@@ -17,9 +17,9 @@
 }
 
 .card {
-    background: #fff;
-    border: 1px solid var(--color-surface-muted);
-    border-radius: 18px;
+    background: var(--color-surface);
+    border: 2px solid var(--color-borda-pixel);
+    border-radius: var(--radius-lg);
     padding: 1.4rem 1.6rem;
     display: flex;
     gap: 1.1rem;
@@ -36,7 +36,7 @@
 }
 
 .info strong {
-    color: var(--color-primary);
+    color: var(--color-titulo);
     font-family: var(--font-display);
 }
 
@@ -44,7 +44,7 @@
     display: inline-flex;
     align-items: center;
     gap: 0.25rem;
-    color: var(--color-accent-hover);
+    color: var(--color-ouro-texto);
     font-size: 0.85rem;
     font-weight: 700;
 }
@@ -62,13 +62,13 @@
     color: var(--color-text);
     font-size: 0.78rem;
     font-weight: 600;
-    border-radius: 999px;
+    border-radius: var(--radius-pill);
     padding: 0.25rem 0.75rem;
     margin-bottom: 0.6rem;
 }
 
 .proposta {
-    color: #555;
+    color: var(--color-text-muted);
     font-size: 0.9rem;
     line-height: 1.4;
 }
@@ -82,7 +82,7 @@
 }
 
 .valor {
-    color: var(--color-primary);
+    color: var(--color-titulo);
     font-weight: 700;
 }
 
@@ -93,7 +93,7 @@
 
 .aceitar, .recusar {
     border: none;
-    border-radius: 999px;
+    border-radius: var(--radius-pill);
     padding: 0.5rem 1.1rem;
     font-size: 0.85rem;
     font-weight: 700;
@@ -103,7 +103,7 @@
 
 .aceitar {
     background: var(--color-accent);
-    color: #1f1c34;
+    color: var(--color-tinta);
 }
 
 .recusar {
@@ -115,7 +115,7 @@
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
-    color: var(--color-primary-light);
+    color: var(--color-feitico);
     font-size: 0.82rem;
     font-weight: 600;
     text-decoration: none;
@@ -125,14 +125,14 @@
     text-decoration: underline;
 }
 
-/* ---------- grupos, etiquetas e movimento ---------- */
+/* Grupos */
 
 .grupo {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     font-size: 1rem;
-    color: var(--color-primary);
+    color: var(--color-titulo);
     margin: 1.8rem 0 0.9rem;
 }
 
@@ -161,7 +161,7 @@
     border-color: var(--color-border);
 }
 
-/* Respondidos ficam um pouco apagados: o olho vai primeiro aos pendentes. */
+/* Respondidos */
 .respondido {
     opacity: 0.8;
 }
@@ -179,11 +179,11 @@
 
 .aceitar:hover:not(:disabled) {
     background: var(--color-accent-hover);
-    box-shadow: 0 4px 14px rgba(255, 192, 20, 0.4);
+    box-shadow: var(--shadow-md);
 }
 
 .recusar:hover:not(:disabled) {
-    background: #fdecea;
+    background: var(--color-perigo-tint);
     color: var(--color-danger);
 }
 
@@ -198,13 +198,13 @@
 }
 
 .aceita {
-    background: #e3f5ec;
-    color: #1d7a4c;
+    background: var(--color-sucesso-tint);
+    color: var(--color-sucesso);
 }
 
 .recusada {
-    background: #fdecea;
-    color: #9b2c22;
+    background: var(--color-perigo-tint);
+    color: var(--color-danger);
 }
 
 .vazio {
@@ -214,14 +214,14 @@
     gap: 0.5rem;
     text-align: center;
     padding: 3.5rem 1.5rem;
-    background: #fff;
-    border: 1px dashed var(--color-border);
+    background: var(--color-surface);
+    border: 2px dashed var(--color-borda-pixel);
     border-radius: var(--radius-lg);
     color: var(--color-text-muted);
 }
 
 .vazio strong {
-    color: var(--color-primary);
+    color: var(--color-titulo);
     font-size: 1.05rem;
 }
 
@@ -254,4 +254,87 @@
 
 .verPortfolio + .verPortfolio {
     margin-left: 1.1rem;
+}
+
+/* Contraproposta do freelancer */
+.contraproposta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    margin: 0.6rem 0 0.4rem;
+    padding: 0.7rem 0.9rem;
+    background: linear-gradient(var(--color-accent-tint), var(--color-accent-tint)), var(--color-surface);
+    border: 2px solid var(--color-accent);
+    border-radius: var(--radius-md);
+}
+
+.contraproposta strong {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--color-titulo);
+    font-size: 0.84rem;
+}
+
+.contrapropostaItens {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem 1rem;
+    font-size: 0.84rem;
+    color: var(--color-text);
+}
+
+.contrapropostaItens s {
+    color: var(--color-text-muted);
+}
+
+.contrapropostaItens b {
+    color: var(--color-ouro-texto);
+}
+
+.contraproposta p {
+    margin: 0;
+    font-size: 0.84rem;
+    font-style: italic;
+    color: var(--color-text-soft, var(--color-text));
+}
+
+.contraproposta small {
+    font-size: 0.74rem;
+    color: var(--color-text-muted);
+}
+
+/* Candidatura em nome da guilda */
+.guilda {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.12rem 0.55rem 0.12rem 0.3rem;
+    font-size: 0.74rem;
+    font-weight: 700;
+    color: var(--color-titulo);
+    background: var(--color-bg-alt);
+    border: 2px solid var(--color-accent);
+}
+
+.nomeELinha {
+    flex-wrap: wrap;
+}
+
+/* Botões de aceitar/recusar quebram a linha no celular */
+.acoes {
+    flex-wrap: wrap;
+}
+
+@media (max-width: 640px) {
+    .direita {
+        flex-wrap: wrap;
+        gap: 0.6rem;
+    }
+    .acoes {
+        flex: 1 1 100%;
+    }
+    .acoes button {
+        flex: 1 1 auto;
+    }
 }

@@ -7,7 +7,7 @@
     padding: clamp(2rem, 5vw, 4rem) clamp(1.5rem, 5vw, 5rem);
     position: relative;
     background: var(--gradient-hero);
-    border-radius: 28px;
+    border-radius: var(--radius-lg);
 }
 
 .heroTexto {
@@ -19,11 +19,11 @@
     max-width: 700px;
 }
 
-/*titlo conectse*/
+/* Título */
 .heroTexto h1 {
-    font-size: clamp(3rem, 6vw, 4rem);
+    font-size: clamp(3.75rem, 7.5vw, 5rem);
     font-weight: 800;
-    font-family: var(--font-display);
+    font-family: var(--font-titulo);
     color: rgb(255, 255, 255);
     line-height: 1.1;
     letter-spacing: -0.03em;
@@ -47,8 +47,8 @@
     max-width: 420px;
     display: flex;
     align-items: center;
-    background: #30302E;
-    border-radius: 999px;
+    background: var(--color-campo);
+    border-radius: var(--radius-pill);
     padding: 8px 6px 8px 18px;
 }
 
@@ -69,10 +69,10 @@
 .heroBusca button {
     background: var(--color-accent);
     border: none;
-    border-radius: 999px;
+    border-radius: var(--radius-pill);
     padding: 10px 20px;
     cursor: pointer;
-    color: #1f1c34;
+    color: var(--color-tinta);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -83,13 +83,12 @@
     background: var(--color-accent-hover);
 }
 
-/* Era um lilás dessaturado (#A997B7) que sumia contra o roxo do hero.
-   Botão fantasma dá hierarquia: o dourado da busca continua sendo a ação principal. */
+/* Botão */
 .heroBtn {
     background: transparent;
     border: 1.5px solid rgba(255, 255, 255, 0.45);
     color: #fff;
-    border-radius: 999px;
+    border-radius: var(--radius-pill);
     padding: 11px 22px;
     font-size: 14px;
     cursor: pointer;
@@ -101,7 +100,7 @@
 
 .heroBtn:hover {
     background: rgba(255, 255, 255, 0.12);
-    border-color: #fff;
+    border-color: var(--color-borda-pixel);
 }
 
 .heroBruxa {
@@ -117,7 +116,7 @@
         text-align: left;
         padding: 2rem 1rem;
         margin: 0.75rem;
-        border-radius: 20px;
+        border-radius: var(--radius-lg);
     }
 
     .heroCont {
@@ -130,4 +129,124 @@
     .heroBruxa {
         display: none;
     }
+}
+/* Bruxa */
+.hero {
+    background: var(--estrelas), var(--gradient-hero);
+    overflow: hidden;
+}
+
+.hero::after {
+    content: '';
+    position: absolute;
+    right: -80px;
+    top: -80px;
+    width: 360px;
+    height: 360px;
+    background: radial-gradient(circle, var(--color-ouro-brilho) 0%, rgba(242, 211, 171, 0) 65%);
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.heroSubt {
+    font-family: var(--font-titulo);
+    font-weight: 700;
+    letter-spacing: 0;
+    text-shadow: 0 0 24px var(--color-ouro-brilho);
+}
+
+.heroBtn {
+    display: inline-flex;
+    align-items: center;
+}
+
+.heroBruxa {
+    position: relative;
+    z-index: 1;
+}
+
+.heroBruxa img {
+    display: block;
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(0 18px 30px rgba(21, 3, 36, 0.55)) drop-shadow(0 0 22px rgba(139, 109, 156, 0.45));
+    animation: flutuar 6s ease-in-out infinite;
+}
+
+/* Pixel */
+.hero {
+    border-bottom: 6px solid var(--color-borda-pixel);
+}
+
+.hero::after {
+    display: none;
+}
+
+.heroSubt {
+    text-shadow: 4px 4px 0 var(--color-feitico), 8px 8px 0 rgba(0, 0, 0, 0.35);
+    overflow-wrap: anywhere;
+}
+
+.heroBusca {
+    background: var(--color-surface);
+    border: 3px solid var(--color-accent);
+    box-shadow: 4px 4px 0 0 #000;
+    padding: 4px 4px 4px 14px;
+}
+
+.heroBusca input {
+    color: var(--color-text);
+}
+
+.heroBusca input::placeholder {
+    color: var(--color-text-muted);
+}
+
+.heroBusca button {
+    border: 2px solid var(--color-borda-pixel);
+}
+
+.heroBruxa img {
+    filter: drop-shadow(8px 8px 0 rgba(0, 0, 0, 0.45));
+    animation: flutuar 3s steps(6, end) infinite;
+}
+
+@media (max-width: 480px) {
+    .heroTexto h1 {
+        font-size: 2.88rem;
+    }
+
+    .heroSubt {
+        font-size: 2.5rem;
+        line-height: 1.1;
+        text-shadow: 3px 3px 0 var(--color-feitico);
+    }
+}
+
+/* Tema claro (pôr do sol): o herói vira um painel creme em faixas, com tinta escura */
+:global(:root[data-theme='light']) .hero {
+    background: var(--estrelas-claras), linear-gradient(180deg, #f8f6fc 0 25%, #f1eef9 25% 50%, #eae6f5 50% 75%, #e3def1 75%);
+    box-shadow: var(--shadow-lg);
+}
+
+:global(:root[data-theme='light']) .heroTexto h1 {
+    color: var(--color-titulo);
+}
+
+:global(:root[data-theme='light']) .heroSubt {
+    color: #8a3fb0;
+    text-shadow: 4px 4px 0 #cdeef4, 8px 8px 0 rgba(39, 39, 68, 0.15);
+}
+
+:global(:root[data-theme='light']) .heroBtn {
+    color: var(--color-titulo);
+    border-color: var(--color-borda-pixel);
+}
+
+:global(:root[data-theme='light']) .heroBtn:hover {
+    background: rgba(39, 39, 68, 0.06);
+}
+
+:global(:root[data-theme='light']) .heroBruxa img {
+    filter: drop-shadow(8px 8px 0 rgba(39, 39, 68, 0.22));
 }

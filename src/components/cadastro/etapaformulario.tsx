@@ -1,54 +1,133 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { ArrowLeft, Eye, EyeOff } from 'lucide-react'
+import { ArrowLeft, Check } from 'lucide-react'
 import styles from './cadastro.module.css'
 import type { Perfil } from './etapaperfil'
 import { api, ErroApi, salvarSessao } from '../../services/api'
 import { pedirTokenGoogle, type DadosGoogle } from '../../services/google'
 import { useRole } from '../../context/useRole'
+import CampoSenha from '../camposenha/camposenha'
+import type { PedidoConfirmacao } from './confirmaremail'
 import { mascararCpf, mascararTelefone } from '../../utils/mascaras'
+import { nomeOficial, useNomesCidades } from '../../utils/cidades'
+import {
+  ESTADOS,
+  ROTULO_FORCA,
+  analisarTelefone,
+  dataHaAnos,
+  emailValido,
+  erroCpf,
+  erroNascimento,
+  erroNome,
+  erroSenha,
+  forcaSenha,
+  IDADE_MINIMA,
+} from '../../utils/validacao'
 
 interface EtapaFormularioProps {
   perfil: Perfil
-  /* Conta Google ainda sem cadastro: e-mail fixo e sem campo de senha. */
+  onTrocarPerfil: (perfil: Perfil) => void
+  /* Código do "Convide um amigo" (vem do link) */
+  convite?: string
+  /* Cadastro Google */
   google: DadosGoogle | null
   onGoogle: (dados: DadosGoogle | null) => void
   onVoltar: () => void
   onCriarConta: (email: string) => void
+  /* O servidor pediu para confirmar o e-mail com o código que mandou */
+  onConfirmarEmail?: (pedido: PedidoConfirmacao) => void
 }
 
-interface RespostaSessao {
+interface RespostaSessao extends Partial<PedidoConfirmacao> {
   token?: string
   tipo?: Perfil
   cadastroNecessario?: boolean
   google?: { email: string; nome: string; sobrenome: string }
 }
 
+/* Ordem dos campos na tela (o primeiro com problema recebe o foco ao enviar) */
+const CAMPOS = ['nome', 'sobrenome', 'email', 'senha', 'confirmar', 'cpf', 'telefone', 'nascimento', 'estado', 'cidade', 'termos'] as const
+type Campo = (typeof CAMPOS)[number]
+
 export default function EtapaFormulario({
   perfil,
+  onTrocarPerfil,
+  convite = '',
   google,
   onGoogle,
   onVoltar,
   onCriarConta,
+  onConfirmarEmail,
 }: EtapaFormularioProps) {
   const navigate = useNavigate()
   const { setRole } = useRole()
-  const [mostrarSenha, setMostrarSenha] = useState(false)
 
   const [nome, setNome] = useState(google?.nome ?? '')
   const [sobrenome, setSobrenome] = useState(google?.sobrenome ?? '')
   const [email, setEmail] = useState('')
   const [senha, setSenha] = useState('')
+  const [confirmar, setConfirmar] = useState('')
   const [cpf, setCpf] = useState('')
   const [telefone, setTelefone] = useState('')
   const [dataNasc, setDataNasc] = useState('')
   const [cidade, setCidade] = useState('')
   const [estado, setEstado] = useState('')
+  const [aceitouTermos, setAceitouTermos] = useState(false)
+  const [codigoConvite, setCodigoConvite] = useState(convite)
+
+  /* Só mostra o erro de um campo depois que a pessoa sai dele (ou tenta enviar) */
+  const [tocados, setTocados] = useState<Set<Campo>>(new Set())
+  const [tentouEnviar, setTentouEnviar] = useState(false)
 
   const [erro, setErro] = useState('')
   const [carregando, setCarregando] = useState(false)
 
-  /* Devolve false se o token não trouxer um tipo válido. */
+  const nomesCidades = useNomesCidades(estado)
+  const telefoneInfo = analisarTelefone(telefone)
+  const forca = forcaSenha(senha)
+
+  const problemas: Record<Campo, string> = {
+    nome: erroNome(nome, 'nome'),
+    sobrenome: erroNome(sobrenome, 'sobrenome'),
+    email: google ? '' : !email.trim() ? 'Informe o e-mail.' : emailValido(email) ? '' : 'Confira o e-mail (exemplo: nome@gmail.com).',
+    senha: google ? '' : erroSenha(senha),
+    confirmar: google ? '' : !confirmar ? 'Repita a senha.' : confirmar !== senha ? 'As senhas não são iguais.' : '',
+    cpf: erroCpf(cpf),
+    telefone: telefoneInfo.erro,
+    nascimento: erroNascimento(dataNasc),
+    estado: estado ? '' : 'Escolha o estado.',
+    cidade: !estado
+      ? 'Escolha o estado primeiro.'
+      : !cidade.trim()
+        ? 'Informe a cidade.'
+        : nomesCidades && !nomeOficial(nomesCidades, cidade)
+          ? `Não achamos "${cidade.trim()}" em ${estado}. Escolha uma cidade da lista.`
+          : '',
+    termos: aceitouTermos ? '' : 'É preciso aceitar os Termos para criar a conta.',
+  }
+
+  const mostrar = (c: Campo) => (tocados.has(c) || tentouEnviar ? problemas[c] : '')
+  const tocar = (c: Campo) => setTocados((t) => (t.has(c) ? t : new Set(t).add(c)))
+
+  /* id, aviso de erro e saída do campo, iguais em todos */
+  const ligar = (c: Campo) => ({
+    id: `cad-${c}`,
+    'aria-invalid': Boolean(mostrar(c)) || undefined,
+    'aria-describedby': `cad-${c}-msg`,
+    onBlur: () => tocar(c),
+  })
+
+  /* Embaixo de cada campo: o erro, a confirmação (ok) ou uma dica */
+  const aviso = (campo: Campo, ok?: string | false | null, dica?: string) => {
+    const texto = mostrar(campo)
+    return (
+      <small id={`cad-${campo}-msg`} className={texto ? styles.msgErro : ok ? styles.msgOk : undefined} aria-live="polite">
+        {texto || (ok ? <><Check size={13} strokeWidth={3} aria-hidden="true" /> {ok}</> : dica)}
+      </small>
+    )
+  }
+
+  /* Login */
   const entrar = (token: string, tipo?: Perfil) => {
     const tipoReal = salvarSessao(token, tipo)
 
@@ -72,7 +151,7 @@ export default function EtapaFormulario({
         publico: true,
       })
 
-      /* Esse e-mail do Google já tem conta: entra direto. */
+      /* Conta Google existente */
       if (dados.token) {
         if (!entrar(dados.token, dados.tipo)) {
           setErro('Não foi possível identificar o tipo da sua conta. Tente novamente.')
@@ -92,10 +171,26 @@ export default function EtapaFormulario({
     }
   }
 
+  /* Ao sair do campo, "sao jose dos campos" vira "São José dos Campos" */
+  const acertarCidade = () => {
+    tocar('cidade')
+    const oficial = nomesCidades && nomeOficial(nomesCidades, cidade)
+    if (oficial) setCidade(oficial)
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
     setErro('')
+    setTentouEnviar(true)
+
+    const primeiro = CAMPOS.find((c) => problemas[c])
+    if (primeiro) {
+      setErro('Confira os campos marcados em vermelho.')
+      document.getElementById(`cad-${primeiro}`)?.focus()
+      return
+    }
+
     setCarregando(true)
 
     try {
@@ -103,21 +198,29 @@ export default function EtapaFormulario({
         metodo: 'POST',
         publico: true,
         corpo: {
-          nome: `${nome} ${sobrenome}`.trim(),
-          ...(google ? { googleToken: google.token } : { email, senha }),
+          nome: `${nome.trim()} ${sobrenome.trim()}`,
+          ...(google ? { googleToken: google.token } : { email: email.trim().toLowerCase(), senha }),
           cpf,
           telefone,
           data_nasc: dataNasc,
-          cidade,
+          cidade: (nomesCidades && nomeOficial(nomesCidades, cidade)) || cidade.trim(),
           estado,
           tipo: perfil,
+          aceitouTermos,
+          ...(codigoConvite.trim() ? { convite: codigoConvite.trim().toUpperCase() } : {}),
         },
       })
 
-      /* Cadastro pelo Google já devolve a sessão (não há senha para digitar no login). */
+      /* Sessão Google */
       if (dados?.token && entrar(dados.token, dados.tipo)) return
 
-      onCriarConta(google?.email ?? email)
+      /* Falta confirmar o e-mail */
+      if (dados?.confirmarEmail && dados.desafio && onConfirmarEmail) {
+        onConfirmarEmail({ confirmarEmail: true, email: dados.email ?? email, desafio: dados.desafio })
+        return
+      }
+
+      onCriarConta(google?.email ?? email.trim().toLowerCase())
     } catch (e) {
       setErro(e instanceof ErroApi ? e.message : 'Não foi possível conectar ao servidor.')
     } finally {
@@ -126,7 +229,7 @@ export default function EtapaFormulario({
   }
 
   return (
-    <form className={styles.formulario} onSubmit={handleSubmit}>
+    <form className={styles.formulario} onSubmit={handleSubmit} noValidate>
       <button
         type="button"
         className={styles.btnVoltar}
@@ -157,10 +260,6 @@ export default function EtapaFormulario({
             >
               Continuar com Google
             </button>
-
-            <button type="button" className={styles.btnSocial}>
-              Continuar com Apple
-            </button>
           </div>
 
           <div className={styles.divisor}>
@@ -169,147 +268,224 @@ export default function EtapaFormulario({
         </>
       )}
 
+      <label>
+        Você vai usar o ContrateJá como
+        <select id="cad-perfil" value={perfil} onChange={(e) => onTrocarPerfil(e.target.value as Perfil)}>
+          <option value="freelancer">Freelancer: quero trabalhar em projetos</option>
+          <option value="contratante">Contratante: quero contratar pessoas</option>
+        </select>
+      </label>
+
       <div className={styles.linhaForm}>
-        <label>
-          Primeiro nome
+        <div className={styles.campo}>
+          <label htmlFor="cad-nome">Primeiro nome</label>
           <input
+            {...ligar('nome')}
             type="text"
-            required
+            autoComplete="given-name"
+            maxLength={60}
             placeholder="Seu nome"
             value={nome}
             onChange={(e) => setNome(e.target.value)}
           />
-        </label>
+          {aviso('nome')}
+        </div>
 
-        <label>
-          Sobrenome
+        <div className={styles.campo}>
+          <label htmlFor="cad-sobrenome">Sobrenome</label>
           <input
+            {...ligar('sobrenome')}
             type="text"
-            required
+            autoComplete="family-name"
+            maxLength={89}
             placeholder="Seu sobrenome"
             value={sobrenome}
             onChange={(e) => setSobrenome(e.target.value)}
           />
-        </label>
+          {aviso('sobrenome')}
+        </div>
       </div>
 
-      <label>
-        E-mail
+      <div className={styles.campo}>
+        <label htmlFor="cad-email">E-mail</label>
         <input
+          {...ligar('email')}
           type="email"
-          required
+          autoComplete="email"
+          maxLength={150}
           placeholder="seu@email.com"
           value={google ? google.email : email}
           readOnly={Boolean(google)}
           onChange={(e) => setEmail(e.target.value)}
         />
-      </label>
+        {aviso('email')}
+      </div>
 
       {!google && (
-      <label>
-        Senha
-        <div className={styles.campoSenha}>
-          <input
-            type={mostrarSenha ? 'text' : 'password'}
-            required
-            minLength={6}
-            placeholder="Crie uma senha"
-            value={senha}
-            onChange={(e) => setSenha(e.target.value)}
-          />
-
-          <button
-            type="button"
-            onClick={() => setMostrarSenha(!mostrarSenha)}
-            aria-label="Mostrar senha"
-          >
-            {mostrarSenha ? (
-              <EyeOff size={17} strokeWidth={2} />
-            ) : (
-              <Eye size={17} strokeWidth={2} />
+        <>
+          <div className={styles.campo}>
+            <label htmlFor="cad-senha">Senha</label>
+            <CampoSenha
+              {...ligar('senha')}
+              autoComplete="new-password"
+              maxLength={72}
+              placeholder="Crie uma senha"
+              value={senha}
+              onChange={(e) => setSenha(e.target.value)}
+            />
+            {senha && (
+              <span className={styles.forca} data-nivel={forca}>
+                <span className={styles.forcaBarra} aria-hidden="true"><span /></span>
+                Força da senha: {ROTULO_FORCA[forca]}
+              </span>
             )}
-          </button>
-        </div>
+            {aviso('senha', '', 'Pelo menos 6 caracteres. Misture letras, números e símbolos para ficar forte.')}
+          </div>
 
-        <small>Deve ter pelo menos 6 caracteres.</small>
-      </label>
+          <div className={styles.campo}>
+            <label htmlFor="cad-confirmar">Confirmar senha</label>
+            <CampoSenha
+              {...ligar('confirmar')}
+              autoComplete="new-password"
+              maxLength={72}
+              placeholder="Repita a senha"
+              value={confirmar}
+              onChange={(e) => setConfirmar(e.target.value)}
+            />
+            {aviso('confirmar', confirmar && !problemas.confirmar && !problemas.senha ? 'As senhas conferem' : '')}
+          </div>
+        </>
       )}
 
-      <label>
-        CPF
-        <input
-          type="text"
-          required
-          inputMode="numeric"
-          minLength={14}
-          maxLength={14}
-          title="Informe os 11 dígitos do CPF"
-          placeholder="000.000.000-00"
-          value={cpf}
-          onChange={(e) => setCpf(mascararCpf(e.target.value))}
-        />
-      </label>
+      <div className={styles.linhaForm}>
+        <div className={styles.campo}>
+          <label htmlFor="cad-cpf">CPF</label>
+          <input
+            {...ligar('cpf')}
+            type="text"
+            inputMode="numeric"
+            autoComplete="off"
+            maxLength={14}
+            placeholder="000.000.000-00"
+            value={cpf}
+            onChange={(e) => setCpf(mascararCpf(e.target.value))}
+          />
+          {aviso('cpf', !problemas.cpf ? 'CPF válido' : '', 'Não aparece no seu perfil.')}
+        </div>
 
-      <label>
-        Telefone
-        <input
-          type="tel"
-          required
-          inputMode="numeric"
-          minLength={14}
-          maxLength={15}
-          title="Informe DDD e número, com 10 ou 11 dígitos"
-          placeholder="(00) 00000-0000"
-          value={telefone}
-          onChange={(e) => setTelefone(mascararTelefone(e.target.value))}
-        />
-      </label>
+        <div className={styles.campo}>
+          <label htmlFor="cad-telefone">Telefone</label>
+          <input
+            {...ligar('telefone')}
+            type="tel"
+            inputMode="numeric"
+            autoComplete="tel-national"
+            maxLength={15}
+            placeholder="(00) 00000-0000"
+            value={telefone}
+            onChange={(e) => setTelefone(mascararTelefone(e.target.value))}
+          />
+          {aviso('telefone', telefoneInfo.descricao, 'Com DDD. Não aparece no seu perfil.')}
+        </div>
+      </div>
 
-      <label>
-        Data de nascimento
+      <div className={styles.campo}>
+        <label htmlFor="cad-nascimento">Data de nascimento</label>
         <input
+          {...ligar('nascimento')}
           type="date"
-          required
+          autoComplete="bday"
+          min={dataHaAnos(120)}
+          max={dataHaAnos(IDADE_MINIMA)}
           value={dataNasc}
           onChange={(e) => setDataNasc(e.target.value)}
         />
-      </label>
+        {aviso('nascimento', '', `É preciso ter ${IDADE_MINIMA} anos ou mais.`)}
+      </div>
 
       <div className={styles.linhaForm}>
-        <label>
-          Cidade
+        <div className={`${styles.campo} ${styles.campoUf}`}>
+          <label htmlFor="cad-estado">Estado</label>
+          <select
+            {...ligar('estado')}
+            autoComplete="address-level1"
+            value={estado}
+            onChange={(e) => {
+              setEstado(e.target.value)
+              tocar('estado')
+            }}
+          >
+            <option value="">Escolha</option>
+            {ESTADOS.map(([sigla, nomeUf]) => (
+              <option key={sigla} value={sigla}>{sigla} - {nomeUf}</option>
+            ))}
+          </select>
+          {aviso('estado')}
+        </div>
+
+        <div className={styles.campo}>
+          <label htmlFor="cad-cidade">Cidade</label>
           <input
+            {...ligar('cidade')}
+            onBlur={acertarCidade}
             type="text"
-            required
-            placeholder="Sua cidade"
+            autoComplete="address-level2"
+            list={estado ? 'cad-lista-cidades' : undefined}
+            disabled={!estado}
+            maxLength={100}
+            placeholder={estado ? 'Comece a digitar' : 'Escolha o estado antes'}
             value={cidade}
             onChange={(e) => setCidade(e.target.value)}
           />
-        </label>
-
-        <label>
-          Estado
-          <input
-            type="text"
-            required
-            maxLength={2}
-            placeholder="UF"
-            value={estado}
-            onChange={(e) => setEstado(e.target.value.toUpperCase())}
-          />
-        </label>
+          {nomesCidades && (
+            <datalist id="cad-lista-cidades">
+              {nomesCidades.map((n) => <option key={n} value={n} />)}
+            </datalist>
+          )}
+          {aviso(
+            'cidade',
+            cidade && nomesCidades && !problemas.cidade ? `${nomeOficial(nomesCidades, cidade)}/${estado}` : '',
+            estado ? 'Escolha uma das cidades sugeridas.' : ''
+          )}
+        </div>
       </div>
 
-      <label>
-        Você prefere trabalhar como?
-        <select value={perfil} disabled>
-          <option value="freelancer">Freelancer</option>
-          <option value="contratante">Contratante</option>
-        </select>
+      <div className={styles.campo}>
+        <label htmlFor="cad-convite">Código de convite (opcional)</label>
+        <input
+          id="cad-convite"
+          type="text"
+          autoComplete="off"
+          maxLength={12}
+          placeholder="Ex.: ANA-7K2Q"
+          value={codigoConvite}
+          onChange={(e) => setCodigoConvite(e.target.value.toUpperCase())}
+        />
+        <small>Alguém te convidou? Com o código, vocês dois ganham XP no seu primeiro projeto.</small>
+      </div>
+
+      <label className={styles.termos}>
+        <input
+          {...ligar('termos')}
+          type="checkbox"
+          checked={aceitouTermos}
+          onChange={(e) => {
+            setAceitouTermos(e.target.checked)
+            tocar('termos')
+          }}
+        />
+        <span>
+          Li e aceito os{' '}
+          <Link to="/termos" target="_blank" rel="noopener">
+            Termos de Uso e a Política de Privacidade
+          </Link>
+          .
+        </span>
       </label>
+      {aviso('termos')}
 
       {erro && (
-        <p className="msg-erro">
+        <p className="msg-erro" role="alert">
           {erro}
         </p>
       )}
@@ -319,7 +495,7 @@ export default function EtapaFormulario({
         className={styles.btnPrimario}
         disabled={carregando}
       >
-        {carregando ? 'Criando conta...' : 'Criar conta'}
+        {carregando ? 'Criando conta...' : `Criar conta de ${perfil}`}
       </button>
 
       <p className={styles.linkLogin}>
