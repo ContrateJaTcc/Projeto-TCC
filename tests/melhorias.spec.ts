@@ -42,7 +42,7 @@ test.describe('Histórico', () => {
     await page.getByRole('searchbox', { name: 'Buscar no histórico' }).fill('nada disso')
     await expect(page.getByText('Nada encontrado')).toBeVisible()
     await page.getByRole('button', { name: 'Limpar filtros' }).click()
-    await expect(page.locator('article')).toHaveCount(3)
+    await expect(page.locator('article')).toHaveCount(4)
   })
 
   test('linha do tempo mostra as etapas e a da vez', async ({ page }) => {

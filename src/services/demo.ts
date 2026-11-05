@@ -460,7 +460,7 @@ function estadoInicial(eu: number): Estado {
     mudancas: [{ serv_id: 101, campo: 'valor', antes: 'R$ 15,00', depois: 'R$ 19,00', data: diasAtras(1) }],
     criterios: [
       { cri_id: 1701, serv_id: 102, cri_texto: 'Página inicial com a vitrine das roupas', cri_entregue_em: diasAtras(6), cri_aprovado_em: diasAtras(5) },
-      { cri_id: 1702, serv_id: 102, cri_texto: 'Carrinho de compras funcionando', cri_entregue_em: diasAtras(1), cri_aprovado_em: null },
+      { cri_id: 1702, serv_id: 102, cri_texto: 'Compra de ponta a ponta funcionando', cri_entregue_em: diasAtras(1), cri_aprovado_em: null },
       { cri_id: 1703, serv_id: 102, cri_texto: 'Site certinho no celular', cri_entregue_em: null, cri_aprovado_em: null },
     ],
     versoes: [

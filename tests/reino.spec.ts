@@ -103,7 +103,7 @@ test('chat: aviso de contato por fora antes da contratação', async ({ page }) 
 
   /* A Ana tenta mandar o WhatsApp numa conversa sem contratação: o site pede confirmação */
   await trocarPara(page, 2, 'freelancer', '/freelancer/mensagens')
-  await page.getByRole('button', { name: /Marta O. Textos do site da cafeteria/ }).click()
+  await page.getByRole('button', { name: /Marta O(liveira|.) Textos do site da cafeteria/ }).click()
   const chat = page.getByRole('dialog')
   await chat.getByPlaceholder('Escreva sua mensagem...').fill('Me chama no zap que eu faço mais barato')
   await chat.getByRole('button', { name: 'Enviar' }).click()
