@@ -280,7 +280,7 @@ export default function Configuracoes() {
               <strong>Clima</strong>
               <span>
                 O tempo que faz sobre o castelo. Real segue o tempo de agora na cidade do seu perfil; Estação muda sozinho a cada
-                poucas horas, com o tempo típico do {NOME_ESTACAO[estacaoDe(new Date())]}.
+                poucas horas, com o tempo típico {estacaoDe(new Date()) === 'primavera' ? 'da' : 'do'} {NOME_ESTACAO[estacaoDe(new Date())]}.
               </span>
             </div>
             <div className={`${styles.temas} ${styles.climas}`} role="group" aria-label="Clima">

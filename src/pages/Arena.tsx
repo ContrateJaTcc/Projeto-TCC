@@ -110,7 +110,7 @@ export default function Arena() {
   return (
     <div className={comum.pagina}>
       <h1 className="placa">Arena do castelo</h1>
-      <p className={`${comum.subtitulo} placa`}>O chefão do mês cai com os projetos concluídos de todo mundo. E toda semana tem um desafio criativo com votação.</p>
+      <p className={`${comum.subtitulo} placa`}>O chefão do mês cai com os projetos concluídos de todo mundo.{desafio && ' E toda semana tem um desafio criativo com votação.'}</p>
 
       <div className={styles.grade}>
         {chefao && (
