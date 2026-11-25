@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Menu } from 'lucide-react'
-import logo from '../imgs/logo.png'
+import logo from '../imgs/novalogo.png'
 import { useRole } from '../../context/useRole'
 import BotaoTema from '../botaotema/botaotema'
 import styles from './header.module.css'

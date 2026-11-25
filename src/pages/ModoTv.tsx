@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { Maximize, Users, Briefcase, CircleCheckBig, Star, Wifi, Building2 } from 'lucide-react'
 import { api } from '../services/api'
 import MuralReino from '../components/reino/mural'
-import logo from '../components/imgs/logo.png'
+import logo from '../components/imgs/novalogo.png'
 import styles from './ModoTv.module.css'
 
 interface Numeros {

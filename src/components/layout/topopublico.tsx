@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import logo from '../imgs/logo.png'
+import logo from '../imgs/novalogo.png'
 import { useRole } from '../../context/useRole'
 import BotaoTema from '../botaotema/botaotema'
 import Footer from '../footer/footer'

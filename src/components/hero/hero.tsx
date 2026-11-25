@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Search } from 'lucide-react'
-import logo from '../imgs/logo.png'
+import logo from '../imgs/novalogo.png'
 import { useRole } from '../../context/useRole'
 import styles from './hero.module.css'
 

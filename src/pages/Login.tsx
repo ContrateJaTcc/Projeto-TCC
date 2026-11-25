@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import logo from '../components/imgs/logo.png'
+import logo from '../components/imgs/novalogo.png'
 import { useRole } from '../context/useRole'
 import type { Role } from '../context/role-context-def'
 import { api, ErroApi, salvarSessao } from '../services/api'

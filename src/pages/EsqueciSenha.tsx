@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import logo from '../components/imgs/logo.png'
+import logo from '../components/imgs/novalogo.png'
 import { api, ErroApi } from '../services/api'
 import styles from '../components/login/login.module.css'
 
