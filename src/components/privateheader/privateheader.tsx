@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { Search, Menu, X, House, Settings, TextSearch } from 'lucide-react'
-import logo from '../imgs/logo.png'
+import logo from '../imgs/novalogo.png'
 import { useRole } from '../../context/useRole'
 import type { Role } from '../../context/role-context-def'
 import Notificacoes from './notificacoes'

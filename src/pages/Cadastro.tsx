@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate, useLocation, useSearchParams, Link } from 'react-router-dom'
 import { Check } from 'lucide-react'
-import logo from '../components/imgs/logo.png'
+import logo from '../components/imgs/novalogo.png'
 import EtapaPerfil, { type Perfil } from '../components/cadastro/etapaperfil'
 import EtapaFormulario from '../components/cadastro/etapaformulario'
 import ConfirmarEmail, { type PedidoConfirmacao } from '../components/cadastro/confirmaremail'

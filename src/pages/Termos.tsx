@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { ArrowLeft } from 'lucide-react'
-import logo from '../components/imgs/logo.png'
+import logo from '../components/imgs/novalogo.png'
 import styles from './Termos.module.css'
 
 /* Seções */
