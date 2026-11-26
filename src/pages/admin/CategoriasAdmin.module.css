@@ -1,0 +1,74 @@
+.pagina {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* Formulário de nova categoria: mesmo cartão das linhas do painel */
+.nova {
+    display: grid;
+    grid-template-columns: 1fr 2fr auto;
+    align-items: end;
+    gap: 0.75rem;
+    padding: 1rem 1.1rem;
+    background: var(--color-surface);
+    border: 2px solid var(--color-borda-pixel);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+}
+
+.nova h3 {
+    grid-column: 1 / -1;
+    margin: 0;
+    font-family: var(--font-titulo);
+    font-size: 1.4rem;
+    color: var(--color-titulo);
+}
+
+.nova label,
+.edicao label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--color-titulo);
+}
+
+.nova input,
+.edicao input {
+    padding: 0.5rem 0.65rem;
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    color: var(--color-titulo);
+    background: var(--color-campo);
+    border: 2px solid var(--color-borda-pixel);
+    min-width: 0;
+}
+
+.nova button {
+    justify-content: center;
+    min-height: 40px;
+}
+
+.edicao {
+    gap: 0.5rem;
+}
+
+.dica {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+}
+
+/* Desativada: continua na lista, mas apagadinha */
+.desativada {
+    opacity: 0.72;
+    border-style: dashed !important;
+}
+
+@media (max-width: 720px) {
+    .nova {
+        grid-template-columns: 1fr;
+    }
+}

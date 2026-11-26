@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { Shield, Users, Crown, LogOut, UserMinus, Pencil, Trophy, Sparkles, Info } from 'lucide-react'
+import { Shield, Users, Crown, LogOut, UserMinus, Pencil, Trophy, Sparkles, Info, Flame } from 'lucide-react'
 import { api, ErroApi } from '../services/api'
 import { useToast } from '../context/useToast'
 import Avatar from '../components/avatar/avatar'
@@ -99,6 +99,8 @@ export default function Guildas() {
   const [brasao, setBrasao] = useState('escudo')
   const [cor, setCor] = useState('ouro')
   const [editando, setEditando] = useState(false)
+  /* Liderança dissolvendo a guilda: segundo clique confirma */
+  const [dissolvendo, setDissolvendo] = useState(false)
 
   const carregar = useCallback(async () => {
     try {
@@ -242,6 +244,25 @@ export default function Guildas() {
                   <button type="button" className={comum.botao} onClick={() => chamar('sair', '/guildas/sair', 'POST')} disabled={ocupado === 'sair'}>
                     {ocupado === 'sair' ? <span className="spinner" /> : <LogOut size={15} strokeWidth={2.4} />} Sair da guilda
                   </button>
+                  {souLider && (
+                    <button
+                      type="button"
+                      className={`${comum.botao} ${styles.dissolver} ${dissolvendo ? styles.dissolverConfirmar : ''}`}
+                      onClick={() => {
+                        if (!dissolvendo) {
+                          setDissolvendo(true)
+                          return
+                        }
+                        setDissolvendo(false)
+                        chamar('dissolver', `/guildas/${minha.gui_id}`, 'DELETE')
+                      }}
+                      onBlur={() => setDissolvendo(false)}
+                      disabled={ocupado === 'dissolver'}
+                    >
+                      {ocupado === 'dissolver' ? <span className="spinner" /> : <Flame size={15} strokeWidth={2.4} />}
+                      {dissolvendo ? 'Clique de novo: todos saem' : 'Dissolver a guilda'}
+                    </button>
+                  )}
                 </div>
               )}
               <MissoesGuilda guiId={minha.gui_id} />

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Check, Coins, ListChecks, Plus, Trash2 } from 'lucide-react'
+import { Check, ChevronDown, ChevronUp, Coins, ListChecks, Pencil, Plus, Trash2, X } from 'lucide-react'
 import { api, ErroApi } from '../../services/api'
 import { useToast } from '../../context/useToast'
 import { formatarData, formatarMoeda } from '../../utils/formatar'
@@ -38,6 +38,9 @@ export default function Etapas({ servId, etapas: iniciais, podeEditar, podeMarca
   const [etapas, setEtapas] = useState(iniciais)
   const [nova, setNova] = useState('')
   const [ocupado, setOcupado] = useState<number | 'nova' | null>(null)
+  /* Renomeando uma etapa (contratante) */
+  const [renomeando, setRenomeando] = useState<number | null>(null)
+  const [novoNome, setNovoNome] = useState('')
 
   /* Quem só olha e não há etapas: nada a mostrar */
   if (etapas.length === 0 && !podeEditar) return null
@@ -74,6 +77,15 @@ export default function Etapas({ servId, etapas: iniciais, podeEditar, podeMarca
     const titulo = nova.trim()
     if (!titulo) return
     if (await chamar('nova', `/servicos/${servId}/etapas`, 'POST', { titulo })) setNova('')
+  }
+
+  /* Renomear e mudar a ordem: rota só do contratante */
+  const editar = (etapa: Etapa, corpo: { titulo?: string; mover?: 'cima' | 'baixo' }) =>
+    chamar(etapa.eta_id, `/servicos/${servId}/etapas/${etapa.eta_id}/editar`, 'PUT', corpo)
+
+  async function salvarNome(e: React.FormEvent, etapa: Etapa) {
+    e.preventDefault()
+    if (await editar(etapa, { titulo: novoNome.trim() })) setRenomeando(null)
   }
 
   return (
@@ -135,7 +147,26 @@ export default function Etapas({ servId, etapas: iniciais, podeEditar, podeMarca
                     {feita && <Check size={13} strokeWidth={3} />}
                   </span>
                 )}
-                <span className={styles.nomeEtapa}>{etapa.eta_titulo}</span>
+                {renomeando === etapa.eta_id ? (
+                  <form className={`${styles.novaEtapa} ${styles.nomeEtapa}`} onSubmit={(e) => salvarNome(e, etapa)}>
+                    <input
+                      value={novoNome}
+                      onChange={(e) => setNovoNome(e.target.value)}
+                      maxLength={100}
+                      aria-label={`Novo nome da etapa ${etapa.eta_titulo}`}
+                      autoFocus
+                      onKeyDown={(e) => e.key === 'Escape' && setRenomeando(null)}
+                    />
+                    <button type="submit" disabled={!novoNome.trim() || ocupado === etapa.eta_id} aria-label="Salvar o nome">
+                      <Check size={15} strokeWidth={2.4} />
+                    </button>
+                    <button type="button" className={styles.removerEtapa} onClick={() => setRenomeando(null)} aria-label="Cancelar">
+                      <X size={15} strokeWidth={2.4} />
+                    </button>
+                  </form>
+                ) : (
+                  <span className={styles.nomeEtapa}>{etapa.eta_titulo}</span>
+                )}
                 {feita && <span className={styles.quandoEtapa}>{formatarData(etapa.eta_concluida_em)}</span>}
                 {etapa.eta_liberada_em ? (
                   <span className={styles.etapaPaga} title={`Paga em ${formatarData(etapa.eta_liberada_em)}`}>
@@ -155,7 +186,43 @@ export default function Etapas({ servId, etapas: iniciais, podeEditar, podeMarca
                     </button>
                   )
                 )}
-                {podeEditar && !etapa.eta_liberada_em && (
+                {podeEditar && renomeando !== etapa.eta_id && (
+                  <span className={styles.ordemEtapa}>
+                    <button
+                      type="button"
+                      className={styles.removerEtapa}
+                      aria-label={`Subir a etapa ${etapa.eta_titulo}`}
+                      disabled={ocupado !== null || etapa === etapas[0]}
+                      onClick={() => editar(etapa, { mover: 'cima' })}
+                    >
+                      <ChevronUp size={15} strokeWidth={2.4} />
+                    </button>
+                    <button
+                      type="button"
+                      className={styles.removerEtapa}
+                      aria-label={`Descer a etapa ${etapa.eta_titulo}`}
+                      disabled={ocupado !== null || etapa === etapas[etapas.length - 1]}
+                      onClick={() => editar(etapa, { mover: 'baixo' })}
+                    >
+                      <ChevronDown size={15} strokeWidth={2.4} />
+                    </button>
+                    {!etapa.eta_liberada_em && (
+                      <button
+                        type="button"
+                        className={styles.removerEtapa}
+                        aria-label={`Renomear a etapa ${etapa.eta_titulo}`}
+                        disabled={ocupado !== null}
+                        onClick={() => {
+                          setRenomeando(etapa.eta_id)
+                          setNovoNome(etapa.eta_titulo)
+                        }}
+                      >
+                        <Pencil size={14} strokeWidth={2.2} />
+                      </button>
+                    )}
+                  </span>
+                )}
+                {podeEditar && !etapa.eta_liberada_em && renomeando !== etapa.eta_id && (
                   <button
                     type="button"
                     className={styles.removerEtapa}

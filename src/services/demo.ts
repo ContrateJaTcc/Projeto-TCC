@@ -176,9 +176,11 @@ interface Estado {
     msg_reuniao_em?: string | null; msg_reuniao_link?: string | null; msg_reuniao_status?: 'pendente' | 'aceita' | 'recusada' | 'cancelada' | null; msg_alerta_contato?: boolean
     /* Respondendo (citando) outra mensagem */
     msg_resposta_id?: number | null
+    /* Editada ou apagada pelo remetente (até 15 minutos depois) */
+    msg_editada_em?: string | null; msg_apagada_em?: string | null
   }[]
   notificacoes: { not_id: number; usu_id: number; not_titulo: string; not_desc: string; not_lida: boolean; not_data: string }[]
-  avaliacoes: { aval_id: number; serv_id: number; usu_avaliador: number; usu_avaliado: number; aval_nota: number; aval_comentario: string | null; aval_data: string; aval_comunicacao?: number | null; aval_prazo?: number | null; aval_qualidade?: number | null }[]
+  avaliacoes: { aval_id: number; serv_id: number; usu_avaliador: number; usu_avaliado: number; aval_nota: number; aval_comentario: string | null; aval_data: string; aval_comunicacao?: number | null; aval_prazo?: number | null; aval_qualidade?: number | null; aval_editada_em?: string | null }[]
   portfolio: { port_id: number; usu_id: number; port_titulo: string; port_desc: string; port_link: string | null; port_img: string | null; port_data_criacao: string; port_data_atualizacao: string; port_serv_id?: number | null }[]
   cenario: { tema: 'escuro' | 'claro' | null; clima: string | null; fogos: number | null; aviso: string | null }
   /* Versão do formato: estado guardado de uma versão antiga é jogado fora */
@@ -227,7 +229,11 @@ interface Estado {
   notas: { usu_id: number; alvo_id: number; texto: string; data: string }[]
   envios: { env_id: number; semana: string; usu_id: number; titulo: string; link: string; desc: string | null; data: string }[]
   votos: { env_id: number; usu_id: number }[]
+  /* Categorias editáveis pela administração (começa com as padrão) */
+  tipos?: CategoriaDemo[]
 }
+
+interface CategoriaDemo { tipo_id: number; tipo_nome: string; tipo_desc: string | null; ativo: boolean }
 
 const VERSAO = 11
 
@@ -600,7 +606,9 @@ class ErroDemo extends Error {
   }
 }
 
-const tipoNome = (id: number) => TIPOS.find((t) => t.tipo_id === id)?.tipo_nome ?? 'Outros'
+/* Categorias desta sessão (a administração pode criar, editar, desativar e excluir) */
+let tiposAtuais: CategoriaDemo[] = TIPOS.map((t) => ({ ...t, ativo: true }))
+const tipoNome = (id: number) => tiposAtuais.find((t) => t.tipo_id === id)?.tipo_nome ?? 'Outros'
 
 function quem(e: Estado, id: number) {
   const u = e.usuarios.find((x) => x.usu_id === id)
@@ -789,7 +797,7 @@ function conversasDe(e: Estado) {
     return {
       serv_id, serv_titulo: servicoDe(e, serv_id).serv_titulo, outro_usu_id: outro, outro_nome: contratadoAqui(serv_id, outro) ? o.usu_nome : nomeCurtoDemo(o.usu_nome), outro_foto: o.usu_foto, outro_visto_em: vistoDe(o),
       anonimo: !contratadoAqui(serv_id, outro),
-      ultima_mensagem: ultima.msg_texto, ultima_data: ultima.msg_data, nao_lidas: msgs.filter((m) => m.usu_destinatario === e.eu && !m.msg_lida).length,
+      ultima_mensagem: ultima.msg_apagada_em ? 'Mensagem apagada' : ultima.msg_texto, ultima_data: ultima.msg_data, nao_lidas: msgs.filter((m) => m.usu_destinatario === e.eu && !m.msg_lida).length,
     }
   })
 }
@@ -803,7 +811,7 @@ const ok = (mensagem: string, extra: object = {}) => ({ mensagem, ...extra })
 
 const ROTAS: Rota[] = [
   ['GET', /^\/config\/cenario$/, (e) => e.cenario],
-  ['GET', /^\/tipos-servico$/, () => ({ tipos: TIPOS })],
+  ['GET', /^\/tipos-servico$/, () => ({ tipos: tiposAtuais.filter((t) => t.ativo).map((t) => ({ tipo_id: t.tipo_id, tipo_nome: t.tipo_nome, tipo_desc: t.tipo_desc })).sort((a, b) => a.tipo_nome.localeCompare(b.tipo_nome)) })],
 
   /* Usuário */
   ['GET', /^\/usuarios\/eu$/, (e) => {
@@ -1301,7 +1309,13 @@ const ROTAS: Rota[] = [
     const agora = Date.now()
     const digitando = e.digitando.some((d) => d.serv_id === Number(serv) && d.usu_id === Number(outro) && d.outro_id === e.eu && d.ate > agora)
     const lidas = e.mensagens.filter((m) => m.serv_id === Number(serv) && m.usu_remetente === e.eu && m.usu_destinatario === Number(outro) && m.msg_lida)
-    return { digitando, lidas_ate: lidas.reduce((x, m) => Math.max(x, m.msg_id), 0), visto_em: vistoDe(quem(e, Number(outro))) }
+    /* Última edição ou exclusão na conversa: o site recarrega as mensagens quando muda */
+    const marcas = e.mensagens
+      .filter((m) => m.serv_id === Number(serv) && [m.usu_remetente, m.usu_destinatario].includes(e.eu) && [m.usu_remetente, m.usu_destinatario].includes(Number(outro)))
+      .flatMap((m) => [m.msg_editada_em, m.msg_apagada_em])
+      .filter((d): d is string => Boolean(d))
+      .sort()
+    return { digitando, lidas_ate: lidas.reduce((x, m) => Math.max(x, m.msg_id), 0), visto_em: vistoDe(quem(e, Number(outro))), alterada_em: marcas.at(-1) ?? null }
   }],
 
   /* Segurança: verificação em 2 etapas e sessões (no modo o código é sempre 123456) */
@@ -2566,7 +2580,7 @@ function albumDe(e: Estado) {
 }
 
 function testesDe(e: Estado) {
-  return TIPOS.map((t) => ({ ...t, area: areaDaCategoria(t.tipo_nome) }))
+  return tiposAtuais.map((t) => ({ ...t, area: areaDaCategoria(t.tipo_nome) }))
     .filter((t) => t.area)
     .map((t) => {
       const m = e.testes.find((x) => x.usu_id === e.eu && x.tipo_id === t.tipo_id)
@@ -2579,7 +2593,7 @@ function testesDe(e: Estado) {
 }
 
 function testeDe(tipoId: number) {
-  const t = TIPOS.find((x) => x.tipo_id === tipoId)
+  const t = tiposAtuais.find((x) => x.tipo_id === tipoId)
   const area = t ? areaDaCategoria(t.tipo_nome) : null
   if (!t || !area) throw new ErroDemo(404, 'Ainda não há teste para esta área.')
   return { ...t, area }
@@ -2824,6 +2838,309 @@ const ROTAS_REINO: Rota[] = [
 
   /* Álbum de insígnias */
   ['GET', /^\/conquistas\/album$/, (e) => albumDe(e)],
+]
+
+/* ---------- CRUD completo (mesmas regras do servidor) ---------- */
+
+const MINUTOS_PARA_ALTERAR_MSG = 15
+
+function soAdmin(e: Estado) {
+  if (quem(e, e.eu).tipo_usuario !== 'administrador') throw new ErroDemo(403, 'Você não tem permissão para acessar este recurso.')
+}
+
+function lerCategoriaDemo(e: Estado, c: Corpo, ignorarId: number | null = null) {
+  const nome = String(c.nome ?? '').trim().replace(/\s+/g, ' ')
+  const desc = String(c.descricao ?? '').trim()
+  if (nome.length < 2 || nome.length > 100) throw new ErroDemo(400, 'Dê um nome de 2 a 100 letras para a categoria.')
+  if (desc.length > 300) throw new ErroDemo(400, 'A descrição pode ter até 300 letras.')
+  const repetida = e.tipos!.find((t) => t.tipo_nome.toLowerCase() === nome.toLowerCase() && t.tipo_id !== ignorarId)
+  if (repetida) throw new ErroDemo(400, `Já existe a categoria "${repetida.tipo_nome}".`)
+  return { tipo_nome: nome, tipo_desc: desc || null }
+}
+
+function minhaMensagemDemo(e: Estado, id: number) {
+  const m = e.mensagens.find((x) => x.msg_id === id && x.usu_remetente === e.eu)
+  if (!m) throw new ErroDemo(404, 'Mensagem não encontrada.')
+  if (m.msg_apagada_em) throw new ErroDemo(400, 'Esta mensagem já foi apagada.')
+  if (m.msg_proposta_status || m.msg_reuniao_status) throw new ErroDemo(400, 'Propostas e reuniões não podem ser editadas nem apagadas.')
+  if (Date.now() - new Date(m.msg_data).getTime() > MINUTOS_PARA_ALTERAR_MSG * 60_000) throw new ErroDemo(400, `Só dá para editar ou apagar até ${MINUTOS_PARA_ALTERAR_MSG} minutos depois de enviar.`)
+  if (e.denuncias.some((d) => d.den_alvo_tipo === 'mensagem' && d.den_alvo_id === m.msg_id && d.den_status === 'aberta')) throw new ErroDemo(400, 'Esta mensagem está em análise pela administração e não pode ser alterada.')
+  return m
+}
+
+function minhaAvaliacaoDemo(e: Estado, id: number) {
+  const a = e.avaliacoes.find((x) => x.aval_id === id && x.usu_avaliador === e.eu)
+  if (!a) throw new ErroDemo(404, 'Avaliação não encontrada.')
+  if (visivel(e, a)) throw new ErroDemo(400, 'Esta avaliação já aparece no perfil e não pode mais ser mudada.')
+  return a
+}
+
+function lerNotasDemo(c: Corpo) {
+  const nota = Number(c.nota)
+  const comentario = String(c.comentario ?? '').trim()
+  if (!Number.isInteger(nota) || nota < 1 || nota > 5) throw new ErroDemo(400, 'Escolha uma nota de 1 a 5 estrelas.')
+  if (comentario.length > 280) throw new ErroDemo(400, 'O comentário deve ter no máximo 280 caracteres.')
+  const campos: Partial<Estado['avaliacoes'][number]> = { aval_nota: nota, aval_comentario: comentario || null }
+  for (const campo of ['comunicacao', 'prazo', 'qualidade'] as const) {
+    const v = c[campo]
+    if (v === undefined) continue
+    if (v === null || v === '') {
+      campos[`aval_${campo}`] = null
+      continue
+    }
+    if (!Number.isInteger(Number(v)) || Number(v) < 1 || Number(v) > 5) throw new ErroDemo(400, 'As notas por critério vão de 1 a 5.')
+    campos[`aval_${campo}`] = Number(v)
+  }
+  return campos
+}
+
+/* Avaliar freelancer dá XP (20 por estrela): mudar a nota ajusta a diferença */
+function ajustarXpDemo(e: Estado, a: Estado['avaliacoes'][number], novaNota: number) {
+  if (quem(e, a.usu_avaliado).tipo_usuario === 'freelancer' && novaNota !== a.aval_nota) ganharXp(e, a.usu_avaliado, (novaNota - a.aval_nota) * 20)
+}
+
+function meuPedidoDemo(e: Estado, id: number) {
+  const o = e.orcamentos.find((x) => x.orc_id === id && x.usu_id === e.eu)
+  if (!o) throw new ErroDemo(404, 'Pedido não encontrado.')
+  return o
+}
+
+const ROTAS_CRUD: Rota[] = [
+  /* 1. Categorias (administração) */
+  ['GET', /^\/admin\/categorias$/, (e) => {
+    soAdmin(e)
+    return {
+      desativar_disponivel: true,
+      categorias: [...e.tipos!].sort((a, b) => a.tipo_nome.localeCompare(b.tipo_nome)).map((t) => ({
+        ...t,
+        projetos: e.servicos.filter((s) => s.tipo_id === t.tipo_id).length,
+        freelancers: e.usuarios.filter((u) => (u.areas ?? []).includes(t.tipo_id)).length,
+      })),
+    }
+  }],
+  ['POST', /^\/admin\/categorias$/, (e, _p, c) => {
+    soAdmin(e)
+    const campos = lerCategoriaDemo(e, c)
+    e.tipos!.push({ tipo_id: e.proximo++, ...campos, ativo: true })
+    registrar(e, 'categoria_criada', null, campos.tipo_nome)
+    return ok(`Categoria "${campos.tipo_nome}" criada.`)
+  }],
+  ['PUT', /^\/admin\/categorias\/(\d+)$/, (e, [id], c) => {
+    soAdmin(e)
+    const t = e.tipos!.find((x) => x.tipo_id === Number(id))
+    if (!t) throw new ErroDemo(404, 'Categoria não encontrada.')
+    const campos = lerCategoriaDemo(e, c, t.tipo_id)
+    const antes = t.ativo
+    if (typeof c.ativo === 'boolean') {
+      if (!c.ativo && !e.tipos!.some((x) => x.ativo && x.tipo_id !== t.tipo_id)) throw new ErroDemo(400, 'O site precisa de pelo menos uma categoria ativa.')
+      t.ativo = c.ativo
+    }
+    const nomeAntes = t.tipo_nome
+    Object.assign(t, campos)
+    registrar(e, 'categoria_editada', null, nomeAntes === t.tipo_nome ? t.tipo_nome : `${nomeAntes} → ${t.tipo_nome}`)
+    if (antes !== t.ativo) return ok(t.ativo ? `Categoria "${t.tipo_nome}" reativada.` : `Categoria "${t.tipo_nome}" desativada: some dos formulários, mas continua nos projetos antigos.`)
+    return ok('Categoria atualizada.')
+  }],
+  ['DELETE', /^\/admin\/categorias\/(\d+)$/, (e, [id]) => {
+    soAdmin(e)
+    const t = e.tipos!.find((x) => x.tipo_id === Number(id))
+    if (!t) throw new ErroDemo(404, 'Categoria não encontrada.')
+    const total = e.servicos.filter((s) => s.tipo_id === t.tipo_id).length
+    if (total > 0) throw new ErroDemo(409, `"${t.tipo_nome}" tem ${total} ${total === 1 ? 'projeto' : 'projetos'} e não pode ser excluída. Desative a categoria: ela some dos formulários e os projetos antigos continuam iguais.`)
+    if (e.tipos!.length <= 1) throw new ErroDemo(400, 'O site precisa de pelo menos uma categoria.')
+    e.tipos = e.tipos!.filter((x) => x.tipo_id !== t.tipo_id)
+    tiposAtuais = e.tipos
+    /* Como o CASCADE do banco: áreas dos freelancers e alertas dela saem junto */
+    for (const u of e.usuarios) if (u.areas) u.areas = u.areas.filter((a) => a !== t.tipo_id)
+    e.buscas = e.buscas.filter((b) => b.tipo_id !== t.tipo_id)
+    registrar(e, 'categoria_excluida', null, t.tipo_nome)
+    return ok(`Categoria "${t.tipo_nome}" excluída.`)
+  }],
+
+  /* 2. Notificações: uma por vez e limpar */
+  ['PUT', /^\/notificacoes\/(\d+)$/, (e, [id], c) => {
+    const n = e.notificacoes.find((x) => x.not_id === Number(id) && x.usu_id === e.eu)
+    if (!n) throw new ErroDemo(404, 'Notificação não encontrada.')
+    n.not_lida = c.lida !== false
+    return ok(n.not_lida ? 'Marcada como lida.' : 'Marcada como não lida.')
+  }],
+  ['DELETE', /^\/notificacoes\/(\d+)$/, (e, [id]) => {
+    if (!e.notificacoes.some((x) => x.not_id === Number(id) && x.usu_id === e.eu)) throw new ErroDemo(404, 'Notificação não encontrada.')
+    e.notificacoes = e.notificacoes.filter((x) => x.not_id !== Number(id))
+    return ok('Notificação apagada.')
+  }],
+  ['DELETE', /^\/notificacoes$/, (e, _p, _c, busca) => {
+    const todas = busca.get('todas') === '1'
+    const antes = e.notificacoes.length
+    e.notificacoes = e.notificacoes.filter((n) => n.usu_id !== e.eu || (!todas && !n.not_lida))
+    const apagadas = antes - e.notificacoes.length
+    return ok(apagadas ? `${apagadas} ${apagadas === 1 ? 'notificação apagada' : 'notificações apagadas'}.` : 'Nada para limpar.', { apagadas })
+  }],
+
+  /* 3. Editar a candidatura que espera resposta */
+  ['PUT', /^\/servicos\/(\d+)\/candidaturas$/, (e, [id], c) => {
+    const cand = e.candidaturas.find((x) => x.serv_id === Number(id) && x.free_usu === e.eu && x.cand_status !== 'cancelada')
+    if (!cand) throw new ErroDemo(404, 'Sua candidatura para este projeto não foi encontrada.')
+    const s = servicoDe(e, cand.serv_id)
+    if (cand.cand_status !== 'pendente' || s.serv_status !== 'aberto') throw new ErroDemo(400, 'Só dá para editar uma candidatura que ainda espera resposta.')
+    Object.assign(cand, lerProposta(c))
+    notificar(e, s.cont_usu, 'Candidatura atualizada', `${quem(e, e.eu).usu_nome} mudou a candidatura em "${s.serv_titulo}".`)
+    return ok('Candidatura atualizada. O contratante foi avisado.')
+  }],
+
+  /* 4. Retirar convite ainda não respondido */
+  ['DELETE', /^\/convites\/(\d+)$/, (e, [id]) => {
+    const conv = e.convites.find((x) => x.conv_id === Number(id) && servicoDe(e, x.serv_id).cont_usu === e.eu)
+    if (!conv) throw new ErroDemo(404, 'Convite não encontrado.')
+    if (conv.conv_status !== 'pendente') throw new ErroDemo(400, 'Este convite já foi respondido e não pode ser retirado.')
+    e.convites = e.convites.filter((x) => x.conv_id !== conv.conv_id)
+    notificar(e, conv.free_usu, 'Convite retirado', `O contratante retirou o convite para "${servicoDe(e, conv.serv_id).serv_titulo}".`)
+    return ok('Convite retirado.')
+  }],
+
+  /* 5. Editar ou apagar a própria mensagem (até 15 minutos) */
+  ['PUT', /^\/mensagens\/(\d+)$/, (e, [id], c) => {
+    const texto = String(c.texto ?? '').trim()
+    if (!texto) throw new ErroDemo(400, 'A mensagem não pode ficar vazia. Para tirar, apague.')
+    if (texto.length > 2000) throw new ErroDemo(400, 'A mensagem pode ter até 2000 letras.')
+    const m = minhaMensagemDemo(e, Number(id))
+    const contratado = e.candidaturas.some((x) => x.serv_id === m.serv_id && x.cand_status === 'aceita' && [m.usu_remetente, m.usu_destinatario].includes(x.free_usu))
+    const alerta = temContatoExterno(texto) && !contratado
+    Object.assign(m, { msg_texto: texto, msg_editada_em: new Date().toISOString(), ...(alerta ? { msg_alerta_contato: true } : {}) })
+    return ok('Mensagem editada.', { alerta_contato: alerta })
+  }],
+  ['DELETE', /^\/mensagens\/(\d+)$/, (e, [id]) => {
+    const m = minhaMensagemDemo(e, Number(id))
+    Object.assign(m, { msg_texto: '', msg_imagem: null, msg_arquivo: null, msg_arquivo_nome: null, msg_apagada_em: new Date().toISOString() })
+    return ok('Mensagem apagada.')
+  }],
+
+  /* 6. Avaliações que eu fiz: corrigir ou apagar enquanto estão às cegas */
+  ['GET', /^\/avaliacoes\/enviadas$/, (e) => ({
+    dias_as_cegas: DIAS_AVALIACAO_CEGA,
+    avaliacoes: e.avaliacoes
+      .filter((a) => a.usu_avaliador === e.eu)
+      .sort((a, b) => b.aval_id - a.aval_id)
+      .map((a) => {
+        const outro = quem(e, a.usu_avaliado)
+        return { ...a, usu_nome: outro.usu_nome, usu_foto: outro.usu_foto, serv_titulo: servicoDe(e, a.serv_id).serv_titulo, editavel: !visivel(e, a) }
+      }),
+  })],
+  ['PUT', /^\/avaliacoes\/(\d+)$/, (e, [id], c) => {
+    const campos = lerNotasDemo(c)
+    const a = minhaAvaliacaoDemo(e, Number(id))
+    ajustarXpDemo(e, a, campos.aval_nota!)
+    Object.assign(a, campos, { aval_editada_em: new Date().toISOString() })
+    return ok('Avaliação corrigida. Ela continua às cegas até a outra pessoa avaliar.')
+  }],
+  ['DELETE', /^\/avaliacoes\/(\d+)$/, (e, [id]) => {
+    const a = minhaAvaliacaoDemo(e, Number(id))
+    ajustarXpDemo(e, a, 0)
+    e.avaliacoes = e.avaliacoes.filter((x) => x.aval_id !== a.aval_id)
+    return ok('Avaliação apagada. Ela volta para a lista de pendentes, se quiser avaliar de novo.')
+  }],
+
+  /* 7. Editar alerta de busca */
+  ['PUT', /^\/buscas\/(\d+)$/, (e, [id], c) => {
+    const b = e.buscas.find((x) => x.bus_id === Number(id) && x.usu_id === e.eu)
+    if (!b) throw new ErroDemo(404, 'Alerta não encontrado.')
+    const termo = String(c.termo ?? '').trim()
+    const tipo_id = c.tipo_id ? Number(c.tipo_id) : null
+    const valorMin = c.valor_min === '' || c.valor_min == null ? null : Number(c.valor_min)
+    if (!termo && !tipo_id) throw new ErroDemo(400, 'Escolha uma palavra ou uma categoria para o alerta.')
+    if (termo.length > 80) throw new ErroDemo(400, 'A palavra pode ter até 80 letras.')
+    if (valorMin !== null && (!Number.isFinite(valorMin) || valorMin < 0)) throw new ErroDemo(400, 'Valor mínimo inválido.')
+    if (tipo_id && !e.tipos!.some((t) => t.tipo_id === tipo_id)) throw new ErroDemo(400, 'Categoria não encontrada.')
+    Object.assign(b, { bus_termo: termo || null, tipo_id, bus_valor_min: valorMin })
+    return ok('Alerta atualizado.', { buscas: buscasDe(e) })
+  }],
+
+  /* 9. Renomear e mudar a ordem das etapas (contratante) */
+  ['PUT', /^\/servicos\/(\d+)\/etapas\/(\d+)\/editar$/, (e, [id, etaId], c) => {
+    const s = participanteDe(e, Number(id))
+    if (s.cont_usu !== e.eu) throw new ErroDemo(403, 'Só o contratante edita as etapas.')
+    const etapa = e.etapas.find((x) => x.eta_id === Number(etaId) && x.serv_id === s.serv_id)
+    if (!etapa) throw new ErroDemo(404, 'Etapa não encontrada.')
+    const titulo = c.titulo === undefined ? null : String(c.titulo).trim()
+    const mover = c.mover
+    if (titulo === null && mover === undefined) throw new ErroDemo(400, 'Diga o novo nome ou para onde mover a etapa.')
+    if (mover !== undefined && mover !== 'cima' && mover !== 'baixo') throw new ErroDemo(400, 'Mover só para "cima" ou "baixo".')
+    const nomeAntes = etapa.eta_titulo
+    if (titulo !== null && titulo !== etapa.eta_titulo) {
+      if (!titulo || titulo.length > 100) throw new ErroDemo(400, 'Dê um nome de até 100 letras para a etapa.')
+      if (etapa.eta_liberada_em) throw new ErroDemo(400, 'Esta etapa já foi paga e não pode mudar de nome.')
+      etapa.eta_titulo = titulo
+    }
+    if (mover) {
+      const ordem = etapasDe(e, s.serv_id).map((x) => x.eta_id)
+      const i = ordem.indexOf(etapa.eta_id)
+      const j = mover === 'cima' ? i - 1 : i + 1
+      if (j >= 0 && j < ordem.length) {
+        ;[ordem[i], ordem[j]] = [ordem[j], ordem[i]]
+        for (const [pos, eta_id] of ordem.entries()) e.etapas.find((x) => x.eta_id === eta_id)!.eta_ordem = pos + 1
+      }
+    }
+    const free = contratadoDe(e, s.serv_id)
+    if (free && titulo !== null && titulo !== nomeAntes) notificar(e, free, 'Etapa renomeada', `"${nomeAntes}" agora se chama "${titulo}" em "${s.serv_titulo}".`)
+    return ok(mover ? 'Ordem das etapas atualizada.' : 'Etapa renomeada.', { etapas: etapasDe(e, s.serv_id) })
+  }],
+
+  /* 11. Pedido de orçamento: corrigir ou apagar antes de alguém responder */
+  ['PUT', /^\/orcamentos\/(\d+)$/, (e, [id], c) => {
+    const pergunta = String(c.pergunta ?? '').trim()
+    if (pergunta.length < 15 || pergunta.length > 600) throw new ErroDemo(400, 'Descreva o que precisa em 15 a 600 letras.')
+    const o = meuPedidoDemo(e, Number(id))
+    if (o.fechado) throw new ErroDemo(400, 'Este pedido já foi encerrado.')
+    if (o.respostas.some((r) => r.status === 'respondido')) throw new ErroDemo(400, 'Alguém já respondeu: mudar a pergunta agora deixaria a resposta sem sentido. Encerre e faça um pedido novo.')
+    o.pergunta = pergunta
+    for (const r of o.respostas.filter((x) => x.status === 'aguardando')) notificar(e, r.usu_id, 'Pedido de orçamento mudou', `O contratante ajustou o pedido: "${pergunta.slice(0, 100)}"`)
+    return ok('Pedido atualizado.')
+  }],
+  ['DELETE', /^\/orcamentos\/(\d+)$/, (e, [id]) => {
+    const o = meuPedidoDemo(e, Number(id))
+    if (o.respostas.some((r) => r.status === 'respondido')) throw new ErroDemo(400, 'Este pedido já tem resposta. Encerre em vez de apagar, para não sumir com o orçamento de quem respondeu.')
+    e.orcamentos = e.orcamentos.filter((x) => x.orc_id !== o.orc_id)
+    return ok('Pedido apagado.')
+  }],
+
+  /* 12. Dissolver a guilda (liderança) */
+  ['DELETE', /^\/guildas\/(\d+)$/, (e, [id]) => {
+    const g = e.guildas.find((x) => x.gui_id === Number(id))
+    if (!g) throw new ErroDemo(404, 'Guilda não encontrada.')
+    if (e.membros.find((m) => m.gui_id === g.gui_id && m.usu_id === e.eu)?.papel !== 'lider') throw new ErroDemo(403, 'Só a liderança dissolve a guilda.')
+    const outros = e.membros.filter((m) => m.gui_id === g.gui_id && m.usu_id !== e.eu).map((m) => m.usu_id)
+    for (const cand of e.candidaturas) if (cand.cand_gui_id === g.gui_id) cand.cand_gui_id = null
+    e.membros = e.membros.filter((m) => m.gui_id !== g.gui_id)
+    e.guildas = e.guildas.filter((x) => x.gui_id !== g.gui_id)
+    for (const usu_id of outros) notificar(e, usu_id, 'Guilda dissolvida', `A liderança dissolveu a ${g.nome}. Você pode entrar em outra ou fundar a sua.`)
+    return ok(`A ${g.nome} foi dissolvida.`)
+  }],
+
+  /* 13. Minhas denúncias: acompanhar e retirar */
+  ['GET', /^\/denuncias\/minhas$/, (e) => ({
+    denuncias: e.denuncias
+      .filter((d) => d.usu_id === e.eu)
+      .sort((a, b) => b.den_id - a.den_id)
+      .map((d) => {
+        const alvo =
+          d.den_alvo_tipo === 'servico'
+            ? `Projeto "${e.servicos.find((s) => s.serv_id === d.den_alvo_id)?.serv_titulo ?? 'removido'}"`
+            : d.den_alvo_tipo === 'usuario'
+              ? `Perfil de ${e.usuarios.find((u) => u.usu_id === d.den_alvo_id)?.usu_nome ?? 'conta removida'}`
+              : (() => {
+                  const m = e.mensagens.find((x) => x.msg_id === d.den_alvo_id)
+                  return m ? `Mensagem no chat de "${servicoDe(e, m.serv_id).serv_titulo}"` : 'Mensagem removida'
+                })()
+        return { den_id: d.den_id, alvo_tipo: d.den_alvo_tipo, alvo, motivo: d.den_motivo, detalhe: d.den_detalhe, status: d.den_status, data: d.den_data }
+      }),
+  })],
+  ['DELETE', /^\/denuncias\/(\d+)$/, (e, [id]) => {
+    const d = e.denuncias.find((x) => x.den_id === Number(id) && x.usu_id === e.eu)
+    if (!d) throw new ErroDemo(404, 'Denúncia não encontrada.')
+    if (d.den_status !== 'aberta') throw new ErroDemo(400, 'Esta denúncia já foi analisada e não pode ser retirada.')
+    e.denuncias = e.denuncias.filter((x) => x.den_id !== d.den_id)
+    return ok('Denúncia retirada.')
+  }],
 ]
 
 /* ---------- Entrada ---------- */
@@ -3218,6 +3535,16 @@ const ROTAS_TRINTA: Rota[] = [
       e.horas = e.horas.filter((h) => h.hor_id !== r.hor_id)
       return ok('Registro apagado.')
     }
+    if (c.acao === 'editar') {
+      if (freelancer !== e.eu || r.hor_status !== 'pendente') throw new ErroDemo(403, 'Só dá para corrigir horas suas que ainda não foram aprovadas.')
+      const minutos = Number(c.minutos)
+      const desc = String(c.desc ?? '').trim().slice(0, 200)
+      if (!Number.isInteger(minutos) || minutos < 1 || minutos > 720) throw new ErroDemo(400, 'Informe de 1 minuto a 12 horas.')
+      if (!desc) throw new ErroDemo(400, 'Conte o que foi feito nessas horas.')
+      Object.assign(r, { hor_minutos: minutos, hor_desc: desc })
+      notificar(e, dono, 'Horas corrigidas', `Um registro em "${s.serv_titulo}" mudou para ${minutos} min. Aprove no histórico.`)
+      return ok('Registro corrigido.')
+    }
     if (c.acao !== 'aprovar' && c.acao !== 'recusar') throw new ErroDemo(400, 'Ação inválida.')
     if (dono !== e.eu) throw new ErroDemo(403, 'Quem aprova as horas é o contratante.')
     if (r.hor_status !== 'pendente') throw new ErroDemo(400, 'Este registro já foi decidido.')
@@ -3255,6 +3582,15 @@ const ROTAS_TRINTA: Rota[] = [
     } else if (c.acao === 'apagar' && dono === e.eu) {
       if (cri.cri_aprovado_em) throw new ErroDemo(400, 'Critério aprovado não pode ser apagado.')
       e.criterios = e.criterios.filter((x) => x.cri_id !== cri.cri_id)
+    } else if (c.acao === 'editar' && dono === e.eu) {
+      /* Mudar o texto muda o combinado: o "entregue" volta a zero e o freelancer é avisado */
+      if (cri.cri_aprovado_em) throw new ErroDemo(400, 'Critério aprovado não pode ser editado.')
+      const texto = String(c.texto ?? '').trim()
+      if (texto.length < 3 || texto.length > 150) throw new ErroDemo(400, 'Escreva o critério com 3 a 150 letras (ex.: "Logo em PNG e SVG").')
+      if (texto !== cri.cri_texto) {
+        if (freelancer) notificar(e, freelancer, 'Critério de aceite mudou', `"${s.serv_titulo}": ${cri.cri_texto} → ${texto}`)
+        Object.assign(cri, { cri_texto: texto, cri_entregue_em: null })
+      }
     } else throw new ErroDemo(403, 'Você não pode fazer isso neste critério.')
     return ok('Critério atualizado.', { criterios: listaCriteriosDemo(e, s.serv_id) })
   }],
@@ -3629,6 +3965,8 @@ const ROTAS_EXTRAS: Rota[] = [
 export async function responderDemo(metodo: string, caminho: string, token: string | null, corpo: unknown, sinal?: AbortSignal) {
   const e = ler()
   const url = new URL(caminho, 'http://demo')
+  e.tipos ??= TIPOS.map((t) => ({ ...t, ativo: true }))
+  tiposAtuais = e.tipos
 
   /* Quem está logado vem do token (assim o "entrar como" troca de conta) */
   try {
@@ -3662,7 +4000,7 @@ export async function responderDemo(metodo: string, caminho: string, token: stri
 
   await espera(180 + Math.random() * 220, sinal)
 
-  for (const [m, padrao, responder] of [...ROTAS_TRINTA, ...ROTAS_EXTRAS, ...ROTAS_REINO, ...ROTAS]) {
+  for (const [m, padrao, responder] of [...ROTAS_CRUD, ...ROTAS_TRINTA, ...ROTAS_EXTRAS, ...ROTAS_REINO, ...ROTAS]) {
     const achou = url.pathname.match(padrao)
     if (m !== metodo || !achou) continue
     const resposta = responder(e, achou.slice(1), (corpo ?? {}) as Corpo, url.searchParams)

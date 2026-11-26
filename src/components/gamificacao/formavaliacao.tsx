@@ -17,17 +17,34 @@ const CRITERIOS = [
 ] as const
 type Criterio = (typeof CRITERIOS)[number]['codigo']
 
+/* Corrigindo uma avaliação já feita (enquanto está às cegas) */
+export interface AvaliacaoInicial {
+  aval_id: number
+  nota: number
+  comentario: string | null
+  comunicacao?: number | null
+  prazo?: number | null
+  qualidade?: number | null
+}
+
 interface FormAvaliacaoProps {
-  pendente: AvaliacaoPendente
+  pendente: Pick<AvaliacaoPendente, 'serv_id' | 'usu_id'>
   onEnviada: () => void
+  /* Com isto, o formulário chega preenchido e salva a correção (PUT) em vez de criar */
+  inicial?: AvaliacaoInicial
+  onCancelar?: () => void
 }
 
 /* Avaliação: estrelas, comentário e envio (quem é avaliado fica no cartão em volta) */
-export default function FormAvaliacao({ pendente, onEnviada }: FormAvaliacaoProps) {
-  const [nota, setNota] = useState(0)
+export default function FormAvaliacao({ pendente, onEnviada, inicial, onCancelar }: FormAvaliacaoProps) {
+  const [nota, setNota] = useState(inicial?.nota ?? 0)
   const [passando, setPassando] = useState(0)
-  const [comentario, setComentario] = useState('')
-  const [criterios, setCriterios] = useState<Partial<Record<Criterio, number>>>({})
+  const [comentario, setComentario] = useState(inicial?.comentario ?? '')
+  const [criterios, setCriterios] = useState<Partial<Record<Criterio, number>>>(() => {
+    const ja: Partial<Record<Criterio, number>> = {}
+    for (const c of CRITERIOS) if (inicial?.[c.codigo]) ja[c.codigo] = Number(inicial[c.codigo])
+    return ja
+  })
   const [erro, setErro] = useState('')
   const [enviando, setEnviando] = useState(false)
 
@@ -46,10 +63,16 @@ export default function FormAvaliacao({ pendente, onEnviada }: FormAvaliacaoProp
     setEnviando(true)
 
     try {
-      await api('/avaliacoes', {
-        metodo: 'POST',
-        corpo: { serv_id: pendente.serv_id, usu_avaliado: pendente.usu_id, nota, comentario, ...criterios },
-      })
+      if (inicial) {
+        /* Correção: critério sem estrela volta a vazio */
+        const porCriterio = Object.fromEntries(CRITERIOS.map((c) => [c.codigo, criterios[c.codigo] ?? null]))
+        await api(`/avaliacoes/${inicial.aval_id}`, { metodo: 'PUT', corpo: { nota, comentario, ...porCriterio } })
+      } else {
+        await api('/avaliacoes', {
+          metodo: 'POST',
+          corpo: { serv_id: pendente.serv_id, usu_avaliado: pendente.usu_id, nota, comentario, ...criterios },
+        })
+      }
       onEnviada()
     } catch (err) {
       setErro(err instanceof ErroApi ? err.message : 'Não foi possível enviar a avaliação.')
@@ -121,9 +144,14 @@ export default function FormAvaliacao({ pendente, onEnviada }: FormAvaliacaoProp
         >
           {comentario.length}/{LIMITE}
         </span>
+        {onCancelar && (
+          <button type="button" className={styles.btnCancelarAvaliacao} onClick={onCancelar} disabled={enviando}>
+            Cancelar
+          </button>
+        )}
         <button type="submit" className={styles.btnEnviar} disabled={enviando}>
           {enviando ? <span className="spinner" /> : <Send size={15} strokeWidth={2.2} />}
-          {enviando ? 'Enviando...' : 'Enviar avaliação'}
+          {enviando ? (inicial ? 'Salvando...' : 'Enviando...') : inicial ? 'Salvar correção' : 'Enviar avaliação'}
         </button>
       </div>
 

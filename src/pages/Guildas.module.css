@@ -251,3 +251,11 @@
         font-size: 1.45rem;
     }
 }
+
+/* Dissolver a guilda (liderança): vermelho no hover e na confirmação */
+.dissolver:hover:not(:disabled),
+.dissolverConfirmar {
+    color: var(--color-danger) !important;
+    border-color: var(--color-danger) !important;
+    background: var(--color-perigo-tint) !important;
+}

@@ -317,3 +317,23 @@ button.caixa:hover:not(:disabled) {
         font-size: 0.62rem;
     }
 }
+
+/* Etapas: subir, descer e renomear (contratante) */
+.ordemEtapa {
+    display: inline-flex;
+    align-items: center;
+}
+
+.ordemEtapa .removerEtapa:hover:not(:disabled) {
+    color: var(--color-titulo);
+}
+
+.removerEtapa:disabled {
+    opacity: 0.35;
+    cursor: default;
+}
+
+.removerEtapa:focus-visible {
+    outline: 3px solid var(--color-accent);
+    outline-offset: 1px;
+}
