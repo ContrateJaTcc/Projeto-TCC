@@ -4,7 +4,7 @@
  * - Arquivos do próprio site (código, arte do fundo, fontes): guarda depois do primeiro uso.
  * - O servidor (API) nunca é guardado: dados sempre frescos. Sem internet, o modo demonstração funciona.
  */
-const VERSAO = 'contrateja-v2'
+const VERSAO = 'contrateja-v3'
 const ESSENCIAIS = ['/', '/index.html', '/favicon.png', '/icone-192.png', '/icone-512.png', '/manifest.webmanifest']
 const FONTES = ['https://fonts.googleapis.com', 'https://fonts.gstatic.com']
 
