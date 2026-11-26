@@ -10,6 +10,7 @@ import { api, ErroApi } from '../services/api'
 import RecadoCandidatura from '../components/candidatura/recado'
 import styles from './ProjetoDetalhe.module.css'
 import Denunciar from '../components/denuncia/denunciar'
+import RemoverProjeto, { type SituacaoRemocao } from '../components/projeto/removerprojeto'
 import Brasao from '../components/reino/brasao'
 import type { GuildaResumo } from '../utils/aparencia'
 import { useCidades } from '../utils/cidades'
@@ -98,6 +99,8 @@ interface Servico {
   contratante_total_avaliacoes: number
   contratante_reputacao?: ReputacaoContratante | null
   mudancas?: { campo: string; antes: string; depois: string; data: string }[]
+  /* Só vem para o dono: se ele pode excluir ou cancelar */
+  remocao?: SituacaoRemocao
 }
 
 interface OutroProjeto {
@@ -156,6 +159,8 @@ export default function ProjetoDetalhe() {
   const [comGuilda, setComGuilda] = useState(false)
   /* Confirmação */
   const [confirmandoCancelar, setConfirmandoCancelar] = useState(false)
+  /* Dono: excluir ou cancelar o projeto */
+  const [remocao, setRemocao] = useState<SituacaoRemocao | null>(null)
 
   const base = role === 'contratante' ? '/contratante' : '/freelancer'
 
@@ -167,6 +172,7 @@ export default function ProjetoDetalhe() {
 
         const dados = await api<{ projeto: Servico }>(`/servicos/${id}`)
         const servico = dados.projeto
+        setRemocao(servico.remocao ?? null)
 
         const projetoFormatado: Projeto = {
           id: String(servico.serv_id),
@@ -547,6 +553,10 @@ export default function ProjetoDetalhe() {
             </span>
           </div>
         </div>
+
+        {role === 'contratante' && remocao && (
+          <RemoverProjeto servId={projeto.id} titulo={projeto.titulo} remocao={remocao} />
+        )}
 
         {role === 'freelancer' && (
           <div className={styles.candidatura}>

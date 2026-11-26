@@ -639,6 +639,52 @@ function notificar(e: Estado, usu_id: number, not_titulo: string, not_desc: stri
 }
 
 /*
+ * Excluir ou cancelar o próprio projeto (mesmas regras do servidor):
+ * excluir de vez só sem candidatura e sem denúncia em análise; com candidatos, só cancelar;
+ * depois de contratar alguém, nenhum dos dois.
+ */
+const STATUS_REMOVIVEIS = ['rascunho', 'aberto']
+
+function situacaoRemocaoDemo(e: Estado, s: Servico) {
+  if (!STATUS_REMOVIVEIS.includes(s.serv_status)) {
+    return {
+      pode_excluir: false, pode_cancelar: false, candidaturas: 0,
+      motivo: s.serv_status === 'em_andamento'
+        ? 'O projeto já está em andamento. Para encerrar, combine com o freelancer ou abra uma disputa.'
+        : 'Este projeto já está encerrado.',
+    }
+  }
+  const ativas = e.candidaturas.filter((c) => c.serv_id === s.serv_id && c.cand_status !== 'cancelada')
+  if (ativas.some((c) => c.cand_status === 'aceita')) {
+    return { pode_excluir: false, pode_cancelar: false, candidaturas: ativas.length, motivo: 'Você já contratou alguém para este projeto.' }
+  }
+  const denunciado = e.denuncias.some((d) => d.den_alvo_tipo === 'servico' && d.den_alvo_id === s.serv_id && d.den_status === 'aberta')
+  if (!ativas.length && !denunciado) return { pode_excluir: true, pode_cancelar: false, candidaturas: 0, motivo: null }
+  return {
+    pode_excluir: false, pode_cancelar: true, candidaturas: ativas.length,
+    motivo: denunciado
+      ? 'Este projeto está em análise pela administração, então não pode ser excluído, só cancelado.'
+      : 'Já tem gente candidatada: o projeto pode ser cancelado, mas fica no seu histórico.',
+  }
+}
+
+/* Projeto do contratante logado (outro dono: 404, como no servidor) */
+function meuProjetoDemo(e: Estado, id: number) {
+  const s = servicoDe(e, id)
+  if (s.cont_usu !== e.eu) throw new ErroDemo(404, 'Projeto não encontrado.')
+  return s
+}
+
+/* Apaga o projeto e tudo o que aponta para ele, como o ON DELETE CASCADE do banco */
+function apagarProjetoDemo(e: Estado, serv_id: number) {
+  const tabelas = e as unknown as Record<string, unknown>
+  for (const [nome, valor] of Object.entries(tabelas)) {
+    if (!Array.isArray(valor)) continue
+    tabelas[nome] = valor.filter((item) => !(item && typeof item === 'object' && (item as { serv_id?: unknown }).serv_id === serv_id))
+  }
+}
+
+/*
  * Avaliação às cegas (igual ao servidor): a nota aparece quando os dois avaliaram o projeto
  * ou 7 dias depois da avaliação.
  */
@@ -867,8 +913,35 @@ const ROTAS: Rota[] = [
         contratante_servicos_postados: e.servicos.filter((o) => o.cont_usu === c.usu_id).length, contratante_nota: total ? media : null, contratante_total_avaliacoes: total,
         contratante_reputacao: reputacaoContratanteDemo(e, c.usu_id),
         mudancas: s.cont_usu === e.eu || candidato ? e.mudancas.filter((m) => m.serv_id === s.serv_id) : [],
+        /* Só o dono vê se pode excluir ou cancelar */
+        ...(s.cont_usu === e.eu ? { remocao: situacaoRemocaoDemo(e, s) } : {}),
       },
     }
+  }],
+  ['DELETE', /^\/servicos\/(\d+)$/, (e, [id]) => {
+    const s = meuProjetoDemo(e, Number(id))
+    const situacao = situacaoRemocaoDemo(e, s)
+    if (!situacao.pode_excluir) throw new ErroDemo(409, situacao.motivo ?? 'Este projeto não pode ser excluído.')
+    apagarProjetoDemo(e, s.serv_id)
+    return ok(s.serv_status === 'rascunho' ? 'Rascunho excluído.' : 'Projeto excluído.')
+  }],
+  ['PUT', /^\/servicos\/(\d+)\/cancelar$/, (e, [id], c) => {
+    const s = meuProjetoDemo(e, Number(id))
+    const situacao = situacaoRemocaoDemo(e, s)
+    if (!situacao.pode_cancelar) throw new ErroDemo(409, situacao.motivo ?? 'Este projeto não pode ser cancelado.')
+    const motivo = String(c?.motivo ?? '').trim().slice(0, 300)
+    const pendentes = e.candidaturas.filter((x) => x.serv_id === s.serv_id && x.cand_status === 'pendente')
+    s.serv_status = 'cancelado'
+    for (const cand of pendentes) {
+      cand.cand_status = 'recusada'
+      notificar(e, cand.free_usu, 'Projeto cancelado', `"${s.serv_titulo}" foi cancelado pelo contratante${motivo ? `: ${motivo}` : '.'}`)
+    }
+    return ok(
+      pendentes.length
+        ? `Projeto cancelado. ${pendentes.length === 1 ? 'O candidato foi avisado' : `Os ${pendentes.length} candidatos foram avisados`}.`
+        : 'Projeto cancelado.',
+      { avisados: pendentes.length },
+    )
   }],
   ['POST', /^\/servicos$/, (e, _p, c) => {
     /* Filtro de spam: projeto suspeito espera a revisão da administração */
