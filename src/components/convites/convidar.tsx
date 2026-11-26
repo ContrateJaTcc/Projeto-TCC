@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Send, Sparkles } from 'lucide-react'
+import { Send, Sparkles, Undo2 } from 'lucide-react'
 import { api, ErroApi } from '../../services/api'
 import { useToast } from '../../context/useToast'
 import styles from './convites.module.css'
@@ -35,6 +35,9 @@ export default function Convidar({ usuId, nome }: { usuId: number; nome: string 
   const [mensagem, setMensagem] = useState('')
   const [enviando, setEnviando] = useState(false)
   const [carregado, setCarregado] = useState(false)
+  /* Retirar convite pendente: segundo clique confirma */
+  const [retirando, setRetirando] = useState<number | null>(null)
+  const [confirmando, setConfirmando] = useState<number | null>(null)
 
   useEffect(() => {
     let ativo = true
@@ -83,6 +86,24 @@ export default function Convidar({ usuId, nome }: { usuId: number; nome: string 
       toast.mostrar(err instanceof ErroApi ? err.message : 'Não foi possível enviar o convite.', 'erro')
     } finally {
       setEnviando(false)
+    }
+  }
+
+  async function retirar(c: ConviteEnviado) {
+    if (confirmando !== c.conv_id) {
+      setConfirmando(c.conv_id)
+      return
+    }
+    setConfirmando(null)
+    setRetirando(c.conv_id)
+    try {
+      const r = await api<{ mensagem: string }>(`/convites/${c.conv_id}`, { metodo: 'DELETE' })
+      setEnviados((atuais) => atuais.filter((x) => x.conv_id !== c.conv_id))
+      toast.mostrar(r.mensagem, 'sucesso')
+    } catch (err) {
+      toast.mostrar(err instanceof ErroApi ? err.message : 'Não foi possível retirar o convite.', 'erro')
+    } finally {
+      setRetirando(null)
     }
   }
 
@@ -141,6 +162,19 @@ export default function Convidar({ usuId, nome }: { usuId: number; nome: string 
             <li key={c.conv_id}>
               <span>{c.serv_titulo}</span>
               <span className={`${styles.status} ${styles[c.conv_status]}`}>{ROTULO[c.conv_status]}</span>
+              {c.conv_status === 'pendente' && (
+                <button
+                  type="button"
+                  className={`${styles.retirar} ${confirmando === c.conv_id ? styles.retirarConfirmar : ''}`}
+                  onClick={() => retirar(c)}
+                  onBlur={() => setConfirmando((atual) => (atual === c.conv_id ? null : atual))}
+                  disabled={retirando !== null}
+                  aria-label={confirmando === c.conv_id ? `Confirmar: retirar o convite para ${c.serv_titulo}` : `Retirar o convite para ${c.serv_titulo}`}
+                >
+                  <Undo2 size={14} strokeWidth={2.4} aria-hidden="true" />
+                  {confirmando === c.conv_id ? 'Confirmar' : 'Retirar'}
+                </button>
+              )}
             </li>
           ))}
         </ul>

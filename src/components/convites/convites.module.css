@@ -300,3 +300,42 @@
         grid-template-columns: 1fr;
     }
 }
+
+/* Convite enviado ainda sem resposta: dá para retirar */
+.enviados li > span:first-child {
+    flex: 1;
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.retirar {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.25rem 0.55rem;
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    background: transparent;
+    border: 2px solid var(--color-borda-pixel);
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.retirar:hover:not(:disabled),
+.retirarConfirmar {
+    color: var(--color-danger);
+    border-color: var(--color-danger);
+    background: var(--color-perigo-tint);
+}
+
+.retirar:focus-visible {
+    outline: 3px solid var(--color-accent);
+    outline-offset: 2px;
+}
+
+.retirar:disabled {
+    opacity: 0.55;
+    cursor: wait;
+}

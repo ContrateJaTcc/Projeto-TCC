@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { BellPlus, BellRing, Trash2 } from 'lucide-react'
+import { BellPlus, BellRing, Trash2, Pencil, Check } from 'lucide-react'
 import { api, ErroApi } from '../../services/api'
 import { useToast } from '../../context/useToast'
 import { formatarMoeda } from '../../utils/formatar'
@@ -30,6 +30,8 @@ export default function AlertasBusca() {
   const [valorMin, setValorMin] = useState('')
   const [salvando, setSalvando] = useState(false)
   const [apagando, setApagando] = useState<number | null>(null)
+  /* Editando um alerta: o mesmo formulário, preenchido, salva a mudança */
+  const [editando, setEditando] = useState<number | null>(null)
 
   useEffect(() => {
     let ativo = true
@@ -47,21 +49,33 @@ export default function AlertasBusca() {
 
   if (buscas === null) return null
 
+  function limparForm() {
+    setTermo('')
+    setTipoId('')
+    setValorMin('')
+    setEditando(null)
+  }
+
+  function editar(b: Busca) {
+    setEditando(b.bus_id)
+    setTermo(b.bus_termo ?? '')
+    setTipoId(b.tipo_id ? String(b.tipo_id) : '')
+    setValorMin(b.bus_valor_min != null && Number(b.bus_valor_min) > 0 ? String(Number(b.bus_valor_min)).replace('.', ',') : '')
+  }
+
   async function criar(e: React.FormEvent) {
     e.preventDefault()
     setSalvando(true)
     try {
-      const dados = await api<{ mensagem: string; buscas: Busca[] }>('/buscas', {
-        metodo: 'POST',
+      const dados = await api<{ mensagem: string; buscas: Busca[] }>(editando ? `/buscas/${editando}` : '/buscas', {
+        metodo: editando ? 'PUT' : 'POST',
         corpo: { termo: termo.trim(), tipo_id: tipoId || null, valor_min: valorMin.replace(',', '.') },
       })
       setBuscas(dados.buscas)
-      setTermo('')
-      setTipoId('')
-      setValorMin('')
+      limparForm()
       toast.mostrar(dados.mensagem)
     } catch (err) {
-      toast.mostrar(err instanceof ErroApi ? err.message : 'Não foi possível criar o alerta.', 'erro')
+      toast.mostrar(err instanceof ErroApi ? err.message : editando ? 'Não foi possível salvar o alerta.' : 'Não foi possível criar o alerta.', 'erro')
     } finally {
       setSalvando(false)
     }
@@ -72,6 +86,7 @@ export default function AlertasBusca() {
     try {
       const dados = await api<{ buscas: Busca[] }>(`/buscas/${b.bus_id}`, { metodo: 'DELETE' })
       setBuscas(dados.buscas)
+      if (editando === b.bus_id) limparForm()
     } catch (err) {
       toast.mostrar(err instanceof ErroApi ? err.message : 'Não foi possível apagar o alerta.', 'erro')
     } finally {
@@ -103,8 +118,11 @@ export default function AlertasBusca() {
       {buscas.length > 0 && (
         <ul className={styles.lista}>
           {buscas.map((b) => (
-            <li key={b.bus_id}>
+            <li key={b.bus_id} className={editando === b.bus_id ? styles.emEdicao : ''}>
               <span>{descrever(b)}</span>
+              <button type="button" onClick={() => editar(b)} aria-label={`Editar o alerta ${descrever(b)}`} aria-pressed={editando === b.bus_id}>
+                <Pencil size={14} strokeWidth={2.2} />
+              </button>
               <button
                 type="button"
                 onClick={() => apagar(b)}
@@ -118,7 +136,7 @@ export default function AlertasBusca() {
         </ul>
       )}
 
-      {buscas.length < LIMITE ? (
+      {buscas.length < LIMITE || editando ? (
         <form className={styles.form} onSubmit={criar}>
           <label>
             Palavra
@@ -138,9 +156,14 @@ export default function AlertasBusca() {
             <input inputMode="decimal" value={valorMin} onChange={(e) => setValorMin(e.target.value.replace(/[^\d,.]/g, ''))} placeholder="Opcional" />
           </label>
           <button type="submit" disabled={!podeSalvar}>
-            {salvando ? <span className="spinner" /> : <BellPlus size={16} strokeWidth={2.2} />}
-            Criar alerta
+            {salvando ? <span className="spinner" /> : editando ? <Check size={16} strokeWidth={2.2} /> : <BellPlus size={16} strokeWidth={2.2} />}
+            {editando ? 'Salvar alerta' : 'Criar alerta'}
           </button>
+          {editando && (
+            <button type="button" className={styles.cancelar} onClick={limparForm}>
+              Cancelar
+            </button>
+          )}
         </form>
       ) : (
         <p className={styles.limite}>Você já tem {LIMITE} alertas. Apague um para criar outro.</p>

@@ -8,6 +8,7 @@ import Avatar from '../components/avatar/avatar'
 import Carregando from '../components/carregando/carregando'
 import EstadoErro from '../components/carregando/estadoerro'
 import FormAvaliacao from '../components/gamificacao/formavaliacao'
+import AvaliacoesEnviadas, { type AvaliacaoEnviada } from '../components/gamificacao/avaliacoesenviadas'
 import Ilustracao from '../components/ilustracao/ilustracao'
 import type { AvaliacaoPendente } from '../components/gamificacao/tipos'
 import { avisarAvaliacoesMudaram } from '../utils/avaliacoespendentes'
@@ -20,13 +21,23 @@ export default function Avaliacoes() {
   const toast = useToast()
 
   const [pendentes, setPendentes] = useState<AvaliacaoPendente[]>([])
+  /* As que eu já fiz (corrigir ou apagar enquanto estão às cegas) */
+  const [enviadas, setEnviadas] = useState<AvaliacaoEnviada[]>([])
+  const [diasAsCegas, setDiasAsCegas] = useState(7)
   const [carregando, setCarregando] = useState(true)
   const [erro, setErro] = useState('')
 
   const carregar = useCallback(async () => {
     try {
-      const dados = await api<{ pendentes: AvaliacaoPendente[] }>('/avaliacoes/pendentes')
+      const [dados, minhas] = await Promise.all([
+        api<{ pendentes: AvaliacaoPendente[] }>('/avaliacoes/pendentes'),
+        api<{ avaliacoes: AvaliacaoEnviada[]; dias_as_cegas?: number }>('/avaliacoes/enviadas').catch(() => null),
+      ])
       setPendentes(dados.pendentes)
+      if (minhas) {
+        setEnviadas(minhas.avaliacoes)
+        setDiasAsCegas(minhas.dias_as_cegas ?? 7)
+      }
     } catch (e) {
       setErro(e instanceof ErroApi ? e.message : 'Não foi possível conectar ao servidor.')
     } finally {
@@ -48,6 +59,13 @@ export default function Avaliacoes() {
     )
     /* Sai da lista na hora; o resto continua como está */
     setPendentes((atual) => atual.filter((x) => !(x.serv_id === p.serv_id && x.usu_id === p.usu_id)))
+    avisarAvaliacoesMudaram()
+    carregar()
+  }
+
+  /* Corrigiu ou apagou uma das que fez: a apagada volta para as pendentes */
+  function mudouEnviada() {
+    carregar()
     avisarAvaliacoesMudaram()
   }
 
@@ -115,6 +133,8 @@ export default function Avaliacoes() {
           ))}
         </div>
       )}
+
+      <AvaliacoesEnviadas avaliacoes={enviadas} diasAsCegas={diasAsCegas} aoMudar={mudouEnviada} />
     </div>
   )
 }

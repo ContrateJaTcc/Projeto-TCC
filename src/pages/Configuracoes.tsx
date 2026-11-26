@@ -16,6 +16,7 @@ import AvisosPorTipo from '../components/configuracoes/avisos'
 import OpcoesPrivacidade from '../components/configuracoes/privacidade'
 import PainelCartas from '../components/configuracoes/cartas'
 import ListaBloqueados from '../components/configuracoes/bloqueados'
+import MinhasDenuncias from '../components/configuracoes/minhasdenuncias'
 import { demoAtivo } from '../services/demoflag'
 import { abrirApresentacao } from '../utils/apresentacao'
 import { tocarPlim } from '../utils/som'
@@ -586,6 +587,7 @@ export default function Configuracoes() {
 
           <OpcoesPrivacidade papel={role} />
           {role !== 'administrador' && <ListaBloqueados />}
+          {role !== 'administrador' && <MinhasDenuncias />}
           <p className={styles.texto}>
             Seus dados são tratados conforme a LGPD. Veja os <Link to="/termos" viewTransition>Termos e condições</Link>.
           </p>

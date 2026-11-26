@@ -777,3 +777,60 @@ button.anexar {
     width: 32px;
     height: 32px;
 }
+
+/* Mensagem apagada: fica o aviso no lugar do texto */
+.apagada {
+    font-style: italic;
+    opacity: 0.75;
+}
+
+/* Editando a própria mensagem dentro da bolha */
+.edicaoMsg {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    min-width: min(260px, 60vw);
+}
+
+.edicaoMsg textarea {
+    font: inherit;
+    padding: 0.4rem 0.5rem;
+    color: var(--color-text);
+    background: var(--color-campo);
+    border: 2px solid var(--color-borda-pixel);
+    resize: vertical;
+}
+
+.edicaoMsg div {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.35rem;
+}
+
+.edicaoMsg button {
+    padding: 0.2rem 0.6rem;
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--color-titulo);
+    background: var(--color-surface);
+    border: 2px solid var(--color-borda-pixel);
+    cursor: pointer;
+}
+
+.edicaoMsg button[type='submit'] {
+    color: var(--color-tinta);
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+}
+
+.edicaoMsg button:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.acoesMsg > button.apagarConfirmar {
+    color: var(--color-danger);
+    border-color: var(--color-danger);
+    background: var(--color-perigo-tint);
+}

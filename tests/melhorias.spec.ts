@@ -61,7 +61,7 @@ test.describe('Histórico', () => {
     await page.goto('/contratante/historico')
     const site = cartao(page, 'Criação de website')
     await site.getByLabel('Nome da nova etapa').fill('Testes finais')
-    await site.getByRole('button', { name: 'Adicionar' }).click()
+    await site.getByRole('button', { name: 'Adicionar', exact: true }).click()
     await expect(site.getByText('Testes finais')).toBeVisible()
     await expect(site.getByText('1 de 4 · 25%')).toBeVisible()
 

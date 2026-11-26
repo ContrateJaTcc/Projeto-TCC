@@ -138,3 +138,11 @@
     flex: 1 1 14rem;
     width: auto;
 }
+
+/* Apagar pedido sem resposta: vermelho no hover e na confirmação */
+.apagar:hover:not(:disabled),
+.apagarConfirmar {
+    color: var(--color-danger) !important;
+    border-color: var(--color-danger) !important;
+    background: var(--color-perigo-tint) !important;
+}

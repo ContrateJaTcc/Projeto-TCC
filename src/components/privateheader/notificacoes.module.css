@@ -210,3 +210,88 @@
     border: 2px solid var(--color-borda-pixel);
     cursor: pointer;
 }
+
+/* Ações: no topo (todas lidas, limpar) e em cada aviso (lida/não lida, apagar) */
+.topo {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+.topoAcoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+}
+
+.topoAcoes button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.3rem 0.55rem;
+    font-family: var(--font-sans);
+    font-size: 0.74rem;
+    font-weight: 600;
+    color: var(--color-text-soft);
+    background: var(--color-surface);
+    border: 2px solid var(--color-borda-pixel);
+    cursor: pointer;
+}
+
+.topoAcoes button:hover:not(:disabled) {
+    color: var(--color-titulo);
+    border-color: var(--color-accent);
+}
+
+.topoAcoes button:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+.lista li:not(.maisItem) {
+    grid-template-columns: auto 1fr auto;
+}
+
+.texto {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.itemAcoes {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.itemAcoes button {
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    padding: 0;
+    color: var(--color-text-muted);
+    background: transparent;
+    border: 2px solid transparent;
+    cursor: pointer;
+}
+
+.itemAcoes button:hover,
+.itemAcoes button:focus-visible {
+    color: var(--color-titulo);
+    border-color: var(--color-borda-pixel);
+    background: var(--color-surface);
+}
+
+.itemAcoes button:last-child:hover,
+.itemAcoes button:last-child:focus-visible {
+    color: var(--color-danger);
+    border-color: var(--color-danger);
+}
+
+.topoAcoes button:focus-visible,
+.itemAcoes button:focus-visible {
+    outline: 3px solid var(--color-accent);
+    outline-offset: 1px;
+}

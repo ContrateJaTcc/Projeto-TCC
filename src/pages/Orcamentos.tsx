@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
-import { ReceiptText, Send, X } from 'lucide-react'
+import { ReceiptText, Send, X, Pencil, Trash2 } from 'lucide-react'
 import { api, ErroApi } from '../services/api'
 import { useRole } from '../context/useRole'
 import { useToast } from '../context/useToast'
@@ -53,6 +53,10 @@ export default function Orcamentos() {
   const [pergunta, setPergunta] = useState('')
   const [respondendo, setRespondendo] = useState<Record<number, { valor: string; prazo: string; texto: string }>>({})
   const contratante = role === 'contratante'
+  /* Contratante: corrigir a pergunta ou apagar o pedido enquanto ninguém respondeu */
+  const [editandoPedido, setEditandoPedido] = useState<number | null>(null)
+  const [perguntaEd, setPerguntaEd] = useState('')
+  const [apagandoPedido, setApagandoPedido] = useState<number | null>(null)
 
   const carregar = useCallback(() => {
     api<{ pedidos: Pedido[] }>('/orcamentos').then((d) => setPedidos(d.pedidos)).catch(() => setPedidos([]))
@@ -64,7 +68,7 @@ export default function Orcamentos() {
     return () => clearTimeout(t)
   }, [carregar, contratante])
 
-  async function enviar(caminho: string, metodo: 'POST' | 'PUT', corpo?: object) {
+  async function enviar(caminho: string, metodo: 'POST' | 'PUT' | 'DELETE', corpo?: object) {
     try {
       const r = await api<{ mensagem: string }>(caminho, { metodo, corpo })
       toast.mostrar(r.mensagem, 'sucesso')
@@ -74,6 +78,16 @@ export default function Orcamentos() {
       toast.mostrar(e instanceof ErroApi ? e.message : 'Não deu certo. Tente de novo.', 'erro')
       return false
     }
+  }
+
+  async function apagarPedido(p: Pedido) {
+    /* Segundo clique confirma */
+    if (apagandoPedido !== p.orc_id) {
+      setApagandoPedido(p.orc_id)
+      return
+    }
+    setApagandoPedido(null)
+    await enviar(`/orcamentos/${p.orc_id}`, 'DELETE')
   }
 
   const alternar = (id: number) => setEscolhidos((l) => (l.includes(id) ? l.filter((x) => x !== id) : l.length >= 3 ? l : [...l, id]))
@@ -123,7 +137,26 @@ export default function Orcamentos() {
       <div className={styles.lista}>
         {pedidos.map((p) => (
           <section key={p.orc_id} className={comum.painel} aria-label={`Pedido de ${formatarData(p.data)}`}>
-            <p className={styles.pergunta}>“{p.pergunta}”</p>
+            {editandoPedido === p.orc_id ? (
+              <form
+                className={styles.campo}
+                onSubmit={async (e) => {
+                  e.preventDefault()
+                  if (await enviar(`/orcamentos/${p.orc_id}`, 'PUT', { pergunta: perguntaEd })) setEditandoPedido(null)
+                }}
+              >
+                <label className={styles.campo}>
+                  Corrigir a pergunta
+                  <textarea value={perguntaEd} onChange={(e) => setPerguntaEd(e.target.value)} rows={3} maxLength={600} autoFocus />
+                </label>
+                <div className={styles.acoes}>
+                  <button type="submit" className={comum.botaoOuro} disabled={perguntaEd.trim().length < 15}>Salvar pergunta</button>
+                  <button type="button" className={comum.botao} onClick={() => setEditandoPedido(null)}>Cancelar</button>
+                </div>
+              </form>
+            ) : (
+              <p className={styles.pergunta}>“{p.pergunta}”</p>
+            )}
             <p className={comum.nota}>
               {p.contratante ? `${p.contratante} · ` : ''}{formatarData(p.data)}{p.fechado ? ' · encerrado' : ''}
             </p>
@@ -149,12 +182,40 @@ export default function Orcamentos() {
                     </article>
                   ))}
                 </div>
-                {!p.fechado && (
-                  <div className={styles.acoes}>
-                    <Link to="/contratante/criar-projeto" className={comum.botaoOuro}>Criar o projeto</Link>
-                    <button type="button" className={comum.botao} onClick={() => enviar(`/orcamentos/${p.orc_id}/fechar`, 'PUT')}>Encerrar pedido</button>
-                  </div>
-                )}
+                {(() => {
+                  /* Sem nenhuma resposta ainda: dá para corrigir a pergunta e apagar o pedido */
+                  const semResposta = !p.respostas.some((r) => r.status === 'respondido')
+                  if (p.fechado && !semResposta) return null
+                  return (
+                    <div className={styles.acoes}>
+                      {!p.fechado && <Link to="/contratante/criar-projeto" className={comum.botaoOuro}>Criar o projeto</Link>}
+                      {!p.fechado && <button type="button" className={comum.botao} onClick={() => enviar(`/orcamentos/${p.orc_id}/fechar`, 'PUT')}>Encerrar pedido</button>}
+                      {semResposta && !p.fechado && editandoPedido !== p.orc_id && (
+                        <button
+                          type="button"
+                          className={comum.botao}
+                          onClick={() => {
+                            setEditandoPedido(p.orc_id)
+                            setPerguntaEd(p.pergunta)
+                            setApagandoPedido(null)
+                          }}
+                        >
+                          <Pencil size={14} strokeWidth={2.4} aria-hidden="true" /> Corrigir pergunta
+                        </button>
+                      )}
+                      {semResposta && (
+                        <button
+                          type="button"
+                          className={`${comum.botao} ${styles.apagar} ${apagandoPedido === p.orc_id ? styles.apagarConfirmar : ''}`}
+                          onClick={() => apagarPedido(p)}
+                          onBlur={() => setApagandoPedido((atual) => (atual === p.orc_id ? null : atual))}
+                        >
+                          <Trash2 size={14} strokeWidth={2.4} aria-hidden="true" /> {apagandoPedido === p.orc_id ? 'Clique de novo para apagar' : 'Apagar pedido'}
+                        </button>
+                      )}
+                    </div>
+                  )
+                })()}
               </>
             ) : (
               p.respostas.map((r) =>

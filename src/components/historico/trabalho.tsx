@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { Timer, Play, Square, Check, X, ListChecks, Trash2, History, Repeat, ExternalLink, Plus } from 'lucide-react'
+import { Timer, Play, Square, Check, X, ListChecks, Trash2, History, Repeat, ExternalLink, Plus, Pencil } from 'lucide-react'
 import { api, ErroApi } from '../../services/api'
 import { useToast } from '../../context/useToast'
 import { formatarData, formatarMoeda } from '../../utils/formatar'
@@ -61,6 +61,10 @@ export function HorasTrabalhadas({ servId, papel, emAndamento }: { servId: numbe
   const [manual, setManual] = useState(false)
   const [minutos, setMinutos] = useState('60')
   const [desc, setDesc] = useState('')
+  /* Corrigindo um registro que ainda espera aprovação */
+  const [editandoHor, setEditandoHor] = useState<number | null>(null)
+  const [minutosEd, setMinutosEd] = useState('')
+  const [descEd, setDescEd] = useState('')
 
   if (!dados || !dados.por_hora) return null
 
@@ -70,6 +74,7 @@ export function HorasTrabalhadas({ servId, papel, emAndamento }: { servId: numbe
       toast.mostrar(r.mensagem, 'sucesso')
       setManual(false)
       setDesc('')
+      setEditandoHor(null)
       recarregar()
     } catch (e) {
       toast.mostrar(e instanceof ErroApi ? e.message : 'Não foi possível salvar as horas.', 'erro')
@@ -122,11 +127,34 @@ export function HorasTrabalhadas({ servId, papel, emAndamento }: { servId: numbe
         <ul className={styles.lista}>
           {dados.registros.filter((r) => r.hor_status !== 'rodando').slice(0, 8).map((r) => (
             <li key={r.hor_id} className={styles[r.hor_status]}>
-              <span>
-                <strong>{r.hor_minutos ? horasTexto(r.hor_minutos) : '—'}</strong> · {formatarData(r.hor_inicio)}
-                {r.hor_desc && <> · {r.hor_desc}</>}
-              </span>
-              <span className={styles.status}>{ROTULO_STATUS[r.hor_status]}</span>
+              {editandoHor === r.hor_id ? (
+                <form
+                  className={`${styles.form} ${styles.cresce}`}
+                  onSubmit={(e) => {
+                    e.preventDefault()
+                    enviar({ acao: 'editar', minutos: Number(minutosEd), desc: descEd }, `/servicos/${servId}/horas/${r.hor_id}`, 'PUT')
+                  }}
+                >
+                  <label>
+                    Minutos
+                    <input inputMode="numeric" value={minutosEd} onChange={(e) => setMinutosEd(e.target.value.replace(/\D/g, '').slice(0, 3))} autoFocus />
+                  </label>
+                  <label className={styles.cresce}>
+                    O que foi feito
+                    <input value={descEd} onChange={(e) => setDescEd(e.target.value)} maxLength={200} />
+                  </label>
+                  <button type="submit" className={styles.botaoForte} disabled={!descEd.trim() || Number(minutosEd) < 1}>Salvar</button>
+                  <button type="button" className={styles.botao} onClick={() => setEditandoHor(null)}>Cancelar</button>
+                </form>
+              ) : (
+                <>
+                  <span>
+                    <strong>{r.hor_minutos ? horasTexto(r.hor_minutos) : '—'}</strong> · {formatarData(r.hor_inicio)}
+                    {r.hor_desc && <> · {r.hor_desc}</>}
+                  </span>
+                  <span className={styles.status}>{ROTULO_STATUS[r.hor_status]}</span>
+                </>
+              )}
               {!free && r.hor_status === 'pendente' && (
                 <span className={styles.acoes}>
                   <button type="button" className={styles.botao} onClick={() => enviar({ acao: 'aprovar' }, `/servicos/${servId}/horas/${r.hor_id}`, 'PUT')} aria-label={`Aprovar ${r.hor_minutos} minutos`}>
@@ -137,10 +165,24 @@ export function HorasTrabalhadas({ servId, papel, emAndamento }: { servId: numbe
                   </button>
                 </span>
               )}
-              {free && r.hor_status === 'pendente' && (
-                <button type="button" className={styles.icone} onClick={() => enviar({ acao: 'apagar' }, `/servicos/${servId}/horas/${r.hor_id}`, 'PUT')} aria-label="Apagar este registro">
-                  <Trash2 size={14} strokeWidth={2.4} />
-                </button>
+              {free && r.hor_status === 'pendente' && editandoHor !== r.hor_id && (
+                <>
+                  <button
+                    type="button"
+                    className={styles.icone}
+                    onClick={() => {
+                      setEditandoHor(r.hor_id)
+                      setMinutosEd(String(r.hor_minutos ?? ''))
+                      setDescEd(r.hor_desc ?? '')
+                    }}
+                    aria-label="Corrigir este registro"
+                  >
+                    <Pencil size={14} strokeWidth={2.4} />
+                  </button>
+                  <button type="button" className={styles.icone} onClick={() => enviar({ acao: 'apagar' }, `/servicos/${servId}/horas/${r.hor_id}`, 'PUT')} aria-label="Apagar este registro">
+                    <Trash2 size={14} strokeWidth={2.4} />
+                  </button>
+                </>
               )}
             </li>
           ))}
@@ -163,6 +205,9 @@ export function CriteriosAceite({ servId, papel, emAndamento }: { servId: number
   const toast = useToast()
   const [dados, recarregar] = useDoProjeto<{ disponivel?: boolean; criterios: Criterio[] }>(`/servicos/${servId}/criterios`)
   const [novo, setNovo] = useState('')
+  /* Corrigindo o texto de um critério ainda não aprovado */
+  const [editandoCri, setEditandoCri] = useState<number | null>(null)
+  const [textoCri, setTextoCri] = useState('')
 
   if (!dados) return null
   const contratante = papel === 'contratante'
@@ -172,6 +217,7 @@ export function CriteriosAceite({ servId, papel, emAndamento }: { servId: number
     try {
       await api(caminho, { metodo, corpo })
       setNovo('')
+      setEditandoCri(null)
       recarregar()
     } catch (e) {
       toast.mostrar(e instanceof ErroApi ? e.message : 'Não foi possível atualizar o critério.', 'erro')
@@ -205,18 +251,50 @@ export function CriteriosAceite({ servId, papel, emAndamento }: { servId: number
                   aria-label={`Entreguei: ${c.cri_texto}`}
                 />
               )}
-              <span className={styles.cresce}>{c.cri_texto}</span>
-              <span className={styles.status}>{estado === 'aprovado' ? 'aprovado' : estado === 'entregue' ? 'entregue, falta aprovar' : 'falta'}</span>
+              {editandoCri === c.cri_id ? (
+                <form
+                  className={`${styles.form} ${styles.cresce}`}
+                  onSubmit={(e) => {
+                    e.preventDefault()
+                    mudar(rota, { acao: 'editar', texto: textoCri }, 'PUT')
+                  }}
+                >
+                  <label className={styles.cresce}>
+                    Texto do critério
+                    <input value={textoCri} onChange={(e) => setTextoCri(e.target.value)} maxLength={150} autoFocus />
+                  </label>
+                  <button type="submit" className={styles.botaoForte} disabled={textoCri.trim().length < 3}>Salvar</button>
+                  <button type="button" className={styles.botao} onClick={() => setEditandoCri(null)}>Cancelar</button>
+                </form>
+              ) : (
+                <>
+                  <span className={styles.cresce}>{c.cri_texto}</span>
+                  <span className={styles.status}>{estado === 'aprovado' ? 'aprovado' : estado === 'entregue' ? 'entregue, falta aprovar' : 'falta'}</span>
+                </>
+              )}
               {contratante && emAndamento && estado === 'entregue' && (
                 <span className={styles.acoes}>
                   <button type="button" className={styles.botao} onClick={() => mudar(rota, { acao: 'aprovar' }, 'PUT')} aria-label={`Aprovar: ${c.cri_texto}`}><Check size={14} strokeWidth={2.6} /> Aprovar</button>
                   <button type="button" className={styles.botao} onClick={() => mudar(rota, { acao: 'reprovar' }, 'PUT')} aria-label={`Pedir para refazer: ${c.cri_texto}`}><X size={14} strokeWidth={2.6} /> Refazer</button>
                 </span>
               )}
-              {contratante && emAndamento && estado !== 'aprovado' && (
-                <button type="button" className={styles.icone} onClick={() => mudar(rota, { acao: 'apagar' }, 'PUT')} aria-label={`Apagar o critério ${c.cri_texto}`}>
-                  <Trash2 size={14} strokeWidth={2.4} />
-                </button>
+              {contratante && emAndamento && estado !== 'aprovado' && editandoCri !== c.cri_id && (
+                <>
+                  <button
+                    type="button"
+                    className={styles.icone}
+                    onClick={() => {
+                      setEditandoCri(c.cri_id)
+                      setTextoCri(c.cri_texto)
+                    }}
+                    aria-label={`Editar o critério ${c.cri_texto}`}
+                  >
+                    <Pencil size={14} strokeWidth={2.4} />
+                  </button>
+                  <button type="button" className={styles.icone} onClick={() => mudar(rota, { acao: 'apagar' }, 'PUT')} aria-label={`Apagar o critério ${c.cri_texto}`}>
+                    <Trash2 size={14} strokeWidth={2.4} />
+                  </button>
+                </>
               )}
             </li>
           )

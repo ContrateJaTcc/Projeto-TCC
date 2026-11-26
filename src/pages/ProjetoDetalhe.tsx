@@ -10,6 +10,7 @@ import { api, ErroApi } from '../services/api'
 import RecadoCandidatura from '../components/candidatura/recado'
 import styles from './ProjetoDetalhe.module.css'
 import Denunciar from '../components/denuncia/denunciar'
+import RemoverProjeto, { type SituacaoRemocao } from '../components/projeto/removerprojeto'
 import Brasao from '../components/reino/brasao'
 import type { GuildaResumo } from '../utils/aparencia'
 import { useCidades } from '../utils/cidades'
@@ -98,6 +99,8 @@ interface Servico {
   contratante_total_avaliacoes: number
   contratante_reputacao?: ReputacaoContratante | null
   mudancas?: { campo: string; antes: string; depois: string; data: string }[]
+  /* Só vem para o dono: se ele pode excluir ou cancelar */
+  remocao?: SituacaoRemocao
 }
 
 interface OutroProjeto {
@@ -156,6 +159,11 @@ export default function ProjetoDetalhe() {
   const [comGuilda, setComGuilda] = useState(false)
   /* Confirmação */
   const [confirmandoCancelar, setConfirmandoCancelar] = useState(false)
+  /* Dono: excluir ou cancelar o projeto */
+  const [remocao, setRemocao] = useState<SituacaoRemocao | null>(null)
+  /* Freelancer: editar a candidatura que espera resposta (valor, prazo e recado) */
+  const [editandoCandidatura, setEditandoCandidatura] = useState(false)
+  const [meuRecado, setMeuRecado] = useState('')
 
   const base = role === 'contratante' ? '/contratante' : '/freelancer'
 
@@ -167,6 +175,7 @@ export default function ProjetoDetalhe() {
 
         const dados = await api<{ projeto: Servico }>(`/servicos/${id}`)
         const servico = dados.projeto
+        setRemocao(servico.remocao ?? null)
 
         const projetoFormatado: Projeto = {
           id: String(servico.serv_id),
@@ -223,7 +232,7 @@ export default function ProjetoDetalhe() {
         // Status
         if (role === 'freelancer') {
           const dadosCandidaturas = await api<{
-            candidaturas: { serv_id: number; cand_status: string; cand_valor_proposto?: number | string | null; cand_prazo_proposto?: number | null }[]
+            candidaturas: { serv_id: number; cand_status: string; cand_valor_proposto?: number | string | null; cand_prazo_proposto?: number | null; cand_mensagem?: string | null }[]
           }>(
             '/candidaturas/minhas'
           ).catch(() => null)
@@ -243,6 +252,7 @@ export default function ProjetoDetalhe() {
             const valor = candidaturaAtual?.cand_valor_proposto != null ? Number(candidaturaAtual.cand_valor_proposto) : null
             const prazo = candidaturaAtual?.cand_prazo_proposto ?? null
             setMinhaProposta(valor !== null || prazo !== null ? { valor, prazo } : null)
+            setMeuRecado(candidaturaAtual?.cand_status === 'pendente' ? candidaturaAtual.cand_mensagem ?? '' : '')
           }
 
           const eu = await api<{ guilda?: GuildaResumo | null }>('/usuarios/eu', { silencioso: true }).catch(() => null)
@@ -288,11 +298,44 @@ export default function ProjetoDetalhe() {
           : null
       )
       setPropondo(false)
+      setMeuRecado(recado.trim())
       setMensagemCandidatura(dados.mensagem || 'Candidatura enviada com sucesso!')
     } catch (erro) {
       setMensagemCandidatura(
         erro instanceof Error ? erro.message : 'Erro ao enviar candidatura.'
       )
+    } finally {
+      setProcessandoCandidatura(false)
+    }
+  }
+
+  /* Abre a edição com o que já foi enviado */
+  function editarCandidatura() {
+    setValorProposto(minhaProposta?.valor != null ? String(minhaProposta.valor).replace('.', ',') : '')
+    setPrazoProposto(minhaProposta?.prazo != null ? String(minhaProposta.prazo) : '')
+    setRecado(meuRecado)
+    setConfirmandoCancelar(false)
+    setMensagemCandidatura('')
+    setEditandoCandidatura(true)
+  }
+
+  async function salvarCandidatura() {
+    if (!id || processandoCandidatura) return
+    setProcessandoCandidatura(true)
+    setMensagemCandidatura('')
+    try {
+      const valor = valorProposto ? Number(valorProposto.replace(',', '.')) : null
+      const prazo = prazoProposto ? Number(prazoProposto) : null
+      const dados = await api<{ mensagem: string }>(`/servicos/${id}/candidaturas`, {
+        metodo: 'PUT',
+        corpo: { valor_proposto: valor, prazo_proposto: prazo, mensagem: recado.trim() },
+      })
+      setMinhaProposta(valor !== null || prazo !== null ? { valor, prazo } : null)
+      setMeuRecado(recado.trim())
+      setEditandoCandidatura(false)
+      setMensagemCandidatura(dados.mensagem || 'Candidatura atualizada.')
+    } catch (erro) {
+      setMensagemCandidatura(erro instanceof Error ? erro.message : 'Erro ao editar a candidatura.')
     } finally {
       setProcessandoCandidatura(false)
     }
@@ -548,22 +591,65 @@ export default function ProjetoDetalhe() {
           </div>
         </div>
 
+        {role === 'contratante' && remocao && (
+          <RemoverProjeto servId={projeto.id} titulo={projeto.titulo} remocao={remocao} />
+        )}
+
         {role === 'freelancer' && (
           <div className={styles.candidatura}>
-            {statusCandidatura === 'pendente' ? (
-              <button
-                type="button"
-                className={`${styles.botaoCandidatura} ${styles.candidaturaEnviada}`}
-                onClick={cancelarCandidatura}
-                onBlur={() => setConfirmandoCancelar(false)}
-                disabled={processandoCandidatura}
-              >
-                {processandoCandidatura
-                  ? 'Processando...'
-                  : confirmandoCancelar
-                    ? 'Clique de novo para confirmar'
-                    : 'Cancelar candidatura'}
-              </button>
+            {statusCandidatura === 'pendente' && editandoCandidatura ? (
+              <>
+                <div className={styles.proposta}>
+                  <strong>Editar candidatura</strong>
+                  <p>Deixe valor e prazo em branco para ficar com os do projeto. O contratante é avisado da mudança.</p>
+                  <div className={styles.propostaCampos}>
+                    <label>
+                      {projeto.tipoValor === 'hora' ? 'Valor por hora (R$)' : 'Valor (R$)'}
+                      <input
+                        inputMode="decimal"
+                        value={valorProposto}
+                        onChange={(e) => setValorProposto(e.target.value.replace(/[^\d,.]/g, ''))}
+                        placeholder={String(projeto.valorNumero)}
+                      />
+                    </label>
+                    <label>
+                      Prazo (dias)
+                      <input
+                        inputMode="numeric"
+                        value={prazoProposto}
+                        onChange={(e) => setPrazoProposto(e.target.value.replace(/\D/g, '').slice(0, 3))}
+                        placeholder={projeto.prazoDias ? String(projeto.prazoDias) : '—'}
+                      />
+                    </label>
+                  </div>
+                </div>
+                <RecadoCandidatura valor={recado} aoMudar={setRecado} />
+                <button type="button" className={styles.botaoCandidatura} onClick={salvarCandidatura} disabled={processandoCandidatura}>
+                  {processandoCandidatura ? 'Salvando...' : 'Salvar alterações'}
+                </button>
+                <button type="button" className={styles.botaoProposta} onClick={() => setEditandoCandidatura(false)} disabled={processandoCandidatura}>
+                  Voltar sem salvar
+                </button>
+              </>
+            ) : statusCandidatura === 'pendente' ? (
+              <>
+                <button
+                  type="button"
+                  className={`${styles.botaoCandidatura} ${styles.candidaturaEnviada}`}
+                  onClick={cancelarCandidatura}
+                  onBlur={() => setConfirmandoCancelar(false)}
+                  disabled={processandoCandidatura}
+                >
+                  {processandoCandidatura
+                    ? 'Processando...'
+                    : confirmandoCancelar
+                      ? 'Clique de novo para confirmar'
+                      : 'Cancelar candidatura'}
+                </button>
+                <button type="button" className={styles.botaoProposta} onClick={editarCandidatura} disabled={processandoCandidatura}>
+                  Editar candidatura
+                </button>
+              </>
             ) : statusCandidatura === 'aceita' || statusCandidatura === 'recusada' ? (
               <button
                 type="button"

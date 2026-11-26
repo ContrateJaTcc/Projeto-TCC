@@ -188,3 +188,96 @@
     color: var(--color-ouro-texto);
 }
 
+
+/* ---------- Avaliações que você fez ---------- */
+.enviadas {
+    margin-top: 2.5rem;
+}
+
+.enviadas h2 {
+    margin-bottom: 0.4rem;
+}
+
+.notaDada {
+    display: flex;
+    align-items: center;
+    gap: 0.15rem;
+    margin: 0;
+}
+
+.notaDada small {
+    margin-left: 0.5rem;
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+}
+
+.estrelaCheia {
+    color: var(--color-accent);
+    fill: var(--color-accent);
+}
+
+.estrelaVazia {
+    color: var(--color-text-soft);
+}
+
+.comentarioDado {
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--color-text);
+    overflow-wrap: anywhere;
+}
+
+.cegaPequena {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.4rem;
+    margin: 0;
+    font-size: 0.8rem;
+    line-height: 1.4;
+    color: var(--color-text-muted);
+}
+
+.cegaPequena svg {
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+    color: var(--color-feitico);
+}
+
+.acoesEnviada {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.acoesEnviada button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.45rem 0.85rem;
+    font-family: var(--font-sans);
+    font-size: 0.84rem;
+    font-weight: 700;
+    color: var(--color-titulo);
+    background: var(--color-surface);
+    border: 2px solid var(--color-borda-pixel);
+    box-shadow: var(--shadow-sm);
+    cursor: pointer;
+}
+
+.acoesEnviada button:active {
+    transform: translate(2px, 2px);
+    box-shadow: none;
+}
+
+.acoesEnviada .apagar:hover,
+.acoesEnviada .apagarConfirmar {
+    color: var(--color-danger);
+    border-color: var(--color-danger);
+    background: var(--color-perigo-tint);
+}
+
+.acoesEnviada button:disabled {
+    opacity: 0.55;
+    cursor: wait;
+}

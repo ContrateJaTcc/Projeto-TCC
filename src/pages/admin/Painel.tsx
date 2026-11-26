@@ -10,6 +10,7 @@ import { useRole } from '../../context/useRole'
 import PoderesSupremos from './PoderesSupremos'
 import RegistroAdmin from './RegistroAdmin'
 import DenunciasAdmin from './DenunciasAdmin'
+import CategoriasAdmin from './CategoriasAdmin'
 import DisputasAdmin from './DisputasAdmin'
 import ModeracaoAdmin from './ModeracaoAdmin'
 import ErrosAdmin from './ErrosAdmin'
@@ -54,7 +55,7 @@ interface ServicoAdmin {
   contratante_nome: string
 }
 
-type Aba = 'usuarios' | 'projetos' | 'denuncias' | 'disputas' | 'revisao' | 'erros' | 'funil' | 'saude' | 'supremo' | 'registro'
+type Aba = 'usuarios' | 'projetos' | 'categorias' | 'denuncias' | 'disputas' | 'revisao' | 'erros' | 'funil' | 'saude' | 'supremo' | 'registro'
 type Acao =
   | { tipo: 'conta'; id: number; status: string }
   | { tipo: 'projeto'; id: number }
@@ -238,7 +239,7 @@ export default function PainelAdmin() {
 
       <div className={styles.barra}>
         <div className={styles.abas} role="tablist">
-          {(supremo ? (['usuarios', 'projetos', 'denuncias', 'disputas', 'revisao', 'erros', 'funil', 'saude', 'supremo', 'registro'] as Aba[]) : (['usuarios', 'projetos', 'denuncias', 'disputas', 'revisao', 'erros', 'funil', 'saude'] as Aba[])).map((a) => (
+          {(supremo ? (['usuarios', 'projetos', 'categorias', 'denuncias', 'disputas', 'revisao', 'erros', 'funil', 'saude', 'supremo', 'registro'] as Aba[]) : (['usuarios', 'projetos', 'categorias', 'denuncias', 'disputas', 'revisao', 'erros', 'funil', 'saude'] as Aba[])).map((a) => (
             <button
               key={a}
               type="button"
@@ -247,7 +248,7 @@ export default function PainelAdmin() {
               className={aba === a ? styles.abaAtiva : ''}
               onClick={() => setAba(a)}
             >
-              {a === 'usuarios' ? `Usuários (${usuarios.length})` : a === 'projetos' ? `Projetos (${servicos.length})` : a === 'denuncias' ? 'Denúncias' : a === 'disputas' ? 'Disputas' : a === 'revisao' ? 'Revisão de projetos' : a === 'erros' ? 'Erros' : a === 'funil' ? 'Funil' : a === 'saude' ? 'Saúde do servidor' : a === 'supremo' ? 'Poderes supremos' : 'Registro'}
+              {a === 'usuarios' ? `Usuários (${usuarios.length})` : a === 'projetos' ? `Projetos (${servicos.length})` : a === 'categorias' ? 'Categorias' : a === 'denuncias' ? 'Denúncias' : a === 'disputas' ? 'Disputas' : a === 'revisao' ? 'Revisão de projetos' : a === 'erros' ? 'Erros' : a === 'funil' ? 'Funil' : a === 'saude' ? 'Saúde do servidor' : a === 'supremo' ? 'Poderes supremos' : 'Registro'}
             </button>
           ))}
         </div>
@@ -292,6 +293,8 @@ export default function PainelAdmin() {
         <PoderesSupremos />
       ) : aba === 'registro' ? (
         <RegistroAdmin />
+      ) : aba === 'categorias' ? (
+        <CategoriasAdmin />
       ) : aba === 'denuncias' ? (
         <DenunciasAdmin aoAgir={carregar} />
       ) : aba === 'disputas' ? (

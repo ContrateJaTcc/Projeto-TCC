@@ -743,3 +743,25 @@
     border: none;
     cursor: pointer;
 }
+
+/* Corrigindo uma avaliação: "Cancelar" ao lado de "Salvar correção" */
+.btnCancelarAvaliacao {
+    margin-left: auto;
+    padding: 0.55rem 1rem;
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 0.86rem;
+    color: var(--color-text-soft);
+    background: transparent;
+    border: 2px solid var(--color-borda-pixel);
+    border-radius: var(--radius-pill);
+    cursor: pointer;
+}
+
+.btnCancelarAvaliacao:hover:not(:disabled) {
+    color: var(--color-titulo);
+}
+
+.btnCancelarAvaliacao + .btnEnviar {
+    margin-left: 0;
+}

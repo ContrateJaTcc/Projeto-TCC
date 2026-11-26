@@ -8,6 +8,7 @@ import { qualidadeDoAnuncio } from './qualidadeprojeto'
 import { formatarMoeda } from '../../utils/formatar'
 import { useToast } from '../../context/useToast'
 import { motivosDeSpam } from '../../utils/moderacao'
+import RemoverProjeto, { type SituacaoRemocao } from '../../components/projeto/removerprojeto'
 
 /* Rascunho automático: o que foi digitado num projeto novo fica guardado neste navegador */
 const CHAVE_RASCUNHO = 'criar-projeto:rascunho'
@@ -71,6 +72,8 @@ interface ServicoCarregado {
   serv_forma_pagamento: string | null
   serv_vagas: number | null
   serv_candidaturas_ate?: string | null
+  serv_status?: string
+  remocao?: SituacaoRemocao
 }
 
 
@@ -153,6 +156,9 @@ function CriarProjeto() {
 
   const [publicando, setPublicando] = useState(false)
   const [erro, setErro] = useState('')
+  /* Editando um projeto existente: o dono pode excluir (rascunho/sem candidatos) ou cancelar */
+  const [remocao, setRemocao] = useState<SituacaoRemocao | null>(null)
+  const [statusAtual, setStatusAtual] = useState<string | null>(null)
 
   /* Categorias */
   const [tiposServico, setTiposServico] = useState<TipoServico[]>([])
@@ -174,6 +180,12 @@ function CriarProjeto() {
       const dados = await api<{ projeto: ServicoCarregado }>(`/servicos/${fonte}`)
 
       const projeto = dados.projeto
+
+      /* Só editando o próprio projeto (não ao copiar um antigo para um novo) */
+      if (projetoId) {
+        setRemocao(projeto.remocao ?? null)
+        setStatusAtual(projeto.serv_status ?? null)
+      }
 
       setTitulo(projeto.serv_titulo || '')
       setDescricao(projeto.serv_desc || '')
@@ -729,6 +741,11 @@ function CriarProjeto() {
           </button>
         </div>
       </form>
+
+      {/* Fora do formulário: o cartão tem a própria janela com formulário */}
+      {projetoId && remocao && (
+        <RemoverProjeto servId={projetoId} titulo={titulo || 'Projeto sem título'} remocao={remocao} rascunho={statusAtual === 'rascunho'} />
+      )}
     </main>
   )
 }

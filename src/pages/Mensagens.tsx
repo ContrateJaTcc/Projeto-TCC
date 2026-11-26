@@ -1,6 +1,6 @@
 import { Fragment, useCallback, useEffect, useRef, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
-import { Search, ArrowLeft, X, Send, MessageCirclePlus, ImagePlus, FileText, Download, HandCoins, CalendarClock, ShieldAlert, Reply, Ban } from 'lucide-react'
+import { Search, ArrowLeft, X, Send, MessageCirclePlus, ImagePlus, FileText, Download, HandCoins, CalendarClock, ShieldAlert, Reply, Ban, Pencil, Trash2 } from 'lucide-react'
 import { useRole } from '../context/useRole'
 import Avatar from '../components/avatar/avatar'
 import Carregando from '../components/carregando/carregando'
@@ -73,6 +73,9 @@ interface Mensagem {
   msg_alerta_contato?: boolean | number
   /* Respondendo (citando) outra mensagem */
   msg_resposta_id?: number | null
+  /* Editada ou apagada pelo remetente (até 15 minutos depois de enviar) */
+  msg_editada_em?: string | null
+  msg_apagada_em?: string | null
   /* Pendente */
   pendente?: boolean
 }
@@ -100,6 +103,8 @@ const tamanhoLegivel = (bytes: number) => (bytes < 1024 * 1024 ? `${Math.max(1, 
 const ESPERA_ERRO = 4000
 /* De quanto em quanto tempo confere "digitando..." e "visto" com a conversa aberta */
 const INTERVALO_ESTADO = 2500
+/* Editar ou apagar a própria mensagem: até 15 minutos depois (o servidor confere de novo) */
+const MINUTOS_PARA_ALTERAR = 15
 /* Avisa que está digitando no máximo a cada 3 segundos */
 const INTERVALO_DIGITANDO = 3000
 
@@ -144,6 +149,19 @@ export default function Mensagens() {
   const [respondendo, setRespondendo] = useState<number | null>(null)
   /* Mensagem que está sendo respondida (citada) */
   const [citando, setCitando] = useState<Mensagem | null>(null)
+  /* Editando ou apagando a própria mensagem */
+  const [editandoMsg, setEditandoMsg] = useState<number | null>(null)
+  const [textoEdicao, setTextoEdicao] = useState('')
+  const [apagandoMsg, setApagandoMsg] = useState<number | null>(null)
+  const [alterandoMsg, setAlterandoMsg] = useState(false)
+  /* Última edição/exclusão vista na conversa ("" = nenhuma; null = ainda não perguntou) */
+  const alteradaEm = useRef<string | null>(null)
+  /* Relógio da tela: os botões de editar/apagar somem quando passam os 15 minutos */
+  const [agora, setAgora] = useState(() => Date.now())
+  useEffect(() => {
+    const id = setInterval(() => setAgora(Date.now()), 30_000)
+    return () => clearInterval(id)
+  }, [])
   const [bloqueando, setBloqueando] = useState(false)
   /* O outro está digitando? Até qual mensagem minha ele já leu? */
   const [estado, setEstado] = useState<{ digitando: boolean; lidasAte: number; visto?: string | null }>({ digitando: false, lidasAte: 0 })
@@ -280,9 +298,17 @@ export default function Mensagens() {
     if (!ativa) return
     let vivo = true
     const conferir = () =>
-      api<{ digitando: boolean; lidas_ate: number; visto_em?: string | null }>(`/mensagens/${ativa.serv_id}/${ativa.outro_usu_id}/estado`, { silencioso: true })
-        .then((d) => vivo && setEstado({ digitando: d.digitando, lidasAte: d.lidas_ate, visto: d.visto_em }))
+      api<{ digitando: boolean; lidas_ate: number; visto_em?: string | null; alterada_em?: string | null }>(`/mensagens/${ativa.serv_id}/${ativa.outro_usu_id}/estado`, { silencioso: true })
+        .then((d) => {
+          if (!vivo) return
+          setEstado({ digitando: d.digitando, lidasAte: d.lidas_ate, visto: d.visto_em })
+          /* Alguém editou ou apagou uma mensagem: traz a versão nova */
+          const marca = d.alterada_em ?? ''
+          if (alteradaEm.current !== null && marca !== alteradaEm.current) buscarMensagens(ativa).catch(() => {})
+          alteradaEm.current = marca
+        })
         .catch(() => {})
+    alteradaEm.current = null
     conferir()
     const id = setInterval(conferir, INTERVALO_ESTADO)
     return () => {
@@ -290,7 +316,51 @@ export default function Mensagens() {
       clearInterval(id)
       setEstado({ digitando: false, lidasAte: 0 })
     }
-  }, [ativa])
+  }, [ativa, buscarMensagens])
+
+  /* Minha mensagem de texto comum, dentro dos 15 minutos */
+  const podeAlterar = (m: Mensagem) =>
+    m.usu_remetente === meuId &&
+    !m.pendente &&
+    !m.msg_apagada_em &&
+    !m.msg_proposta_status &&
+    !m.msg_reuniao_status &&
+    agora - new Date(m.msg_data).getTime() < MINUTOS_PARA_ALTERAR * 60_000
+
+  async function salvarEdicao(m: Mensagem) {
+    if (!ativa || alterandoMsg) return
+    setAlterandoMsg(true)
+    try {
+      await api(`/mensagens/${m.msg_id}`, { metodo: 'PUT', corpo: { texto: textoEdicao } })
+      setEditandoMsg(null)
+      await buscarMensagens(ativa)
+    } catch (e) {
+      toast.mostrar(e instanceof ErroApi ? e.message : 'Não foi possível editar a mensagem.', 'erro')
+    } finally {
+      setAlterandoMsg(false)
+    }
+  }
+
+  async function apagarMsg(m: Mensagem) {
+    if (!ativa || alterandoMsg) return
+    /* Segundo clique confirma */
+    if (apagandoMsg !== m.msg_id) {
+      setApagandoMsg(m.msg_id)
+      return
+    }
+    setApagandoMsg(null)
+    setAlterandoMsg(true)
+    try {
+      await api(`/mensagens/${m.msg_id}`, { metodo: 'DELETE' })
+      if (citando?.msg_id === m.msg_id) setCitando(null)
+      await buscarMensagens(ativa)
+      carregarConversas()
+    } catch (e) {
+      toast.mostrar(e instanceof ErroApi ? e.message : 'Não foi possível apagar a mensagem.', 'erro')
+    } finally {
+      setAlterandoMsg(false)
+    }
+  }
 
   function mudarTexto(valor: string) {
     setTexto(valor)
@@ -713,7 +783,7 @@ export default function Mensagens() {
                       return (
                         <blockquote className={styles.citacao}>
                           <strong>{original ? (original.usu_remetente === meuId ? 'Você' : ativa.outro_nome?.split(' ')[0]) : 'Mensagem'}</strong>
-                          <span>{original ? original.msg_texto || (original.msg_imagem ? 'Imagem' : original.msg_arquivo_nome ?? '') : 'Mensagem que não está mais aqui'}</span>
+                          <span>{original ? (original.msg_apagada_em ? 'Mensagem apagada' : original.msg_texto || (original.msg_imagem ? 'Imagem' : original.msg_arquivo_nome ?? '')) : 'Mensagem que não está mais aqui'}</span>
                         </blockquote>
                       )
                     })()}
@@ -751,18 +821,78 @@ export default function Mensagens() {
                         respondendo={respondendo === m.msg_id}
                         aoResponder={(acao) => responderProposta(m, acao)}
                       />
+                    ) : m.msg_apagada_em ? (
+                      <em className={styles.apagada}>{m.usu_remetente === meuId ? 'Você apagou esta mensagem' : 'Mensagem apagada'}</em>
+                    ) : editandoMsg === m.msg_id ? (
+                      <form
+                        className={styles.edicaoMsg}
+                        onSubmit={(e) => {
+                          e.preventDefault()
+                          salvarEdicao(m)
+                        }}
+                      >
+                        <textarea
+                          aria-label="Editar mensagem"
+                          value={textoEdicao}
+                          onChange={(e) => setTextoEdicao(e.target.value)}
+                          maxLength={2000}
+                          rows={2}
+                          autoFocus
+                          onKeyDown={(e) => {
+                            if (e.key === 'Escape') setEditandoMsg(null)
+                            if (e.key === 'Enter' && !e.shiftKey) {
+                              e.preventDefault()
+                              salvarEdicao(m)
+                            }
+                          }}
+                        />
+                        <div>
+                          <button type="button" onClick={() => setEditandoMsg(null)} disabled={alterandoMsg}>
+                            Cancelar
+                          </button>
+                          <button type="submit" disabled={alterandoMsg || !textoEdicao.trim()}>
+                            Salvar
+                          </button>
+                        </div>
+                      </form>
                     ) : (
                       m.msg_texto
                     )}
                     <span className={styles.hora}>
                       {m.pendente ? 'enviando...' : formatarHora(m.msg_data)}
+                      {m.msg_editada_em && !m.msg_apagada_em && ' · editada'}
                     </span>
                   </div>
-                  {!m.pendente && !m.msg_reuniao_status && !m.msg_proposta_status && (
+                  {!m.pendente && !m.msg_reuniao_status && !m.msg_proposta_status && !m.msg_apagada_em && editandoMsg !== m.msg_id && (
                     <div className={`${styles.acoesMsg} ${m.usu_remetente === meuId ? styles.acoesMinha : ''}`}>
                       <button type="button" onClick={() => { setCitando(m); campo.current?.focus() }} aria-label={`Responder: ${m.msg_texto.slice(0, 40) || 'anexo'}`}>
                         <Reply size={13} strokeWidth={2.4} aria-hidden="true" /> Responder
                       </button>
+                      {podeAlterar(m) && m.msg_texto && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setEditandoMsg(m.msg_id)
+                            setTextoEdicao(m.msg_texto)
+                            setApagandoMsg(null)
+                          }}
+                          aria-label={`Editar: ${m.msg_texto.slice(0, 40)}`}
+                        >
+                          <Pencil size={13} strokeWidth={2.4} aria-hidden="true" /> Editar
+                        </button>
+                      )}
+                      {podeAlterar(m) && (
+                        <button
+                          type="button"
+                          className={apagandoMsg === m.msg_id ? styles.apagarConfirmar : ''}
+                          onClick={() => apagarMsg(m)}
+                          onBlur={() => setApagandoMsg((atual) => (atual === m.msg_id ? null : atual))}
+                          disabled={alterandoMsg}
+                          aria-label={apagandoMsg === m.msg_id ? 'Confirmar: apagar a mensagem' : `Apagar: ${m.msg_texto.slice(0, 40) || 'anexo'}`}
+                        >
+                          <Trash2 size={13} strokeWidth={2.4} aria-hidden="true" /> {apagandoMsg === m.msg_id ? 'Confirmar' : 'Apagar'}
+                        </button>
+                      )}
                       {m.usu_remetente !== meuId && <Denunciar alvoTipo="mensagem" alvoId={m.msg_id} rotulo="Denunciar" titulo="Denunciar mensagem" />}
                     </div>
                   )}
